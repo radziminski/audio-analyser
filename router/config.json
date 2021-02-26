@@ -1,0 +1,12 @@
+{
+	"apis": {
+		"node": {
+			"routes": ["test-node-route"]
+		}
+	},
+	"clients": {
+		"react": {
+			"routes": ["/"]
+		}
+	}
+}
