@@ -1,10 +1,10 @@
 import { createStore } from 'easy-peasy';
-import { WaveformService } from 'services';
+import { WavesurferService } from 'services';
 import { StoreInjections, AppState } from './types';
 import audioState from './audio';
 
 export const injections: StoreInjections = {
-  waveformService: WaveformService
+  wavesurferService: WavesurferService
 };
 
 export const storeModel: AppState = {

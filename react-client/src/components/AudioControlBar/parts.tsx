@@ -8,4 +8,9 @@ export const Container = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
+  color: white;
+  font-size: 32px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
 `;

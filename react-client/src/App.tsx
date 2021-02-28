@@ -10,7 +10,7 @@ const App: React.FC = () => {
     <div className='App'>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
-        <Layout>Hello there</Layout>
+        <Layout />
       </ThemeProvider>
     </div>
   );

@@ -1,8 +1,8 @@
 import { AudioState } from './audio/index';
-import { WaveformService } from '../services/WaveformService';
+import { WavesurferService } from '../services/WavesurferService';
 
 export interface StoreInjections {
-  waveformService: WaveformService;
+  wavesurferService: WavesurferService;
 }
 
 export interface AppState {

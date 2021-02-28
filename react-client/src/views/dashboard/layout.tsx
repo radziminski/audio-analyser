@@ -11,7 +11,7 @@ const Layout: React.FC = ({ children }) => {
         title='My_superb_audio_file.wav'
         subTitles={['18:40', '24.09.2021', '30s']}
       >
-        <Waveform url={require('../../assets/sample.wav')} />
+        <Waveform url={require('../../assets/sample2.wav')} />
         {children}
       </DashboardContent>
     </>

@@ -1,3 +1,3 @@
-import WaveformService from './WaveformService';
+import WavesurferService from './WavesurferService';
 
-export { WaveformService };
+export { WavesurferService };

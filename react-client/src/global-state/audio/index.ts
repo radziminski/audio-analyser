@@ -1,28 +1,65 @@
+import { action, thunk, Action, Thunk, computed, Computed } from 'easy-peasy';
 import { AudioController } from 'services/AudioController';
-import { action, thunk, Action, Thunk } from 'easy-peasy';
 
 export type AudioAction<Payload = void> = Action<AudioState, Payload>;
 export type AudioThunk<Payload = void> = Thunk<AudioState, Payload>;
 
 export interface AudioState {
-  controller: AudioController | null;
+  controller: WaveSurfer | null;
   currTime: number;
+  duration: number;
   isPlaying: boolean;
-  setController: AudioAction<AudioController>;
-  initAudioController: AudioThunk<{ url: string }>;
+  setController: AudioAction<WaveSurfer>;
+  initController: AudioThunk<{
+    url: string;
+    ref: HTMLElement | HTMLDivElement;
+  }>;
   play: AudioAction;
   pause: AudioAction;
   stop: AudioAction;
+  setCurrTime: AudioAction<number>;
+  setDuration: AudioAction<number>;
 }
 
 const audioState: AudioState = {
   controller: null,
   currTime: 0,
   isPlaying: false,
+  duration: 0,
 
-  initAudioController: thunk(async (actions, payload, helpers) => {
-    const controller = await AudioController.fromUrl(payload.url);
+  initController: thunk(async (actions, payload, helpers) => {
+    const controller: WaveSurfer = await helpers.injections.wavesurferService.create(
+      {
+        container: payload.ref
+      }
+    );
+
+    const updateTime = () => {
+      const time = controller.getCurrentTime();
+      if (time && time != helpers.getState().currTime)
+        actions.setCurrTime(time);
+    };
+    controller.load(payload.url);
+    controller.on('ready', () => {
+      actions.setDuration(controller.getDuration());
+    });
+    controller.on('audioprocess', () => {
+      if (controller.isPlaying()) {
+        updateTime();
+      }
+    });
+    controller.on('interaction', () => {
+      setTimeout(() => updateTime(), 50);
+    });
+
     actions.setController(controller);
+  }),
+
+  setCurrTime: action((state, currTime) => {
+    state.currTime = currTime;
+  }),
+  setDuration: action((state, currTime) => {
+    state.currTime = currTime;
   }),
 
   setController: action((state, controller) => {
@@ -30,6 +67,7 @@ const audioState: AudioState = {
   }),
 
   play: action((state) => {
+    console.log('playing...');
     if (state.controller) {
       state.controller.play();
     }
@@ -37,17 +75,17 @@ const audioState: AudioState = {
   }),
 
   stop: action((state) => {
+    console.log('stoping...');
     if (state.controller) {
       state.controller?.stop();
     }
     state.isPlaying = false;
-    state.currTime = 0;
   }),
 
   pause: action((state) => {
+    console.log('pausing...');
     if (state.controller) {
       state.controller.pause();
-      state.currTime = state.controller.currTime;
     }
     state.isPlaying = false;
   })

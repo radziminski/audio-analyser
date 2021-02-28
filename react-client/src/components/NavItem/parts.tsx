@@ -5,7 +5,7 @@ export const Container = styled.div<{ selected?: boolean }>`
   width: 300px;
   background: ${(props) =>
     props.selected ? props.theme.colors.background50 : 'transparent'};
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 12px 30px;
   font-size: 18px;
   color: white;
