@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Title, SubTitles, SubTitle } from './parts';
+import AudioControlBar from '../AudioControlBar';
 
 interface Props {
   title?: string;
@@ -9,6 +10,8 @@ interface Props {
 const DashboardContent: React.FC<Props> = ({ children, subTitles, title }) => {
   return (
     <Container>
+      <AudioControlBar />
+
       {title && <Title>{title}</Title>}
       {subTitles && subTitles.length > 0 && (
         <SubTitles>

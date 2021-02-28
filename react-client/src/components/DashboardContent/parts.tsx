@@ -5,6 +5,7 @@ export const Container = styled.div`
   background: ${({ theme }) => theme.colors.background50};
   margin-left: 400px;
   min-height: 100vh;
+  position: relative;
 `;
 
 export const Title = styled.div`
@@ -20,7 +21,7 @@ export const SubTitle = styled.div`
   color: white;
   font-weight: 300;
   opacity: 0.5;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
 

@@ -10,7 +10,5 @@ COPY ./package.json .
 # Installing dependencies
 RUN npm install
 
-COPY . .
-
 # Specifying startup command
 CMD ["npm", "start"]
