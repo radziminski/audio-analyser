@@ -1,12 +1,13 @@
+import { COLORS } from './../styles/theme';
 import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.min.js';
 
 const WAVEFORM_OPTIONS: Omit<WaveSurfer.WaveSurferParams, 'container'> = {
   waveColor: 'white',
-  progressColor: '#7033FF',
-  cursorColor: '#EE249F',
+  progressColor: COLORS.secondary100,
+  cursorColor: COLORS.accentSecondary100,
   barMinHeight: 1,
-  barWidth: 3,
+  barWidth: 5,
   barRadius: 2,
   responsive: true,
   height: 100,

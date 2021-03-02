@@ -10,9 +10,11 @@ export const Container = styled.div<{ selected?: boolean }>`
   font-size: 18px;
   color: white;
   font-weight: 400;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s;
+  align-items: center;
+  opacity: ${(props) => (props.selected ? 1 : 0.45)};
 
   &:hover {
     background: ${(props) => props.theme.colors.background50};

@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { getWavBytes } from 'utils/audio-convertion';
+import p5 from 'p5';
+import 'p5/lib/addons/p5.sound';
+import { useStoreState } from 'global-state/hooks';
 
 interface Props {
   buffer: AudioBuffer;
@@ -22,6 +25,10 @@ export const TestWaveform: React.FC<Props> = ({
   const [cursorXPosition, setCursorXPosition] = useState<number>(0);
   const [samplesPerBar, setSamplesPerBar] = useState<number>(0);
   const sampleRate = 48000;
+
+  const { currTime, duration, controller } = useStoreState(
+    (state) => state.audio
+  );
 
   useEffect(() => {
     if (
@@ -46,18 +53,25 @@ export const TestWaveform: React.FC<Props> = ({
         }
         currBars.push(Math.round((average * 500) / samplesPerBar));
       }
+      console.log('FURST');
       setBars([...currBars]);
     }
   }, [containerRef, buffer]);
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   setCursorXPosition((prevPosition) => prevPosition + 1);
-    //   const containerPosition = containerRef?.current?.getBoundingClientRect();
-    //   if (cursorXPosition > (containerPosition?.width ?? 0))
-    //     clearInterval(interval);
-    // }, 50);
-  }, [cursorXPosition]);
+    // controller?.on('audioprocess', () => {
+    //   const time = controller.getTime();
+    //   if (currTime && duration) {
+    //     setCursorXPosition(
+    //       ((containerRef?.current?.getBoundingClientRect().width || 0) *
+    //         currTime) /
+    //         duration
+    //     );
+    //   }
+    // });
+    const time = Math.round(currTime * 20) / 20;
+    if (time != cursorXPosition) setCursorXPosition(time);
+  }, [currTime]);
 
   return (
     <Box>
@@ -67,22 +81,13 @@ export const TestWaveform: React.FC<Props> = ({
         alignItems='center'
         position='relative'
         onClick={(e) => {
-          const containerPosition =
-            containerRef?.current?.getBoundingClientRect().left ?? 0;
-          const relativePosition = e.nativeEvent.pageX - containerPosition;
-          console.log(containerPosition);
-          console.log(e.nativeEvent.pageX);
-          console.log(relativePosition);
-          setCursorXPosition(relativePosition);
-        }}
-        onDrag={(e) => {
-          const containerPosition =
-            containerRef?.current?.getBoundingClientRect().left ?? 0;
-          const relativePosition = e.nativeEvent.pageX - containerPosition;
-          console.log(containerPosition);
-          console.log(e.nativeEvent.pageX);
-          console.log(relativePosition);
-          setCursorXPosition(relativePosition);
+          // const containerPosition =
+          //   containerRef?.current?.getBoundingClientRect().left ?? 0;
+          // const relativePosition = e.nativeEvent.pageX - containerPosition;
+          // console.log(containerPosition);
+          // console.log(e.nativeEvent.pageX);
+          // console.log(relativePosition);
+          // setCursorXPosition(relativePosition);
         }}
       >
         {bars?.map((barHeight, i) => {
@@ -103,9 +108,13 @@ export const TestWaveform: React.FC<Props> = ({
           background='pink'
           position='absolute'
           top={0}
-          left={`${cursorXPosition}px`}
+          left={`${
+            (cursorXPosition / duration) *
+            (containerRef?.current?.offsetWidth || 0)
+          }px`}
           draggable
         ></Box>
+        <Box position='absolute' width='100%' height='100%'></Box>
       </FlexBox>
     </Box>
   );

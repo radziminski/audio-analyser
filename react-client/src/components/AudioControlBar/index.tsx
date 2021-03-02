@@ -12,12 +12,13 @@ export const AudioControlBar: React.FC = () => {
   return (
     <Container>
       <AudioTimer />
-
-      {isPlaying ? (
-        <Icon icon={'pause-circle'} onClick={() => pause()} />
-      ) : (
-        <Icon icon={'play-circle'} onClick={() => play()} />
-      )}
+      <Box cursor='pointer'>
+        {isPlaying ? (
+          <Icon size={34} icon={'pause-circle'} onClick={() => pause()} />
+        ) : (
+          <Icon size={34} icon={'play-circle'} onClick={() => play()} />
+        )}
+      </Box>
       <Box width={100}></Box>
     </Container>
   );

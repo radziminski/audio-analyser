@@ -27,5 +27,5 @@ export const NavSelectorBall = styled.div`
   height: 10px;
   border-radius: 50%;
   margin-right: 34px;
-  background: ${({ theme }) => theme.colors.secondary100};
+  background: ${({ theme }) => theme.colors.accentPrimary100};
 `;

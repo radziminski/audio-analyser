@@ -2,24 +2,29 @@ import React, { useState } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import NavItem from 'components/NavItem';
 import { NavSelector } from './parts';
+import { SupportedIcon } from 'components/Icon';
 
 interface NavLink {
   name: string;
   linkTo: string;
+  icon: SupportedIcon;
 }
 
 const NAV_LINKS: NavLink[] = [
   {
     name: 'Home',
-    linkTo: '/'
+    linkTo: '/',
+    icon: 'home-fill'
   },
   {
     name: 'Project',
-    linkTo: '/'
+    linkTo: '/',
+    icon: 'projects-fill'
   },
   {
     name: 'Analyze',
-    linkTo: '/'
+    linkTo: '/',
+    icon: 'audio'
   }
 ];
 
@@ -37,6 +42,7 @@ export const Nav: React.FC = () => {
             onClick={() => {
               setSelectedItem(index);
             }}
+            icon={link.icon}
           />
         ))}
       </FlexBox>

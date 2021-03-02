@@ -8,7 +8,9 @@ export const COLORS = {
   background50: '#25294A',
   background70: '#2A2F54',
   primary100: '#7033FF',
-  secondary100: '#44F3FE',
+  secondary100: '#2A99FF',
+  accentPrimary100: '#44F3FE',
+  accentSecondary100: '#EE249F'
 };
 
 export const RADII = {

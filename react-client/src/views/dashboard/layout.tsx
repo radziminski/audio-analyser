@@ -1,17 +1,20 @@
+import React from 'react';
 import DashboardContent from 'components/DashboardContent';
 import NavPanel from 'components/NavPanel';
-import Waveform from 'components/Waveform';
-import React from 'react';
 
-const Layout: React.FC = ({ children }) => {
+interface Props {
+  title?: string;
+  subTitles?: string[];
+}
+
+const Layout: React.FC<Props> = ({ children, title, subTitles }) => {
   return (
     <>
       <NavPanel />
       <DashboardContent
-        title='My_superb_audio_file.wav'
-        subTitles={['18:40', '24.09.2021', '30s']}
+        title={title || 'Here goes the title'}
+        subTitles={subTitles}
       >
-        <Waveform url={require('../../assets/sample2.wav')} />
         {children}
       </DashboardContent>
     </>

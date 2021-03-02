@@ -13,7 +13,7 @@ export const LogoIcon = styled.div`
   height: 46px;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
+  font-size: 36px;
   color: white;
   background: ${({ theme }) => theme.colors.primary100};
   font-weight: 600;
@@ -22,7 +22,7 @@ export const LogoIcon = styled.div`
 `;
 
 export const LogoText = styled.div`
-  font-size: 26px;
+  font-size: 24px;
   color: white;
   font-weight: 500;
   margin-left: 18px;

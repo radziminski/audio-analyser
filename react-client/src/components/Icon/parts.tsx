@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ size?: number }>`
   display: flex;
   color: white;
-  font-size: 32px;
-  cursor: pointer;
+  font-size: ${(props) => props.size ?? 32}px;
 `;
