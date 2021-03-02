@@ -20,7 +20,10 @@ export const AudioTimer: React.FC = () => {
 
   return (
     <Container>
-      <Box width={46}>{formatTime(currTime)}</Box> <Box width={12}>/</Box>
+      <Box width={46}>{formatTime(currTime)}</Box>
+      <Box width={12} style={{ fontSize: 12 }}>
+        /
+      </Box>
       <Box width={46}>{formatTime(duration)}</Box>
     </Container>
   );

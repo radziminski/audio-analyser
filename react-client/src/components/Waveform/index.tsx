@@ -1,4 +1,5 @@
 import Box from 'components/Box';
+import TestWaveform from 'components/TestWaveform/TestWaveform';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { AudioController } from 'services/AudioController';
@@ -91,6 +92,14 @@ export const Waveform: React.FC<Props> = ({ url }) => {
           <div id='wave-timeline' />
         </Box>
       </Box>
+      <TestWaveform
+        buffer={(controller as any)?.backend?.buffer ?? []}
+        barMinHeight={1}
+        barWidth={4}
+        barSpacing={1}
+        height={150}
+        barBorderRadius={8}
+      />
     </Box>
   );
 };

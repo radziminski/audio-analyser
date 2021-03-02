@@ -12,5 +12,5 @@ export const Container = styled.div`
   font-size: 32px;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 20px;
+  padding: 5px 16px;
 `;

@@ -33,6 +33,7 @@ const audioState: AudioState = {
         container: payload.ref
       }
     );
+    console.log(controller.backend);
 
     const updateTime = () => {
       const time = controller.getCurrentTime();
@@ -51,6 +52,9 @@ const audioState: AudioState = {
     controller.on('interaction', () => {
       setTimeout(() => updateTime(), 50);
     });
+    controller.on('finish', () => {
+      actions.stop();
+    });
 
     actions.setController(controller);
   }),
@@ -58,8 +62,8 @@ const audioState: AudioState = {
   setCurrTime: action((state, currTime) => {
     state.currTime = currTime;
   }),
-  setDuration: action((state, currTime) => {
-    state.currTime = currTime;
+  setDuration: action((state, duration) => {
+    state.duration = duration;
   }),
 
   setController: action((state, controller) => {
@@ -76,7 +80,7 @@ const audioState: AudioState = {
 
   stop: action((state) => {
     console.log('stoping...');
-    if (state.controller) {
+    if (state.controller && state.controller.isPlaying) {
       state.controller?.stop();
     }
     state.isPlaying = false;
@@ -84,7 +88,7 @@ const audioState: AudioState = {
 
   pause: action((state) => {
     console.log('pausing...');
-    if (state.controller) {
+    if (state.controller && state.controller.isPlaying) {
       state.controller.pause();
     }
     state.isPlaying = false;
