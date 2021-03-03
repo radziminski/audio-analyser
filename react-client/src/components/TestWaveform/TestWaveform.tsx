@@ -3,6 +3,7 @@ import Box, { FlexBox } from 'components/Box';
 import p5 from 'p5';
 import 'p5/lib/addons/p5.sound';
 import { useStoreState } from 'global-state/hooks';
+import { COLORS } from 'styles/theme';
 
 interface Props {
   buffer: AudioBuffer;
@@ -94,16 +95,21 @@ export const TestWaveform: React.FC<Props> = ({
         if (time) {
           currP5.clear();
           currP5.noStroke();
-          currP5.fill('#000000');
+          currP5.fill(COLORS.accentSecondary100);
 
           // bars.forEach((bar, index) => {
           //   currP5.rect(index * (barWidth + barSpacing), 0, barWidth, bar);
           // });
 
+          // const currPosition = Math.round(
+          //   (time / duration) * (containerRef.current?.offsetWidth || 0)
+          // );
+
+          const currPosition =
+            (time / duration) * (containerRef.current?.offsetWidth || 0);
+
           currP5.rect(
-            Math.round(
-              (time / duration) * (containerRef.current?.offsetWidth || 0)
-            ),
+            currPosition,
             0,
             2,
             containerRef.current?.clientHeight || 0

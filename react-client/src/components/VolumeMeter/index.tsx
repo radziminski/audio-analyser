@@ -57,6 +57,7 @@ export const VolumeMeter: React.FC<Props> = ({ sth, audioElement }) => {
 
     const analyserLeft = ctx.createAnalyser();
     const analyserRight = ctx.createAnalyser();
+    const analyserInst = ctx.createAnalyser();
 
     const splitter = ctx.createChannelSplitter(2);
     const merger = ctx.createChannelMerger(2);
@@ -65,13 +66,14 @@ export const VolumeMeter: React.FC<Props> = ({ sth, audioElement }) => {
     gain.connect(splitter);
     splitter.connect(analyserLeft, 0);
     splitter.connect(analyserRight, 1);
+    splitter.connect(analyserInst, 0);
     analyserLeft.connect(merger, 0, 1);
     analyserRight.connect(merger, 0, 0);
     merger.connect(ctx.destination);
 
     const ORANGE_THRESHOLD = 15;
 
-    function displayNumber(
+    function displayAverageVolume(
       value: number,
       type: 'left' | 'right',
       clear = false
@@ -130,19 +132,47 @@ export const VolumeMeter: React.FC<Props> = ({ sth, audioElement }) => {
       }
     }
 
+    function displayInstantaneousVolume(
+      value: number,
+      type: 'left' | 'right',
+      clear = false
+    ) {
+      if (!currP5) return;
+
+      let currSample = value;
+      const containerHeight =
+        containerRef?.current?.getBoundingClientRect().height || 0;
+
+      if (!value || value === -Infinity || value === Infinity || isNaN(value))
+        currSample = containerHeight;
+
+      const offsetX = type === 'left' ? 0 : 36;
+      const width = 34;
+
+      currSample = Math.abs(currSample) * 7;
+
+      if (clear) currP5.clear();
+      currP5.stroke(255, 0, 0);
+      // draw green rect
+      currP5.line(0, currSample, width, currSample);
+    }
+
     // Time domain samples are always provided with the count of
     // fftSize even though there is no FFT involved.
     // (Note that fftSize can only have particular values, not an
     // arbitrary integer.)
-    const fftSize = 1024;
+    const fftSize = 1024 * 4;
     analyserRight.fftSize = fftSize;
     analyserLeft.fftSize = fftSize;
+    analyserInst.fftSize = 1024 * 32;
     const sampleBufferRight = new Float32Array(analyserRight.fftSize);
     const sampleBufferLeft = new Float32Array(analyserLeft.fftSize);
+    const sampleBufferInst = new Float32Array(analyserInst.fftSize);
 
     function loop() {
       analyserRight.getFloatTimeDomainData(sampleBufferRight);
       analyserLeft.getFloatTimeDomainData(sampleBufferLeft);
+      analyserInst.getFloatTimeDomainData(sampleBufferInst);
 
       // Compute average power over the interval.
       let sumOfSquaresRight = 0;
@@ -155,17 +185,32 @@ export const VolumeMeter: React.FC<Props> = ({ sth, audioElement }) => {
       // Compute average power over the interval.
       let sumOfSquaresLeft = 0;
       for (let i = 0; i < sampleBufferLeft.length; i++) {
-        sumOfSquaresLeft += sampleBufferLeft[i] ** 2;
+        const squareLeft = sampleBufferLeft[i] ** 2;
+        sumOfSquaresLeft += squareLeft;
       }
       const avgPowerDecibelsLeft =
         10 * Math.log10(sumOfSquaresLeft / sampleBufferLeft.length);
+
+      const maxSamples = sampleBufferInst
+        .sort()
+        .reverse()
+        .subarray(0, analyserInst.fftSize / 4);
+      let sum = 0;
+      for (let i = 0; i < maxSamples.length; i++) {
+        const value = maxSamples[i] ** 2;
+        sum += value;
+      }
+      const avgPower = sum / maxSamples.length;
+
+      const peakInstantaneousPowerDecibels = 10 * Math.log10(avgPower);
 
       // Note that you should then add or subtract as appropriate to
       // get the _reference level_ suitable for your application.
 
       // Display value.
-      displayNumber(avgPowerDecibelsLeft, 'left', true);
-      displayNumber(avgPowerDecibelsRight, 'right');
+      displayAverageVolume(avgPowerDecibelsLeft, 'left', true);
+      displayAverageVolume(avgPowerDecibelsRight, 'right');
+      displayInstantaneousVolume(peakInstantaneousPowerDecibels, 'left');
 
       requestAnimationFrame(loop);
     }
