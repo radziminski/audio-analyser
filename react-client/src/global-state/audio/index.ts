@@ -6,12 +6,14 @@ export type AudioThunk<Payload = void> = Thunk<AudioState, Payload>;
 
 export interface AudioState {
   controller: WaveSurfer | null;
+  audioElement: HTMLAudioElement | null;
   currTime: number;
   duration: number;
   isPlaying: boolean;
+  setAudioElement: AudioAction<HTMLAudioElement>;
   setController: AudioAction<WaveSurfer>;
   initController: AudioThunk<{
-    url: string;
+    url: string | HTMLAudioElement;
     ref: HTMLElement | HTMLDivElement;
   }>;
   play: AudioAction;
@@ -26,11 +28,17 @@ const audioState: AudioState = {
   currTime: 0,
   isPlaying: false,
   duration: 0,
+  audioElement: null,
+
+  setAudioElement: action((state, audioElement) => {
+    state.audioElement = audioElement;
+  }),
 
   initController: thunk(async (actions, payload, helpers) => {
     const controller: WaveSurfer = await helpers.injections.wavesurferService.create(
       {
-        container: payload.ref
+        container: payload.ref,
+        backend: 'MediaElement'
       }
     );
     console.log(controller.backend);
@@ -72,24 +80,25 @@ const audioState: AudioState = {
 
   play: action((state) => {
     console.log('playing...');
-    if (state.controller) {
-      state.controller.play();
+    if (state.audioElement) {
+      state.audioElement.play();
     }
     state.isPlaying = true;
   }),
 
   stop: action((state) => {
     console.log('stoping...');
-    if (state.controller && state.controller.isPlaying) {
-      state.controller?.stop();
+    if (state.audioElement && !state.audioElement.paused) {
+      state.audioElement.currentTime = 0;
+      state.audioElement.pause();
     }
     state.isPlaying = false;
   }),
 
   pause: action((state) => {
     console.log('pausing...');
-    if (state.controller && state.controller.isPlaying) {
-      state.controller.pause();
+    if (state.audioElement && !state.audioElement.paused) {
+      state.audioElement.pause();
     }
     state.isPlaying = false;
   })

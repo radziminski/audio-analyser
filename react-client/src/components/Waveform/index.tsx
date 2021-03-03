@@ -10,22 +10,32 @@ import { Container } from './parts';
 
 interface Props {
   url: string;
+  audioElement: HTMLAudioElement;
 }
 
-export const Waveform: React.FC<Props> = ({ url }) => {
+export const Waveform: React.FC<Props> = ({ url, audioElement }) => {
   const waveformRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { isPlaying, controller, currTime } = useStoreState(
     (state) => state.audio
   );
-  const { play, pause, stop, initController } = useStoreActions(
-    (actions) => actions.audio
-  );
+  const {
+    play,
+    pause,
+    stop,
+    initController,
+    setAudioElement
+  } = useStoreActions((actions) => actions.audio);
 
   useEffect(() => {
-    if (waveformRef && waveformRef.current)
-      initController({ url, ref: waveformRef.current });
+    if (waveformRef && waveformRef.current && audioRef.current)
+      initController({ url: audioRef.current, ref: waveformRef.current });
   }, [url]);
+
+  useEffect(() => {
+    setAudioElement(audioElement);
+  }, []);
 
   // useEffect(() => {
   //   if (controller && controller.buffer && waveformRef && waveformRef.current) {
@@ -83,15 +93,16 @@ export const Waveform: React.FC<Props> = ({ url }) => {
   // }, [controller]);
 
   return (
-    <Box>
-      <Box>
+    <Box marginBottom={40}>
+      {/* <Box>
         <Container>
           <div id='waveform' ref={waveformRef} />
         </Container>
         <Box padding={'10px'}>
           <div id='wave-timeline' />
         </Box>
-      </Box>
+      </Box> */}
+      <audio src={require('assets/sample.wav')} ref={audioRef} />
       <TestWaveform
         buffer={(controller as any)?.backend?.buffer ?? []}
         barMinHeight={1}
@@ -99,6 +110,7 @@ export const Waveform: React.FC<Props> = ({ url }) => {
         barSpacing={1}
         height={150}
         barBorderRadius={8}
+        audioElement={audioElement}
       />
     </Box>
   );
