@@ -16,7 +16,7 @@ interface Props {
   audioElement: HTMLAudioElement;
 }
 
-export const TestWaveform: React.FC<Props> = ({
+export const Waveform: React.FC<Props> = ({
   barWidth,
   barSpacing,
   barBorderRadius,
@@ -107,4 +107,4 @@ export const TestWaveform: React.FC<Props> = ({
   );
 };
 
-export default TestWaveform;
+export default Waveform;

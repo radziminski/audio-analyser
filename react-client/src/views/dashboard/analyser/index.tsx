@@ -1,8 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
-import Waveform from 'components/OldWaveform';
 import Layout from '../layout';
-import TestWaveform from 'components/Waveform';
+import Waveform from 'components/Waveform';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 
@@ -41,7 +40,7 @@ export const AnalyserView: React.FC = () => {
       return null;
     return (
       <>
-        <TestWaveform
+        <Waveform
           audioBuffer={controller?.buffer}
           isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
           didLoadAudioBuffer={didLoadAudioBuffer ?? false}
