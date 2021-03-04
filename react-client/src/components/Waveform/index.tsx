@@ -1,107 +1,110 @@
-import Box from 'components/Box';
-import TestWaveform from 'components/TestWaveform';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { getWavBytes } from 'utils/audio-convertion';
-import WaveSurfer from 'wavesurfer.js';
-
+import React, { useCallback, useMemo, useRef } from 'react';
+import Box, { FlexBox } from 'components/Box';
+import { useElementDimensions } from 'hooks';
+import { useCalculatePeaks, useCursorDrawer } from './hooks';
 import { Container } from './parts';
 
 interface Props {
-  url: string;
+  audioBuffer: AudioBuffer | null | undefined;
+  isLoadingAudioBuffer: boolean;
+  didLoadAudioBuffer: boolean;
+  barWidth: number;
+  barSpacing: number;
+  barMinHeight: number;
+  barBorderRadius: number;
+  height: number;
   audioElement: HTMLAudioElement;
 }
 
-export const Waveform: React.FC<Props> = ({ url, audioElement }) => {
-  const waveformRef = useRef<HTMLDivElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+export const TestWaveform: React.FC<Props> = ({
+  barWidth,
+  barSpacing,
+  barBorderRadius,
+  height,
+  audioElement,
+  audioBuffer,
+  isLoadingAudioBuffer,
+  didLoadAudioBuffer
+}) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const cursorContainerRef = useRef<HTMLDivElement | null>(null);
+  const {
+    left: containerLeft,
+    width: containerWidth,
+    dimensionsReady
+  } = useElementDimensions(containerRef);
+  useCursorDrawer(cursorContainerRef, audioElement);
 
-  const { controller, currTime } = useStoreState((state) => state.audio);
-  const { play, pause, stop, initController } = useStoreActions(
-    (actions) => actions.audio
+  const { peaks } = useCalculatePeaks(
+    audioBuffer,
+    barWidth,
+    barSpacing,
+    containerRef
   );
 
-  useEffect(() => {
-    if (audioRef.current) initController(audioRef.current);
-  }, [audioRef]);
+  const barsRendered = useMemo(() => {
+    return (
+      peaks?.map((barHeight, i) => {
+        return (
+          <Box
+            key={i}
+            height={barHeight}
+            width={`${barWidth}px`}
+            marginRight={`${barSpacing}px`}
+            background='white'
+            borderRadius={barBorderRadius}
+          />
+        );
+      }) ?? null
+    );
+  }, [peaks]);
 
-  // useEffect(() => {
-  //   if (controller && controller.buffer && waveformRef && waveformRef.current) {
-  //     audioContextRef.current.resume();
-  //     const options = createWaveformOptions(
-  //       waveformRef.current,
-  //       audioContextRef.current
-  //     );
-  //     const currWavesurfer = WaveSurfer.create(options);
+  const onWaveformClicked = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (
+        !containerRef.current ||
+        !audioElement ||
+        !dimensionsReady ||
+        !containerLeft ||
+        !containerWidth
+      )
+        return;
+      const containerPosition = containerLeft;
+      const relativePosition = e.nativeEvent.pageX - containerPosition;
 
-  //     // Float32Array samples
-  //     const [left, right] = [
-  //       controller.buffer.getChannelData(0),
-  //       controller.buffer.getChannelData(1)
-  //     ];
-
-  //     // interleaved
-  //     const interleaved = new Float32Array(left.length + right.length);
-  //     for (let src = 0, dst = 0; src < left.length; src++, dst += 2) {
-  //       interleaved[dst] = left[src];
-  //       interleaved[dst + 1] = right[src];
-  //     }
-
-  //     // get WAV file bytes and audio params of your audio source
-  //     const wavBytes = getWavBytes(interleaved.buffer, {
-  //       isFloat: true, // floating point or 16-bit integer
-  //       numChannels: 2,
-  //       sampleRate: 48000
-  //     });
-  //     const wav = new Blob([wavBytes], { type: 'audio/wav' });
-  //     currWavesurfer.loadBlob(wav);
-  //     currWavesurfer.on('ready', function () {
-  //       // https://wavesurfer-js.org/docs/methods.html
-  //       // wavesurfer.current.play();
-  //       // setPlay(true);
-
-  //       if (currWavesurfer) {
-  //         currWavesurfer.setVolume(0);
-  //       }
-  //       console.log('buffer');
-  //       console.log((currWavesurfer as any).backend.buffer);
-
-  //       setWavesurfer(currWavesurfer);
-  //     });
-  //     currWavesurfer.on('interaction', function () {
-  //       setTimeout(() => {
-  //         console.log(currWavesurfer.getCurrentTime());
-  //         controller?.setTime(currWavesurfer.getCurrentTime());
-  //         togglePlaying();
-  //       }, 50);
-  //     });
-
-  //     return () => currWavesurfer?.destroy();
-  //   }
-  // }, [controller]);
+      const ratio = relativePosition / containerWidth;
+      audioElement.currentTime = ratio * audioElement.duration;
+    },
+    [
+      containerRef.current,
+      audioElement,
+      dimensionsReady,
+      containerLeft,
+      containerWidth
+    ]
+  );
 
   return (
-    <Box marginBottom={40}>
-      {/* <Box>
-        <Container>
-          <div id='waveform' ref={waveformRef} />
-        </Container>
-        <Box padding={'10px'}>
-          <div id='wave-timeline' />
-        </Box>
-      </Box> */}
-      <audio src={require('assets/sample.wav')} ref={audioRef} />
-      {/* <TestWaveform
-        buffer={(controller as any)?.backend?.buffer ?? []}
-        barMinHeight={1}
-        barWidth={4}
-        barSpacing={1}
-        height={150}
-        barBorderRadius={8}
-        audioElement={audioElement}
-      /> */}
-    </Box>
+    <Container>
+      <FlexBox
+        height={height}
+        ref={containerRef}
+        justifyContent='center'
+        alignItems='center'
+        position='relative'
+        onClick={onWaveformClicked}
+      >
+        {barsRendered}
+
+        <Box
+          position='absolute'
+          width='100%'
+          height='100%'
+          ref={cursorContainerRef}
+        ></Box>
+      </FlexBox>
+    </Container>
   );
 };
 
-export default Waveform;
+export default TestWaveform;

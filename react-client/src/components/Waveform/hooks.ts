@@ -1,6 +1,7 @@
-import { COLORS } from './../../styles/theme';
+import { useAnimationFrameLoop } from '../../hooks/useAnimationFrameLoop/index';
+import { COLORS } from '../../styles/theme';
 import { useCanvasDrawer } from 'hooks/useCanvasDrawer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useElementDimensions } from 'hooks/useElementDimensions';
 
 export const useCalculatePeaks = <T extends HTMLElement | null>(
@@ -12,10 +13,10 @@ export const useCalculatePeaks = <T extends HTMLElement | null>(
   const [peaks, setPeaks] = useState<number[]>();
   const [samplesPerBar, setSamplesPerBar] = useState<number>();
 
-  const { dimensionsReady, width } = useElementDimensions(container);
+  const { dimensionsReady, width, height } = useElementDimensions(container);
 
   useEffect(() => {
-    if (!dimensionsReady || !width || !audioBuffer) return;
+    if (!dimensionsReady || !width || !height || !audioBuffer) return;
 
     const buff = audioBuffer.getChannelData(0);
     const barAndSpaceWidth = barWidth + barSpacing;
@@ -31,10 +32,12 @@ export const useCalculatePeaks = <T extends HTMLElement | null>(
       for (let sampleInBar = 0; sampleInBar < samplesPerBar; sampleInBar++) {
         average += Math.abs(buff[sample++] ?? 0);
       }
-      currBars.push(Math.round((average * 500) / samplesPerBar));
+      currBars.push(Math.round((average * height) / samplesPerBar));
     }
+    const highestBar = Math.max(...currBars);
+    const barMultiplier = height / highestBar;
 
-    setPeaks([...currBars]);
+    setPeaks([...currBars.map((bar) => bar * barMultiplier)]);
   }, [audioBuffer, barWidth, barSpacing, dimensionsReady, width]);
 
   return {
@@ -55,34 +58,32 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
 
     canvasDrawer.fill(COLORS.accentSecondary100);
     canvasDrawer.noStroke();
-    // canvasDrawer.fill('#fff');
+
     canvasDrawer.rect(0, 0, 2, height || 0);
   }, [canvasDrawer, ready, dimensionsReady]);
 
-  useEffect(() => {
+  const cursorAnimationFunction = useCallback(() => {
     if (canvasDrawer && ready && audioElement && cursorContainerRef.current) {
-      const animationLoop = () => {
-        const time = audioElement.currentTime || 0;
-        const duration = audioElement.duration;
+      const time = audioElement.currentTime || 0;
+      const duration = audioElement.duration;
 
-        if (time) {
-          canvasDrawer.clear();
-          canvasDrawer.noStroke();
-          canvasDrawer.fill(COLORS.accentSecondary100);
+      if (time) {
+        canvasDrawer.clear();
+        canvasDrawer.noStroke();
+        canvasDrawer.fill(COLORS.accentSecondary100);
 
-          const currPosition =
-            (time / duration) * (cursorContainerRef.current?.offsetWidth || 0);
+        const currPosition =
+          (time / duration) * (cursorContainerRef.current?.offsetWidth || 0);
 
-          canvasDrawer.rect(
-            currPosition,
-            0,
-            2,
-            cursorContainerRef.current?.clientHeight || 0
-          );
-        }
-        requestAnimationFrame(animationLoop);
-      };
-      animationLoop();
+        canvasDrawer.rect(
+          currPosition,
+          0,
+          2,
+          cursorContainerRef.current?.clientHeight || 0
+        );
+      }
     }
   }, [canvasDrawer, audioElement, cursorContainerRef]);
+
+  useAnimationFrameLoop(cursorAnimationFunction);
 };

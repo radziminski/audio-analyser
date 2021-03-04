@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
-import Waveform from 'components/Waveform';
+import Waveform from 'components/OldWaveform';
 import Layout from '../layout';
-import TestWaveform from 'components/TestWaveform';
+import TestWaveform from 'components/Waveform';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 
