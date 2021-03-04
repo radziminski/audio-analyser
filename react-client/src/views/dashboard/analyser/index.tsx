@@ -2,29 +2,66 @@ import React, { useMemo, useRef, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
 import Waveform from 'components/Waveform';
 import Layout from '../layout';
+import TestWaveform from 'components/TestWaveform';
+import { useStoreState, useStoreActions } from 'global-state/hooks';
+import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 
 export const AnalyserView: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioLoaded, setAudioLoaded] = useState(false);
 
+  const {
+    controller,
+    isLoadingAudioBuffer,
+    didLoadAudioBuffer,
+    isPlaying
+  } = useStoreState((state) => state.audio);
+
+  const { initController, loadAudioBuffer, play, pause } = useStoreActions(
+    (actions) => actions.audio
+  );
+
+  usePlayOnSpace(
+    () => play(),
+    () => pause(),
+    isPlaying
+  );
+
   useEffect(() => {
-    console.log(audioRef.current);
-    if (audioRef.current) setAudioLoaded(true);
+    if (audioRef.current) {
+      initController(audioRef.current);
+      loadAudioBuffer();
+      setAudioLoaded(true);
+    }
   }, [audioRef]);
 
   const content = useMemo(() => {
-    console.log(audioRef.current);
-    if (!audioRef.current) return null;
+    console.log(isLoadingAudioBuffer || !didLoadAudioBuffer);
+    if (!audioRef.current || isLoadingAudioBuffer || !didLoadAudioBuffer)
+      return null;
     return (
       <>
-        <Waveform
-          url={require('assets/sample3.wav')}
+        <TestWaveform
+          audioBuffer={controller?.buffer}
+          isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
+          didLoadAudioBuffer={didLoadAudioBuffer ?? false}
+          barMinHeight={1}
+          barWidth={4}
+          barSpacing={1}
+          height={150}
+          barBorderRadius={8}
           audioElement={audioRef.current}
         />
         <VolumeMeter audioElement={audioRef.current} />
       </>
     );
-  }, [audioRef, audioRef.current, audioLoaded]);
+  }, [
+    audioRef,
+    audioRef.current,
+    audioLoaded,
+    isLoadingAudioBuffer,
+    didLoadAudioBuffer
+  ]);
 
   return (
     <>

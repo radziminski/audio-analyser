@@ -6,14 +6,14 @@ import Box from 'components/Box';
 import AudioTimer from 'components/AudioTimer';
 
 export const AudioControlBar: React.FC = () => {
-  const { isPlaying, currTime } = useStoreState((state) => state.audio);
+  const { controller } = useStoreState((state) => state.audio);
   const { play, pause } = useStoreActions((actions) => actions.audio);
 
   return (
     <Container>
       <AudioTimer />
       <Box cursor='pointer'>
-        {isPlaying ? (
+        {controller?.isPlaying ? (
           <Icon size={34} icon={'pause-circle'} onClick={() => pause()} />
         ) : (
           <Icon size={34} icon={'play-circle'} onClick={() => play()} />

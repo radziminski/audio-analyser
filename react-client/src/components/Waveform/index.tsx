@@ -1,8 +1,7 @@
 import Box from 'components/Box';
-import TestWaveform from 'components/TestWaveform/TestWaveform';
+import TestWaveform from 'components/TestWaveform';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { AudioController } from 'services/AudioController';
 import { getWavBytes } from 'utils/audio-convertion';
 import WaveSurfer from 'wavesurfer.js';
 
@@ -17,25 +16,14 @@ export const Waveform: React.FC<Props> = ({ url, audioElement }) => {
   const waveformRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const { isPlaying, controller, currTime } = useStoreState(
-    (state) => state.audio
+  const { controller, currTime } = useStoreState((state) => state.audio);
+  const { play, pause, stop, initController } = useStoreActions(
+    (actions) => actions.audio
   );
-  const {
-    play,
-    pause,
-    stop,
-    initController,
-    setAudioElement
-  } = useStoreActions((actions) => actions.audio);
 
   useEffect(() => {
-    if (waveformRef && waveformRef.current && audioRef.current)
-      initController({ url: audioRef.current, ref: waveformRef.current });
-  }, [url]);
-
-  useEffect(() => {
-    setAudioElement(audioElement);
-  }, []);
+    if (audioRef.current) initController(audioRef.current);
+  }, [audioRef]);
 
   // useEffect(() => {
   //   if (controller && controller.buffer && waveformRef && waveformRef.current) {
@@ -103,7 +91,7 @@ export const Waveform: React.FC<Props> = ({ url, audioElement }) => {
         </Box>
       </Box> */}
       <audio src={require('assets/sample.wav')} ref={audioRef} />
-      <TestWaveform
+      {/* <TestWaveform
         buffer={(controller as any)?.backend?.buffer ?? []}
         barMinHeight={1}
         barWidth={4}
@@ -111,7 +99,7 @@ export const Waveform: React.FC<Props> = ({ url, audioElement }) => {
         height={150}
         barBorderRadius={8}
         audioElement={audioElement}
-      />
+      /> */}
     </Box>
   );
 };
