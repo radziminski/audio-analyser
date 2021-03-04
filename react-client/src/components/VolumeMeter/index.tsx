@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Container } from './parts';
-import { FlexBox } from 'components/Box';
-import { useCanvasDrawer, useAudioContext, useElementDimensions } from 'hooks';
+import { useCanvasDrawer, useElementDimensions } from 'hooks';
 import { drawInstantaneousVolume, drawMaxAverageVolume } from './helpers';
 import { calculateBufferAverage, calculateBufferMaxAverage } from 'utils/audio';
+import {
+  AudioController,
+  LEFT_CHANNEL,
+  RIGHT_CHANNEL
+} from 'global-state/audio/audioController';
 
 interface Props {
-  audioElement: HTMLAudioElement;
+  audioController: AudioController;
 }
-export const VolumeMeter: React.FC<Props> = ({ audioElement }) => {
+
+export const VolumeMeter: React.FC<Props> = ({ audioController }) => {
+  const [analysersIds, setAnalysersIds] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const audioContext = useAudioContext();
   const [meterStarted, setMeterStarted] = useState<boolean>(false);
   const { ready, canvasDrawer } = useCanvasDrawer(containerRef);
 
@@ -19,35 +24,36 @@ export const VolumeMeter: React.FC<Props> = ({ audioElement }) => {
 
   useEffect(() => {
     if (canvasDrawer && ready) startMeter();
+    return () => {
+      analysersIds.forEach((id) => {
+        audioController.removeAnalyser(id);
+      });
+      setAnalysersIds([]);
+    };
   }, [canvasDrawer, ready]);
 
   const startMeter = () => {
-    console.log(audioContext);
-    if (meterStarted) return console.error('error');
+    if (meterStarted) return;
+
+    const analyserRight = audioController.createAnalyser(LEFT_CHANNEL);
+    const analyserLeft = audioController.createAnalyser(RIGHT_CHANNEL);
+    const analyserMaxRight = audioController.createAnalyser(LEFT_CHANNEL);
+    const analyserMaxLeft = audioController.createAnalyser(RIGHT_CHANNEL);
+
+    setAnalysersIds((prevIds) => [
+      ...prevIds,
+      analyserRight.id,
+      analyserLeft.id,
+      analyserMaxRight.id,
+      analyserMaxLeft.id
+    ]);
+
+    const analyserRightNode = analyserRight.analyserNode;
+    const analyserLeftNode = analyserLeft.analyserNode;
+    const analyserMaxRightNode = analyserMaxRight.analyserNode;
+    const analyserMaxLeftNode = analyserMaxLeft.analyserNode;
+
     setMeterStarted(true);
-
-    const sourceNode = audioContext.createMediaElementSource(audioElement);
-
-    const gain = audioContext.createGain();
-    gain.gain.value = 1;
-
-    const analyserLeft = audioContext.createAnalyser();
-    const analyserRight = audioContext.createAnalyser();
-    const analyserMaxLeft = audioContext.createAnalyser();
-    const analyserMaxRight = audioContext.createAnalyser();
-
-    const splitter = audioContext.createChannelSplitter(2);
-    const merger = audioContext.createChannelMerger(2);
-
-    sourceNode.connect(gain);
-    gain.connect(splitter);
-    splitter.connect(analyserLeft, 0);
-    splitter.connect(analyserRight, 1);
-    splitter.connect(analyserMaxLeft, 0);
-    splitter.connect(analyserMaxRight, 1);
-    analyserLeft.connect(merger, 0, 1);
-    analyserRight.connect(merger, 0, 0);
-    //merger.connect(audioContext.destination);
 
     // Time domain samples are always provided with the count of
     // fftSize even though there is no FFT involved.
@@ -55,20 +61,22 @@ export const VolumeMeter: React.FC<Props> = ({ audioElement }) => {
     // arbitrary integer.)
     const instFFTSize = 1024 * 4;
     const avgFFTSize = 1024 * 32;
-    analyserRight.fftSize = instFFTSize;
-    analyserLeft.fftSize = instFFTSize;
-    analyserMaxLeft.fftSize = avgFFTSize;
-    analyserMaxRight.fftSize = avgFFTSize;
-    const sampleBufferRight = new Float32Array(analyserRight.fftSize);
-    const sampleBufferLeft = new Float32Array(analyserLeft.fftSize);
-    const sampleBufferInstLeft = new Float32Array(analyserMaxLeft.fftSize);
-    const sampleBufferInstRight = new Float32Array(analyserMaxRight.fftSize);
+    analyserRightNode.fftSize = instFFTSize;
+    analyserLeftNode.fftSize = instFFTSize;
+    analyserMaxLeftNode.fftSize = avgFFTSize;
+    analyserMaxRightNode.fftSize = avgFFTSize;
+    const sampleBufferRight = new Float32Array(analyserRightNode.fftSize);
+    const sampleBufferLeft = new Float32Array(analyserLeftNode.fftSize);
+    const sampleBufferInstLeft = new Float32Array(analyserMaxLeftNode.fftSize);
+    const sampleBufferInstRight = new Float32Array(
+      analyserMaxRightNode.fftSize
+    );
 
     function loop() {
-      analyserRight.getFloatTimeDomainData(sampleBufferRight);
-      analyserLeft.getFloatTimeDomainData(sampleBufferLeft);
-      analyserMaxLeft.getFloatTimeDomainData(sampleBufferInstLeft);
-      analyserMaxRight.getFloatTimeDomainData(sampleBufferInstRight);
+      analyserRightNode.getFloatTimeDomainData(sampleBufferRight);
+      analyserLeftNode.getFloatTimeDomainData(sampleBufferLeft);
+      analyserMaxLeftNode.getFloatTimeDomainData(sampleBufferInstLeft);
+      analyserMaxRightNode.getFloatTimeDomainData(sampleBufferInstRight);
 
       // Compute average power over the interval.
       const instantaneousAverageLeft = calculateBufferAverage(sampleBufferLeft);

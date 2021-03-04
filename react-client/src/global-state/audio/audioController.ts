@@ -6,20 +6,31 @@ export interface AudioController {
   bufferError: any;
   isPlaying: boolean;
 
-  currSourceNode: AudioBufferSourceNode | null;
-  gainControl: GainNode;
+  sourceNode: MediaElementAudioSourceNode;
+  mixGainNode: GainNode;
+  masterGainNode: GainNode;
+  splitterNode: ChannelSplitterNode;
+  analysers: Analyser[];
+  currAnalyserId: number;
 }
+
+export interface Analyser {
+  analyserNode: AnalyserNode;
+  channel: 0 | 1;
+  id: number;
+}
+
+export const LEFT_CHANNEL = 0;
+export const RIGHT_CHANNEL = 1;
 
 export class AudioController implements AudioController {
   private constructor() {
     this.context = new AudioContext();
-    this.gainControl = this.context.createGain();
-    this.gainControl.connect(this.context.destination);
     this.buffer = null;
+    this.analysers = [];
 
     this.isPlaying = false;
-    this.currSourceNode = null;
-    this.context.suspend();
+    this.currAnalyserId = 0;
   }
 
   static fromAudioElement(element: HTMLAudioElement): AudioController {
@@ -27,7 +38,51 @@ export class AudioController implements AudioController {
     audioController.audioElement = element;
     audioController.isPlaying = !element.paused;
 
+    audioController.sourceNode = audioController.context.createMediaElementSource(
+      element
+    );
+
+    audioController.mixGainNode = audioController.context.createGain();
+    audioController.masterGainNode = audioController.context.createGain();
+
+    audioController.splitterNode = audioController.context.createChannelSplitter(
+      2
+    );
+
+    audioController.sourceNode.connect(audioController.mixGainNode);
+    audioController.mixGainNode.connect(audioController.splitterNode);
+    audioController.mixGainNode.connect(audioController.masterGainNode);
+    audioController.masterGainNode.connect(audioController.context.destination);
+
     return audioController;
+  }
+
+  createAnalyser(channel: 0 | 1 = 0): Analyser {
+    const analyserNode = this.context.createAnalyser();
+    this.splitterNode.connect(analyserNode, channel);
+
+    const analyser: Analyser = {
+      id: this.currAnalyserId++,
+      analyserNode,
+      channel
+    };
+    this.analysers.push(analyser);
+
+    return analyser;
+  }
+
+  removeAnalyser(id: number): boolean {
+    const analyser = this.analysers.find(
+      (currAnalyser) => currAnalyser.id === id
+    );
+    if (!analyser) return false;
+
+    this.splitterNode.disconnect(analyser.analyserNode, analyser.channel);
+    analyser.analyserNode.disconnect();
+    const analyserIndex = this.analysers.indexOf(analyser);
+    if (analyserIndex > 0) this.analysers.splice(analyserIndex, 1);
+
+    return true;
   }
 
   async loadBuffer(): Promise<AudioBuffer | null> {
@@ -44,14 +99,6 @@ export class AudioController implements AudioController {
       this.isLoadingBuffer = false;
     }
     return null;
-  }
-
-  async resetContext() {
-    await this.context.close();
-    this.context = new AudioContext();
-    this.gainControl = this.context.createGain();
-    this.gainControl.connect(this.context.destination);
-    await this.context.suspend();
   }
 
   setBuffer(buffer: AudioBuffer) {

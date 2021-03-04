@@ -36,7 +36,12 @@ export const AnalyserView: React.FC = () => {
 
   const content = useMemo(() => {
     console.log(isLoadingAudioBuffer || !didLoadAudioBuffer);
-    if (!audioRef.current || isLoadingAudioBuffer || !didLoadAudioBuffer)
+    if (
+      !audioRef.current ||
+      isLoadingAudioBuffer ||
+      !didLoadAudioBuffer ||
+      !controller
+    )
       return null;
     return (
       <>
@@ -51,7 +56,7 @@ export const AnalyserView: React.FC = () => {
           barBorderRadius={8}
           audioElement={audioRef.current}
         />
-        <VolumeMeter audioElement={audioRef.current} />
+        <VolumeMeter audioController={controller} />
       </>
     );
   }, [
@@ -59,7 +64,8 @@ export const AnalyserView: React.FC = () => {
     audioRef.current,
     audioLoaded,
     isLoadingAudioBuffer,
-    didLoadAudioBuffer
+    didLoadAudioBuffer,
+    controller
   ]);
 
   return (
