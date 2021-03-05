@@ -24,5 +24,5 @@ export const useOnResize = (
     window.addEventListener('resize', onResize);
 
     return () => window.removeEventListener('resize', onResize);
-  }, []);
+  }, [onResizeCallback, debounceTimeMs]);
 };

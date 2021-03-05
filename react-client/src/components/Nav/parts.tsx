@@ -2,6 +2,11 @@ import React from 'react';
 import Box from 'components/Box';
 import styled from 'styled-components';
 
+export const Container = styled.ul`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const NavSelector: React.FC = () => {
   return (
     <Box width={30} overflow='hidden'>

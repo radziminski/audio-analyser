@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import NavItem from 'components/NavItem';
-import { NavSelector } from './parts';
+import { NavSelector, Container } from './parts';
 import { SupportedIcon } from 'components/Icon';
+import { ROUTES } from 'constants/routes';
 
 interface NavLink {
   name: string;
@@ -13,43 +14,47 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   {
     name: 'Home',
-    linkTo: '/',
+    linkTo: ROUTES.DASHBOARD_HOME,
     icon: 'home-fill'
   },
   {
     name: 'Project',
-    linkTo: '/',
+    linkTo: ROUTES.DASHBOARD_PROJECTS,
     icon: 'projects-fill'
   },
   {
     name: 'Analyze',
-    linkTo: '/',
+    linkTo: ROUTES.DASHBOARD_ANALYSER,
     icon: 'audio'
   }
 ];
 
 export const Nav: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [currRoute, setCurrRoute] = useState(0);
+
   return (
     <>
-      <FlexBox flexDirection='column'>
+      <Container>
         {NAV_LINKS.map((link, index) => (
-          <NavItem
-            selected={selectedItem == index}
+          <li
             key={link.name}
-            name={link.name}
-            linkTo={link.linkTo}
             onClick={() => {
-              setSelectedItem(index);
+              setCurrRoute(index);
             }}
-            icon={link.icon}
-          />
+          >
+            <NavItem
+              selected={currRoute == index}
+              name={link.name}
+              linkTo={link.linkTo}
+              icon={link.icon}
+            />
+          </li>
         ))}
-      </FlexBox>
+      </Container>
       <Box
         position='absolute'
         right={0}
-        top={128 + selectedItem * 58}
+        top={128 + currRoute * 58}
         transition={'all 0.15s'}
       >
         <NavSelector />

@@ -5,6 +5,12 @@ export const Container = styled.div`
   padding: 10px;
   align-items: center;
   cursor: pointer;
+  opacity: 0.82;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 export const AvatarContainer = styled.div`

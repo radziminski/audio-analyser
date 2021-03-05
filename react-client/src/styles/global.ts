@@ -61,7 +61,9 @@ const defaultStylesReset = css`
   a,
   input,
   textarea,
-  select {
+  select,
+  ul,
+  li {
     margin: 0;
     padding: 0;
     border: 0;
@@ -70,6 +72,16 @@ const defaultStylesReset = css`
     &:active {
       outline: 0;
     }
+  }
+
+  a {
+    color: inherit;
+    cursor: inherit;
+    text-decoration: none;
+  }
+
+  ul {
+    list-style: none;
   }
 
   figure {

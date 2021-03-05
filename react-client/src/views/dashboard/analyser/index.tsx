@@ -1,9 +1,10 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
-import Layout from '../layout';
+import Layout from '..';
 import Waveform from 'components/Waveform';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
+import DashboardContent from 'components/DashboardContent';
 
 export const AnalyserView: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -70,13 +71,13 @@ export const AnalyserView: React.FC = () => {
 
   return (
     <>
-      <Layout
+      <DashboardContent
         title='My_superb_audio_file.wav'
         subTitles={['18:40', '24.09.2021', '30s']}
       >
         {content}
-      </Layout>
-      <audio src={require('assets/sampleLong.mp3')} ref={audioRef} />
+        <audio src={require('assets/sampleLong.mp3')} ref={audioRef} />
+      </DashboardContent>
     </>
   );
 };

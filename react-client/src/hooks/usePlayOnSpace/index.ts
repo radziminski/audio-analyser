@@ -1,19 +1,16 @@
-import { useEffect } from 'react';
+import { useOnKeyboardPress } from './../useOnKeyboardPress/index';
 
 export const usePlayOnSpace = (
   play: () => void,
   pause: () => void,
   isPlaying: boolean
 ) => {
-  useEffect(() => {
-    const playOnSpace = (e: KeyboardEvent) => {
-      if (e.code !== 'Space') return;
+  const playOnSpace = (code: string) => {
+    if (code !== 'Space') return;
 
-      if (isPlaying) pause();
-      else play();
-    };
+    if (isPlaying) pause();
+    else play();
+  };
 
-    document.addEventListener('keydown', playOnSpace);
-    return () => document.removeEventListener('keydown', playOnSpace);
-  }, [play, pause]);
+  useOnKeyboardPress(playOnSpace);
 };

@@ -46,7 +46,7 @@ export const VolumeSlider: React.FC = () => {
   }, [gainValue]);
 
   return (
-    <FlexBox alignItems='center'>
+    <FlexBox alignItems='center' justifyContent='flex-start'>
       <Box marginRight='15px' cursor='pointer' onClick={onMute}>
         <Icon icon={icon} size={24} />
       </Box>

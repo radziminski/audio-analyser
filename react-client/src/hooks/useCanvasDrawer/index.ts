@@ -29,7 +29,7 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
         setReady(true);
       };
     },
-    [containerWidth, containerHeight]
+    [containerWidth, containerHeight, canvasWidth, canvasHeight]
   );
 
   useEffect(() => {

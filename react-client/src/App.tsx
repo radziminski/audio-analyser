@@ -1,15 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from 'styles/global';
 import { defaultTheme } from 'styles/theme';
-import AnalyserView from 'views/dashboard/analyser';
+import AppRoutes from 'views';
 
 const App: React.FC = () => {
   return (
     <div className='App'>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
-        <AnalyserView />
+        <Router>
+          <AppRoutes />
+        </Router>
       </ThemeProvider>
     </div>
   );
