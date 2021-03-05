@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Box, { FlexBox } from 'components/Box';
+import Box from 'components/Box';
 import NavItem from 'components/NavItem';
 import { NavSelector, Container } from './parts';
 import { SupportedIcon } from 'components/Icon';
