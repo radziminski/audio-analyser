@@ -106,9 +106,18 @@ export const Waveform: React.FC<Props> = ({
         </FlexBox>
       </WaveformContainer>
       <Timeline
-        containerWidth={containerWidth || 0}
-        height={14}
         duration={audioElement.duration}
+        tickHeight={10}
+        tickColor={'#FFFFFF'}
+        tickOpacity={0.75}
+        tickSpacing={13}
+        tickWidth={2}
+        ticksPerBar={4}
+        subTickWidthDifference={1}
+        subTickHeightMultiplier={0.5}
+        timestampHeight={24}
+        timestampColor='#ffffff'
+        timestampFontSize={12}
       />
     </Container>
   );

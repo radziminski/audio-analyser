@@ -75,7 +75,7 @@ export const AnalyserView: React.FC = () => {
         subTitles={['18:40', '24.09.2021', '30s']}
       >
         {content}
-        <audio src={require('assets/sampleLong.mp3')} ref={audioRef} />
+        <audio src={require('assets/sample.wav')} ref={audioRef} />
       </DashboardContent>
     </>
   );

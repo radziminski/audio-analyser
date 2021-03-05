@@ -1,5 +1,6 @@
 import Box, { FlexBox } from 'components/Box';
-import React from 'react';
+import { useElementDimensions } from 'hooks';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { formatTime } from 'utils/time';
 
@@ -18,49 +19,91 @@ export const WaveformContainer = styled.div`
 `;
 
 interface TimelineProps {
-  containerWidth: number;
-  height: number;
+  duration: number;
+  tickHeight?: number;
   tickSpacing?: number;
   tickWidth?: number;
-  duration: number;
+  tickColor?: string;
+  tickOpacity?: number;
+  tickStyle?: React.CSSProperties;
+  subTickHeightMultiplier?: number;
+  subTickWidthDifference?: number;
+  ticksPerBar?: number;
+  timestampFontSize?: number;
+  timestampColor?: string;
+  timestampStyle?: React.CSSProperties;
+  timestampHeight?: number;
+  containerStyle?: React.CSSProperties;
+  containerPaddingX?: number;
 }
 
+// TODO: Reformat tick boxes into styled components
+
 export const Timeline: React.FC<TimelineProps> = ({
-  containerWidth,
-  height,
   duration,
+  tickHeight = 10,
   tickSpacing = 13,
-  tickWidth = 2
+  tickWidth = 2,
+  tickColor = '#000000',
+  tickOpacity = 0.75,
+  tickStyle = {},
+  subTickHeightMultiplier = 0.5,
+  subTickWidthDifference = 1,
+  ticksPerBar = 4,
+  timestampFontSize = 14,
+  timestampColor = '#000000',
+  timestampStyle = {},
+  timestampHeight = 20,
+  containerStyle = {},
+  containerPaddingX = 10
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width } = useElementDimensions(containerRef, true, 50);
+
   const tickWidthWithSpacing = tickSpacing + tickWidth;
-  const ticksNum = containerWidth / tickWidthWithSpacing;
+  const ticksNum = width
+    ? Math.round((width - containerPaddingX) / tickWidthWithSpacing)
+    : 0;
   const durationOverTicsNum = duration / ticksNum;
 
   return (
-    <FlexBox height={`${height + 22}px`} padding='0 10px'>
+    <FlexBox
+      height={`${tickHeight + timestampHeight}px`}
+      padding={`0 ${containerPaddingX}px`}
+      ref={containerRef}
+      style={{ ...containerStyle }}
+    >
       {Array.from(Array(Math.round(ticksNum)).keys()).map((_, i) =>
-        i % 4 === 0 ? (
-          <Box position='relative'>
+        !ticksPerBar || ticksPerBar <= 0 || i % ticksPerBar === 0 ? (
+          <Box position='relative' key={i}>
             <Box paddingBottom={'30px'}>
               <Box
-                key={i}
-                height={`${height}px`}
-                background='#fff'
-                opacity={0.75}
+                height={`${tickHeight}px`}
+                background={tickColor}
+                opacity={tickOpacity}
                 width={`${tickWidth}px`}
                 marginRight={`${tickSpacing}px`}
+                style={{ ...tickStyle }}
               />
             </Box>
-            <TickTime>{formatTime(i * durationOverTicsNum)}</TickTime>
+            <TickTimestamp
+              height={timestampHeight}
+              fontSize={timestampFontSize}
+              color={timestampColor}
+              style={{ ...timestampStyle }}
+            >
+              {formatTime(i * durationOverTicsNum)}
+            </TickTimestamp>
           </Box>
         ) : (
           <Box
             key={i}
-            height={`${height * 0.5}px`}
-            background='#fff'
-            opacity={0.75}
-            width={`${tickWidth - 1}px`}
-            marginRight={`${tickSpacing + 1}px`}
+            height={`${tickSpacing * subTickHeightMultiplier}px`}
+            background={tickColor}
+            opacity={tickOpacity}
+            width={`${tickWidth - subTickWidthDifference}px`}
+            marginRight={`${tickSpacing + subTickWidthDifference}px`}
+            style={{ ...tickStyle }}
           />
         )
       )}
@@ -68,11 +111,20 @@ export const Timeline: React.FC<TimelineProps> = ({
   );
 };
 
-export const TickTime = styled.div`
+export const TickTimestamp = styled.div<{
+  height: number;
+  fontSize: number;
+  color: string;
+}>`
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 12px;
+  transform: translateX(-70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${(props) => props.color};
+  height: ${(props) => props.height}px;
+  font-size: ${(props) => props.fontSize}px;
 `;
