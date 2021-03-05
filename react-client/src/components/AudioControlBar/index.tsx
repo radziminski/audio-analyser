@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container } from './parts';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import Icon from 'components/Icon';

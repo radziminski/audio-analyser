@@ -11,9 +11,9 @@ import {
   RiVolumeMuteFill
 } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import { AiFillHome } from 'react-icons/ai';
-import { IoIosCreate } from 'react-icons/io';
-import { GiSoundWaves } from 'react-icons/gi';
+// import { AiFillHome } from 'react-icons/ai';
+// import { IoIosCreate } from 'react-icons/io';
+// import { GiSoundWaves } from 'react-icons/gi';
 import { Container } from './parts';
 
 export type SupportedIcon =

@@ -3,7 +3,7 @@ export interface AudioController {
   audioElement: HTMLAudioElement;
   buffer: AudioBuffer | null;
   isLoadingBuffer: boolean;
-  bufferError: any;
+  bufferError: string;
   isPlaying: boolean;
 
   sourceNode: MediaElementAudioSourceNode;

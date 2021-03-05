@@ -22,9 +22,9 @@ export const Waveform: React.FC<Props> = ({
   barBorderRadius,
   height,
   audioElement,
-  audioBuffer,
-  isLoadingAudioBuffer,
-  didLoadAudioBuffer
+  audioBuffer
+  // isLoadingAudioBuffer,
+  // didLoadAudioBuffer
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cursorContainerRef = useRef<HTMLDivElement | null>(null);

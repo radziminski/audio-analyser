@@ -1,6 +1,6 @@
 import { useElementDimensions } from 'hooks/useElementDimensions';
 import p5 from 'p5';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const CANVAS_RESIZE_DEBOUNCE_MS = 50;
 
@@ -34,9 +34,9 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
 
   useEffect(() => {
     if (containerRef.current && !canvasDrawer && dimensionsReady) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const currCanvasDrawer = new p5(
         canvasDrawFunction,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         containerRef.current!
       );
 
@@ -58,6 +58,7 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
 
       const currCanvasDrawer = new p5(
         canvasDrawFunction,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         containerRef.current!
       );
 
