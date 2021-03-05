@@ -5,7 +5,10 @@ import {
   RiUser3Fill,
   RiHome5Fill,
   RiFolderMusicFill,
-  RiBarChartBoxFill
+  RiBarChartBoxFill,
+  RiVolumeUpFill,
+  RiVolumeDownFill,
+  RiVolumeMuteFill
 } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { AiFillHome } from 'react-icons/ai';
@@ -20,7 +23,10 @@ export type SupportedIcon =
   | 'arrow-down-fill'
   | 'home-fill'
   | 'projects-fill'
-  | 'audio';
+  | 'audio'
+  | 'volume-mute-fill'
+  | 'volume-up-fill'
+  | 'volume-down-fill';
 
 export interface Props {
   icon: SupportedIcon;
@@ -45,6 +51,12 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiFolderMusicFill />;
       case 'audio':
         return <RiBarChartBoxFill />;
+      case 'volume-mute-fill':
+        return <RiVolumeMuteFill />;
+      case 'volume-up-fill':
+        return <RiVolumeUpFill />;
+      case 'volume-down-fill':
+        return <RiVolumeDownFill />;
     }
   };
   return (

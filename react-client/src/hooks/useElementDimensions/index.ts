@@ -1,20 +1,35 @@
+import { useOnResize } from './../useOnResize/index';
 import { useState, useEffect } from 'react';
 
 export const useElementDimensions = <T extends HTMLElement | null>(
-  ref: React.MutableRefObject<T>
+  ref: React.MutableRefObject<T>,
+  updateOnResize = false,
+  resizeDebounceTimeMs = 0
 ) => {
   const [height, setHeight] = useState<number>();
   const [width, setWidth] = useState<number>();
   const [left, setLeft] = useState<number>();
 
+  const getDimensions = <T extends HTMLElement>(container: T) => {
+    const width = container.getBoundingClientRect().width;
+    setWidth(width);
+    const height = container.getBoundingClientRect().height;
+    setHeight(height);
+    const left = container.getBoundingClientRect().left;
+    setLeft(left);
+  };
+
+  const onResize = () => {
+    if (ref.current) {
+      getDimensions(ref.current as HTMLElement);
+    }
+  };
+
+  useOnResize(updateOnResize ? onResize : null, resizeDebounceTimeMs);
+
   useEffect(() => {
     if (ref.current) {
-      const width = ref.current.getBoundingClientRect().width;
-      setWidth(width);
-      const height = ref.current.getBoundingClientRect().height;
-      setHeight(height);
-      const left = ref.current.getBoundingClientRect().left;
-      setLeft(left);
+      getDimensions(ref.current as HTMLElement);
     }
   }, [ref]);
 

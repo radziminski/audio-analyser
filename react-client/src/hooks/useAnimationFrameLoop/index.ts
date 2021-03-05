@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useAnimationFrameLoop = (animationFunction: () => void) => {
-  const [currAnimationFrameId, setCurrAnimationFrameId] = useState<number>();
+  const requestRef = useRef<number>();
 
   useEffect(() => {
     const animationLoop = () => {
       animationFunction();
-      const id = requestAnimationFrame(animationLoop);
-      setCurrAnimationFrameId(id);
+      requestRef.current = requestAnimationFrame(animationLoop);
     };
 
     animationLoop();
     return () =>
-      currAnimationFrameId
-        ? cancelAnimationFrame(currAnimationFrameId)
-        : undefined;
+      requestRef.current ? cancelAnimationFrame(requestRef.current) : undefined;
   }, [animationFunction]);
 };

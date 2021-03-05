@@ -13,7 +13,11 @@ export const useCalculatePeaks = <T extends HTMLElement | null>(
   const [peaks, setPeaks] = useState<number[]>();
   const [samplesPerBar, setSamplesPerBar] = useState<number>();
 
-  const { dimensionsReady, width, height } = useElementDimensions(container);
+  const { dimensionsReady, width, height } = useElementDimensions(
+    container,
+    true,
+    100
+  );
 
   useEffect(() => {
     if (!dimensionsReady || !width || !height || !audioBuffer) return;

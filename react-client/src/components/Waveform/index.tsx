@@ -32,7 +32,8 @@ export const Waveform: React.FC<Props> = ({
     left: containerLeft,
     width: containerWidth,
     dimensionsReady
-  } = useElementDimensions(containerRef);
+  } = useElementDimensions(containerRef, true, 50);
+
   useCursorDrawer(cursorContainerRef, audioElement);
 
   const { peaks } = useCalculatePeaks(

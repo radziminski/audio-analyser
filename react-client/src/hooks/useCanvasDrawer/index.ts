@@ -1,6 +1,8 @@
 import { useElementDimensions } from 'hooks/useElementDimensions';
 import p5 from 'p5';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
+
+const CANVAS_RESIZE_DEBOUNCE_MS = 50;
 
 export const useCanvasDrawer = <T extends HTMLElement | null>(
   containerRef: React.MutableRefObject<T>,
@@ -14,43 +16,64 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
     width: containerWidth,
     height: containerHeight,
     dimensionsReady
-  } = useElementDimensions(containerRef);
+  } = useElementDimensions(containerRef, true, CANVAS_RESIZE_DEBOUNCE_MS);
+
+  const canvasDrawFunction = useCallback(
+    (p: p5) => {
+      p.setup = function () {
+        p.createCanvas(
+          canvasWidth ?? containerWidth ?? 0,
+          canvasHeight ?? containerHeight ?? 0
+        );
+
+        setReady(true);
+      };
+    },
+    [containerWidth, containerHeight]
+  );
 
   useEffect(() => {
-    if (
-      containerRef &&
-      containerRef.current &&
-      !canvasDrawer &&
-      dimensionsReady
-    ) {
-      const sketch = function (p: p5) {
-        p.setup = function () {
-          p.createCanvas(
-            canvasWidth ?? containerWidth ?? 0,
-            canvasHeight ?? containerHeight ?? 0
-          );
-
-          setReady(true);
-        };
-      };
-
+    if (containerRef.current && !canvasDrawer && dimensionsReady) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const p5Drawer = new p5(sketch, containerRef.current!);
+      const currCanvasDrawer = new p5(
+        canvasDrawFunction,
+        containerRef.current!
+      );
 
-      setCanvasDrawer(p5Drawer);
+      setCanvasDrawer(currCanvasDrawer);
     }
+
     return canvasDrawer?.remove();
   }, [containerRef.current, dimensionsReady]);
+
+  useEffect(() => {
+    // Handle container resize
+    if (
+      containerRef.current &&
+      containerWidth &&
+      containerHeight &&
+      canvasDrawer
+    ) {
+      canvasDrawer?.remove();
+
+      const currCanvasDrawer = new p5(
+        canvasDrawFunction,
+        containerRef.current!
+      );
+
+      setCanvasDrawer(currCanvasDrawer);
+    }
+  }, [containerWidth, containerHeight]);
 
   if (!canvasDrawer) {
     return {
       ready: false,
-      canvasDrawer
+      canvasDrawer: undefined
     };
   }
 
   return {
     ready: ready,
-    canvasDrawer
+    canvasDrawer: canvasDrawer
   };
 };
