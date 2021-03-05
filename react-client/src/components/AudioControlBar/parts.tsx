@@ -14,3 +14,18 @@ export const Container = styled.div`
   align-items: center;
   padding: 5px 16px;
 `;
+
+export const IconContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+
+  &:first-child {
+    margin-right: 10px;
+  }
+
+  &:last-child {
+    margin-left: 10px;
+  }
+`;

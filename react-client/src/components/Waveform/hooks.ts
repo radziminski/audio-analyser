@@ -52,10 +52,15 @@ export const useCalculatePeaks = <T extends HTMLElement | null>(
 
 export const useCursorDrawer = <T extends HTMLElement | null>(
   cursorContainerRef: React.MutableRefObject<T>,
-  audioElement: HTMLAudioElement
+  audioElement: HTMLAudioElement,
+  cursorWidth = 2
 ) => {
   const { canvasDrawer, ready } = useCanvasDrawer(cursorContainerRef);
-  const { height, dimensionsReady } = useElementDimensions(cursorContainerRef);
+  const { height, width, dimensionsReady } = useElementDimensions(
+    cursorContainerRef,
+    true,
+    50
+  );
 
   useEffect(() => {
     if (!canvasDrawer || !ready || !dimensionsReady) return;
@@ -67,24 +72,28 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
   }, [canvasDrawer, ready, dimensionsReady]);
 
   const cursorAnimationFunction = useCallback(() => {
-    if (canvasDrawer && ready && audioElement && cursorContainerRef.current) {
+    if (
+      canvasDrawer &&
+      ready &&
+      audioElement &&
+      cursorContainerRef.current &&
+      width &&
+      height
+    ) {
       const time = audioElement.currentTime || 0;
       const duration = audioElement.duration;
 
-      if (time) {
+      if (time || time === 0) {
         canvasDrawer.clear();
         canvasDrawer.noStroke();
         canvasDrawer.fill(COLORS.accentSecondary100);
 
-        const currPosition =
-          (time / duration) * (cursorContainerRef.current?.offsetWidth || 0);
+        let currPosition = (time / duration) * width;
 
-        canvasDrawer.rect(
-          currPosition,
-          0,
-          2,
-          cursorContainerRef.current?.clientHeight || 0
-        );
+        if (currPosition >= width - cursorWidth)
+          currPosition = width - cursorWidth;
+
+        canvasDrawer.rect(currPosition, 0, cursorWidth, height);
       }
     }
   }, [canvasDrawer, audioElement, cursorContainerRef]);

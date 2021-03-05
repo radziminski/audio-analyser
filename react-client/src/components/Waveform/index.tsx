@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { useElementDimensions } from 'hooks';
 import { useCalculatePeaks, useCursorDrawer } from './hooks';
-import { Container } from './parts';
+import { Container, Timeline, WaveformContainer } from './parts';
 
 interface Props {
   audioBuffer: AudioBuffer | null | undefined;
@@ -87,23 +87,29 @@ export const Waveform: React.FC<Props> = ({
 
   return (
     <Container>
-      <FlexBox
-        height={height}
-        ref={containerRef}
-        justifyContent='center'
-        alignItems='center'
-        position='relative'
-        onClick={onWaveformClicked}
-      >
-        {barsRendered}
-
-        <Box
-          position='absolute'
-          width='100%'
-          height='100%'
-          ref={cursorContainerRef}
-        ></Box>
-      </FlexBox>
+      <WaveformContainer>
+        <FlexBox
+          height={height}
+          ref={containerRef}
+          justifyContent='center'
+          alignItems='center'
+          position='relative'
+          onClick={onWaveformClicked}
+        >
+          {barsRendered}
+          <Box
+            position='absolute'
+            width='100%'
+            height='100%'
+            ref={cursorContainerRef}
+          ></Box>
+        </FlexBox>
+      </WaveformContainer>
+      <Timeline
+        containerWidth={containerWidth || 0}
+        height={14}
+        duration={audioElement.duration}
+      />
     </Container>
   );
 };

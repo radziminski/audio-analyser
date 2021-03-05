@@ -37,6 +37,7 @@ export const VolumeMeter: React.FC<Props> = ({ audioController }) => {
 
     const analyserRight = audioController.createAnalyser(LEFT_CHANNEL);
     const analyserLeft = audioController.createAnalyser(RIGHT_CHANNEL);
+
     const analyserMaxRight = audioController.createAnalyser(LEFT_CHANNEL);
     const analyserMaxLeft = audioController.createAnalyser(RIGHT_CHANNEL);
 
@@ -50,6 +51,7 @@ export const VolumeMeter: React.FC<Props> = ({ audioController }) => {
 
     const analyserRightNode = analyserRight.analyserNode;
     const analyserLeftNode = analyserLeft.analyserNode;
+
     const analyserMaxRightNode = analyserMaxRight.analyserNode;
     const analyserMaxLeftNode = analyserMaxLeft.analyserNode;
 
