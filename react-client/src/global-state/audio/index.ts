@@ -46,6 +46,7 @@ const audioState: AudioState = {
   duration: computed((state) => state.controller?.audioElement.duration || 0),
 
   initController: action((state, audioElement) => {
+    console.log('in init controller');
     const controller = AudioController.fromAudioElement(audioElement);
     state.controller = controller;
 
@@ -57,10 +58,10 @@ const audioState: AudioState = {
     state.controller?.setTime(time);
   }),
 
-  play: (state) => {
+  play: action((state) => {
     state.controller?.play();
     state.isPlaying = true;
-  },
+  }),
 
   stop: action((state) => {
     state.controller?.stop();
