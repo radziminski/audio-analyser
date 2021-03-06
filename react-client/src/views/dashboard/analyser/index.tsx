@@ -4,19 +4,25 @@ import Waveform from 'components/Waveform';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
+import audioService from 'global-state/audio/audioController';
+import { useHistory, useParams } from 'react-router';
+import { ROUTES } from 'constants/routes';
 
 export const AnalyserView: React.FC = () => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioLoaded, setAudioLoaded] = useState(false);
 
   const {
-    controller,
     isLoadingAudioBuffer,
     didLoadAudioBuffer,
-    isPlaying
+    isPlaying,
+    currSrc,
+    audioSources
   } = useStoreState((state) => state.audio);
 
-  const { initController, loadAudioBuffer, play, pause } = useStoreActions(
+  const { id: srcId } = useParams<{ id: string }>();
+  const history = useHistory();
+
+  const { loadAudioBuffer, play, pause, stop, loadAudio } = useStoreActions(
     (actions) => actions.audio
   );
 
@@ -27,26 +33,34 @@ export const AnalyserView: React.FC = () => {
   );
 
   useEffect(() => {
-    if (audioRef.current) {
-      initController(audioRef.current);
-      loadAudioBuffer();
-      setAudioLoaded(true);
+    console.log(srcId);
+    if (srcId && audioSources[srcId]) {
+      const src = audioSources[srcId];
+      loadAudio(src);
     }
-  }, [audioRef]);
+  }, [srcId]);
+
+  useEffect(() => {
+    if (!currSrc) return;
+
+    loadAudioBuffer();
+    setAudioLoaded(true);
+  }, [currSrc]);
 
   const content = useMemo(() => {
-    console.log(isLoadingAudioBuffer || !didLoadAudioBuffer);
     if (
-      !audioRef.current ||
+      !audioService.audioElement ||
       isLoadingAudioBuffer ||
       !didLoadAudioBuffer ||
-      !controller
+      !audioService
     )
       return null;
+    console.log('Rendering...');
+
     return (
       <>
         <Waveform
-          audioBuffer={controller?.buffer}
+          audioBuffer={audioService?.buffer}
           isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
           didLoadAudioBuffer={didLoadAudioBuffer ?? false}
           barMinHeight={1}
@@ -54,18 +68,17 @@ export const AnalyserView: React.FC = () => {
           barSpacing={1}
           height={150}
           barBorderRadius={8}
-          audioElement={audioRef.current}
+          audioElement={audioService.audioElement}
         />
-        <VolumeMeter audioController={controller} />
+        <VolumeMeter />
       </>
     );
   }, [
-    audioRef,
-    audioRef.current,
+    audioService.audioElement,
     audioLoaded,
     isLoadingAudioBuffer,
     didLoadAudioBuffer,
-    controller
+    audioService
   ]);
 
   return (
@@ -75,7 +88,30 @@ export const AnalyserView: React.FC = () => {
         subTitles={['18:40', '24.09.2021', '30s']}
       >
         {content}
-        <audio src={require('assets/sample.wav')} ref={audioRef} />
+        <button
+          onClick={() => {
+            stop();
+            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample'));
+          }}
+        >
+          Change to sample
+        </button>
+        <button
+          onClick={() => {
+            stop();
+            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample2'));
+          }}
+        >
+          Change to sample2
+        </button>
+        <button
+          onClick={() => {
+            stop();
+            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample3'));
+          }}
+        >
+          Change to sample3
+        </button>
       </DashboardContent>
     </>
   );

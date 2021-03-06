@@ -3,31 +3,31 @@ import SliderPrimary from 'components/SliderPrimary';
 import Icon, { SupportedIcon } from 'components/Icon';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useStoreState } from 'global-state/hooks';
+import audioService from 'global-state/audio/audioController';
 
 export const VolumeSlider: React.FC = () => {
   const [gainValue, setGainValue] = useState(1);
   const [prevGainValue, setPrevGainValue] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
-  const { controller } = useStoreState((state) => state.audio);
 
   const onVolumeChange = useCallback(
     (value: number) => {
-      if (controller) controller.masterGainNode.gain.value = value;
+      if (audioService) audioService.masterGainNode.gain.value = value;
       setGainValue(value);
       setIsMuted(false);
     },
-    [controller, setGainValue]
+    [audioService, setGainValue]
   );
 
   const muteVolume = () => {
     setPrevGainValue(gainValue);
     setIsMuted(true);
-    if (controller) controller.masterGainNode.gain.value = 0;
+    if (audioService) audioService.masterGainNode.gain.value = 0;
     return setGainValue(0);
   };
   const unMuteVolume = () => {
     setIsMuted(false);
-    if (controller) controller.masterGainNode.gain.value = prevGainValue;
+    if (audioService) audioService.masterGainNode.gain.value = prevGainValue;
     setGainValue(prevGainValue);
   };
 

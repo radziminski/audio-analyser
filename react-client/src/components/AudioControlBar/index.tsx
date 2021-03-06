@@ -5,6 +5,7 @@ import Icon from 'components/Icon';
 import Box, { FlexBox } from 'components/Box';
 import AudioTimer from 'components/AudioTimer';
 import VolumeSlider from 'components/VolumeSlider';
+import audioService from 'global-state/audio/audioController';
 
 const ICON_SIZE_SMALL = 24;
 const ICON_SIZE_BIG = 34;
@@ -13,18 +14,16 @@ export const AudioControlBar: React.FC = () => {
   const [displayedCurrTime, setDisplayedCurrTime] = useState(0);
   const currTimeCheckerInterval = useRef<NodeJS.Timeout>();
 
-  const { controller, duration, isPlaying } = useStoreState(
-    (state) => state.audio
-  );
+  const { duration, isPlaying } = useStoreState((state) => state.audio);
 
   const { play, pause, setCurrTime } = useStoreActions(
     (actions) => actions.audio
   );
 
   useEffect(() => {
-    if (isPlaying && controller) {
+    if (isPlaying && audioService) {
       currTimeCheckerInterval.current = setInterval(
-        () => setDisplayedCurrTime(controller.audioElement.currentTime),
+        () => setDisplayedCurrTime(audioService.audioElement.currentTime),
         100
       );
     } else {
@@ -36,10 +35,10 @@ export const AudioControlBar: React.FC = () => {
     return () =>
       currTimeCheckerInterval.current &&
       clearInterval(currTimeCheckerInterval.current);
-  }, [isPlaying, controller]);
+  }, [isPlaying, audioService]);
 
   const goForward = () => {
-    if (controller) setCurrTime(controller.audioElement.duration);
+    if (audioService) setCurrTime(audioService.audioElement.duration);
   };
   const goBackward = () => {
     setCurrTime(0);
@@ -57,7 +56,7 @@ export const AudioControlBar: React.FC = () => {
           />
         </IconContainer>
         <Box cursor='pointer'>
-          {controller?.isPlaying ? (
+          {audioService?.isPlaying ? (
             <Icon
               size={ICON_SIZE_BIG}
               icon={'pause-circle'}

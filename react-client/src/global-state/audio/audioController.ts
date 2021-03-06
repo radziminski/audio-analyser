@@ -1,4 +1,4 @@
-export interface AudioController {
+export interface AudioService {
   context: AudioContext;
   audioElement: HTMLAudioElement;
   buffer: AudioBuffer | null;
@@ -23,8 +23,8 @@ export interface Analyser {
 export const LEFT_CHANNEL = 0;
 export const RIGHT_CHANNEL = 1;
 
-export class AudioController implements AudioController {
-  private constructor() {
+export class AudioService implements AudioService {
+  constructor() {
     this.context = new AudioContext();
     this.buffer = null;
     this.analysers = [];
@@ -33,28 +33,43 @@ export class AudioController implements AudioController {
     this.currAnalyserId = 0;
   }
 
-  static fromAudioElement(element: HTMLAudioElement): AudioController {
-    const audioController = new AudioController();
-    audioController.audioElement = element;
-    audioController.isPlaying = !element.paused;
+  init(element: HTMLAudioElement) {
+    this.audioElement = element;
+    this.isPlaying = !element.paused;
 
-    audioController.sourceNode = audioController.context.createMediaElementSource(
+    this.sourceNode = this.context.createMediaElementSource(element);
+
+    this.mixGainNode = this.context.createGain();
+    this.masterGainNode = this.context.createGain();
+
+    this.splitterNode = this.context.createChannelSplitter(2);
+
+    this.sourceNode.connect(this.mixGainNode);
+    this.mixGainNode.connect(this.splitterNode);
+    this.mixGainNode.connect(this.masterGainNode);
+    this.masterGainNode.connect(this.context.destination);
+  }
+
+  static fromAudioElement(element: HTMLAudioElement): AudioService {
+    const audioService = new AudioService();
+    audioService.audioElement = element;
+    audioService.isPlaying = !element.paused;
+
+    audioService.sourceNode = audioService.context.createMediaElementSource(
       element
     );
 
-    audioController.mixGainNode = audioController.context.createGain();
-    audioController.masterGainNode = audioController.context.createGain();
+    audioService.mixGainNode = audioService.context.createGain();
+    audioService.masterGainNode = audioService.context.createGain();
 
-    audioController.splitterNode = audioController.context.createChannelSplitter(
-      2
-    );
+    audioService.splitterNode = audioService.context.createChannelSplitter(2);
 
-    audioController.sourceNode.connect(audioController.mixGainNode);
-    audioController.mixGainNode.connect(audioController.splitterNode);
-    audioController.mixGainNode.connect(audioController.masterGainNode);
-    audioController.masterGainNode.connect(audioController.context.destination);
+    audioService.sourceNode.connect(audioService.mixGainNode);
+    audioService.mixGainNode.connect(audioService.splitterNode);
+    audioService.mixGainNode.connect(audioService.masterGainNode);
+    audioService.masterGainNode.connect(audioService.context.destination);
 
-    return audioController;
+    return audioService;
   }
 
   createAnalyser(channel: 0 | 1 = 0): Analyser {
@@ -124,4 +139,22 @@ export class AudioController implements AudioController {
   async setTime(time: number) {
     this.audioElement.currentTime = time;
   }
+
+  reloadAudio(src: string) {
+    this.audioElement.src = src;
+    this.audioElement.load();
+  }
+
+  remove() {
+    this.analysers.forEach((analyser) => this.removeAnalyser(analyser.id));
+
+    this.sourceNode.disconnect(this.mixGainNode);
+    this.mixGainNode.disconnect(this.splitterNode);
+    this.mixGainNode.disconnect(this.masterGainNode);
+    this.masterGainNode.disconnect(this.context.destination);
+  }
 }
+
+const audioService = new AudioService();
+
+export default audioService;

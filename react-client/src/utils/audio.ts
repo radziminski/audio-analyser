@@ -5,6 +5,7 @@ export const calculateBufferAverage = (buffer: Float32Array) => {
   for (let i = 0; i < buffer.length; i++) {
     sumOfSquares += buffer[i] ** 2;
   }
+
   return sampleToDecibel(sumOfSquares / buffer.length);
 };
 
@@ -22,4 +23,23 @@ export const calculateBufferMaxAverage = (buffer: Float32Array) => {
   const avgPower = sumOfSquares / maxSamples.length;
 
   return sampleToDecibel(avgPower);
+};
+
+// Makes no sense! - its updating every 8 bars so its too late
+export const calculateBufferAverageMax = (
+  buffer: Float32Array,
+  subBufferSize = 1024 * 4
+) => {
+  const subBuffersNum = Math.round(buffer.length / subBufferSize);
+
+  const subBuffersAverages: number[] = [];
+
+  for (let i = 0; i < subBuffersNum; i++) {
+    const subBufferStart = i * subBufferSize;
+    const avg = calculateBufferAverage(
+      buffer.slice(subBufferStart, subBufferStart + subBufferSize)
+    );
+    subBuffersAverages.push(Math.round(avg));
+  }
+  return subBuffersAverages.sort().reverse()[0];
 };
