@@ -13,7 +13,7 @@ export const AudioControlBar: React.FC = () => {
   const [displayedCurrTime, setDisplayedCurrTime] = useState(0);
   const currTimeCheckerInterval = useRef<NodeJS.Timeout>();
 
-  const { controller, currTime, duration, isPlaying } = useStoreState(
+  const { controller, duration, isPlaying } = useStoreState(
     (state) => state.audio
   );
 

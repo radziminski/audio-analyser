@@ -57,10 +57,10 @@ const audioState: AudioState = {
     state.controller?.setTime(time);
   }),
 
-  play: action((state) => {
+  play: (state) => {
     state.controller?.play();
     state.isPlaying = true;
-  }),
+  },
 
   stop: action((state) => {
     state.controller?.stop();
