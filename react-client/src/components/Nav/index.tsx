@@ -61,20 +61,13 @@ const getCurrPathIndex = (path: string) => {
 
 export const Nav: React.FC = () => {
   const { pathname } = useLocation();
-  const [currRoute, setCurrRoute] = useState(getCurrPathIndex(pathname));
-
-  console.log(getCurrPathIndex(pathname));
+  const currRoute = getCurrDashboardPathIndex(pathname);
 
   return (
     <>
       <Container>
         {NAV_LINKS.map((link, index) => (
-          <li
-            key={link.name}
-            onClick={() => {
-              setCurrRoute(index);
-            }}
-          >
+          <li key={link.name}>
             <NavItem
               selected={currRoute == index}
               name={link.name}

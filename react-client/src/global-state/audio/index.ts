@@ -78,6 +78,8 @@ const audioState: AudioState = {
   }),
 
   loadAudio: action((state, src) => {
+    audioService.stop();
+    state.isPlaying = false;
     audioService.reloadAudio(src);
 
     state.currSrc = src;

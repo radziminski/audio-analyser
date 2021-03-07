@@ -1,6 +1,6 @@
 import Box, { FlexBox } from 'components/Box';
 import { useElementDimensions } from 'hooks';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { formatTime } from 'utils/time';
 
@@ -57,14 +57,24 @@ export const Timeline: React.FC<TimelineProps> = ({
   containerStyle = {},
   containerPaddingX = 10
 }) => {
+  const [renderedDuration, setRenderedDuration] = useState(duration);
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useElementDimensions(containerRef, true, 50);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (duration != renderedDuration) setRenderedDuration(duration);
+    }, 100);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const tickWidthWithSpacing = tickSpacing + tickWidth;
   const ticksNum = width
     ? Math.round((width - containerPaddingX) / tickWidthWithSpacing)
     : 0;
-  const durationOverTicsNum = duration / ticksNum;
+  const durationOverTicsNum = duration ? duration / ticksNum : 0;
 
   return (
     <FlexBox

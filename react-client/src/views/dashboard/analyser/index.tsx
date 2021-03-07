@@ -88,38 +88,6 @@ export const AnalyserView: React.FC = () => {
         subTitles={['18:40', '24.09.2021', '30s']}
       >
         {content}
-        <button
-          onClick={() => {
-            stop();
-            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample'));
-          }}
-        >
-          Change to sample
-        </button>
-        <button
-          onClick={() => {
-            stop();
-            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample2'));
-          }}
-        >
-          Change to sample2
-        </button>
-        <button
-          onClick={() => {
-            stop();
-            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample3'));
-          }}
-        >
-          Change to sample3
-        </button>
-        <button
-          onClick={() => {
-            stop();
-            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'volumes'));
-          }}
-        >
-          Change to volumes
-        </button>
       </DashboardContent>
     </>
   );
