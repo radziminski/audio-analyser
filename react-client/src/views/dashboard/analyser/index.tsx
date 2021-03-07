@@ -112,6 +112,14 @@ export const AnalyserView: React.FC = () => {
         >
           Change to sample3
         </button>
+        <button
+          onClick={() => {
+            stop();
+            history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'volumes'));
+          }}
+        >
+          Change to volumes
+        </button>
       </DashboardContent>
     </>
   );

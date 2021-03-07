@@ -14,7 +14,7 @@ const DashboardView: React.FC = () => {
 
       <Switch>
         <Route path={ROUTES.DASHBOARD} exact>
-          <Redirect to={ROUTES.DASHBOARD_ANALYSER} />
+          <Redirect to={ROUTES.DASHBOARD_HOME} />
         </Route>
         <Route path={ROUTES.DASHBOARD_HOME}>
           <DashboardHomeView />

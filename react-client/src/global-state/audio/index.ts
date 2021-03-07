@@ -33,7 +33,11 @@ const audioState: AudioState = {
     sampleLong: require('assets/sampleLong.mp3'),
     sample: require('assets/sample.wav'),
     sample2: require('assets/sample2.wav'),
-    sample3: require('assets/sample3.wav')
+    sample3: require('assets/sample3.wav'),
+    volumes: require('assets/volumes.wav'),
+    max: require('assets/max.wav'),
+    three: require('assets/three_over.wav'),
+    change: require('assets/change.wav')
   },
 
   loadAudioBuffer: thunk(async (actions, _, helpers) => {

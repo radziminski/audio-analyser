@@ -43,3 +43,17 @@ export const calculateBufferAverageMax = (
   }
   return subBuffersAverages.sort().reverse()[0];
 };
+
+export const getVolumeRelativeToContainer = (
+  volumeValue: number,
+  topMargin?: number
+) => {
+  // console.log(
+  //   (volumeValue / 10) * 100 * Math.pow(0.975, Math.round(volumeValue)) +
+  //     (topMargin || 0)
+  // );
+  return (
+    (volumeValue / 10) * 100 * Math.pow(0.975, Math.round(volumeValue)) +
+    (topMargin || 0)
+  );
+};

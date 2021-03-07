@@ -1,6 +1,8 @@
+import { getVolumeRelativeToContainer } from 'utils/audio';
 import p5 from 'p5';
 
-const ORANGE_COLOR_DB_THRESHOLD = 15;
+const INST_NORMALIZING_OFFSET = 2.5;
+const AVG_NORMALIZING_OFFSET = 1;
 
 export const drawInstantaneousVolume = (
   valueLeft: number,
@@ -62,6 +64,9 @@ export const drawMaxAverageVolume = (
   );
 };
 
+const ORANGE_COLOR_DB_THRESHOLD = 9;
+const RED_COLOR_DB_THRESHOLD = 0;
+
 export const drawInstantaneousVolumeSide = (
   value: number,
   type: 'left' | 'right',
@@ -75,55 +80,101 @@ export const drawInstantaneousVolumeSide = (
 ) => {
   if (!canvasDrawer) return;
 
-  let currSample = value;
-
-  if (!value || value === -Infinity || value === Infinity || isNaN(value))
-    currSample = containerHeight;
+  const { currSample, actualValueDb } = getHeightForValue(
+    value,
+    containerHeight,
+    bottomBorderRadius,
+    INST_NORMALIZING_OFFSET
+  );
 
   const offsetX = type === 'left' ? 0 : containerWidth / 2 + barsSpacing;
+  const bottomLeftRadius = type === 'left' ? bottomBorderRadius : 0;
+  const bottomRightRadius = type === 'right' ? bottomBorderRadius : 0;
 
-  currSample = Math.abs(currSample) * 7;
-  const maxGreenRectHeight = ORANGE_COLOR_DB_THRESHOLD * 7;
+  const maxGreenRectHeight = getCurrSampleHeightFromDb(
+    ORANGE_COLOR_DB_THRESHOLD,
+    containerHeight
+  );
+
+  const maxYellowRectHeight = getCurrSampleHeightFromDb(
+    RED_COLOR_DB_THRESHOLD,
+    containerHeight
+  );
 
   const barWidth = (containerWidth - barsSpacing) / 2;
 
   if (clear) canvasDrawer.clear();
   canvasDrawer.noStroke();
 
-  if (value > -ORANGE_COLOR_DB_THRESHOLD) {
+  if (actualValueDb < ORANGE_COLOR_DB_THRESHOLD) {
+    const greenStart = maxGreenRectHeight;
+    const greenHeight = containerHeight - maxGreenRectHeight;
+    let orangeStart = currSample;
+    let orangeHeight =
+      containerHeight - currSample - (containerHeight - maxGreenRectHeight);
+
     canvasDrawer.fill('#48A300');
     canvasDrawer.rect(
       offsetX,
-      maxGreenRectHeight,
+      greenStart > 0 ? greenStart : +containerHeight,
       barWidth,
-      containerHeight - maxGreenRectHeight,
+      greenHeight > 0 ? greenHeight : 0,
       0,
       0,
-      type === 'right' ? bottomBorderRadius : 0,
-      type === 'left' ? bottomBorderRadius : 0
+      bottomRightRadius,
+      bottomLeftRadius
     );
+
+    if (actualValueDb < RED_COLOR_DB_THRESHOLD) {
+      orangeStart = maxYellowRectHeight;
+      orangeHeight =
+        containerHeight -
+        maxYellowRectHeight -
+        (containerHeight - maxGreenRectHeight);
+
+      const redStart = currSample;
+      const redHeight =
+        containerHeight - currSample - (containerHeight - maxYellowRectHeight);
+
+      canvasDrawer.fill('#FF0000');
+      canvasDrawer.rect(
+        offsetX,
+        redStart > 0 ? redStart : +containerHeight,
+        barWidth,
+        redHeight > 0 ? redHeight : 0,
+        type === 'right' ? topBorderRadius : 0,
+        type === 'left' ? topBorderRadius : 0,
+        0,
+        0
+      );
+    }
+
     canvasDrawer.fill('#ECB831');
     canvasDrawer.rect(
       offsetX,
-      currSample,
+      orangeStart > 0 ? orangeStart : +containerHeight,
       barWidth,
-      containerHeight - currSample - (containerHeight - maxGreenRectHeight),
+      orangeHeight > 0 ? orangeHeight : 0,
       type === 'right' ? topBorderRadius : 0,
       type === 'left' ? topBorderRadius : 0,
       0,
       0
     );
   } else {
+    const greenStart = currSample;
+    const greenHeight =
+      containerHeight - currSample > 0 ? containerHeight - currSample : 0;
+
     canvasDrawer.fill('#48A300');
     canvasDrawer.rect(
       offsetX,
-      currSample,
+      greenStart > 0 ? greenStart : +containerHeight,
       barWidth,
-      containerHeight - currSample > 0 ? containerHeight - currSample : 0,
+      greenHeight > 0 ? greenHeight : 0,
       type === 'right' ? topBorderRadius : 0,
       type === 'left' ? topBorderRadius : 0,
-      type === 'right' ? bottomBorderRadius : 0,
-      type === 'left' ? bottomBorderRadius : 0
+      bottomRightRadius,
+      bottomLeftRadius
     );
   }
 };
@@ -138,15 +189,17 @@ export const drawMaxAverageVolumeSide = (
 ) => {
   if (!canvasDrawer) return;
 
-  let currSample = value;
+  const { currSample } = getHeightForValue(
+    value,
+    containerHeight,
+    0,
+    AVG_NORMALIZING_OFFSET
+  );
 
-  if (!value || value === -Infinity || value === Infinity || isNaN(value))
-    currSample = containerHeight;
+  if (currSample === containerHeight) return;
 
   const offsetX = type === 'left' ? 0 : containerWidth / 2 + barsSpacing;
   const barWidth = (containerWidth - barsSpacing) / 2;
-
-  currSample = Math.abs(currSample) * 7;
 
   canvasDrawer.stroke(255, 0, 0);
   canvasDrawer.line(
@@ -155,4 +208,49 @@ export const drawMaxAverageVolumeSide = (
     type === 'left' ? barWidth : containerWidth,
     currSample
   );
+};
+
+const getCurrSampleHeightFromDb = (
+  sampleValue: number,
+  containerHeight: number
+) => {
+  return (
+    (getVolumeRelativeToContainer(sampleValue / 3) / 100) * containerHeight +
+    0.1 * containerHeight
+  );
+};
+
+const getHeightForValue = (
+  value: number,
+  containerHeight: number,
+  bottomBorderRadius: number,
+  normalizingOffset: number
+) => {
+  let currSample = value;
+
+  if (
+    !value ||
+    value === -Infinity ||
+    value === Infinity ||
+    isNaN(value) ||
+    value < -100 ||
+    value > 100
+  )
+    currSample = -100;
+
+  currSample = Math.round((Math.abs(currSample) - 1.96) * 1000) / 1000;
+
+  currSample = currSample - normalizingOffset;
+  const actualValueDb = currSample;
+
+  const val = getCurrSampleHeightFromDb(currSample, containerHeight);
+
+  currSample =
+    val < 0 || !val
+      ? containerHeight
+      : val > containerHeight - bottomBorderRadius
+      ? containerHeight
+      : val;
+
+  return { currSample, actualValueDb };
 };

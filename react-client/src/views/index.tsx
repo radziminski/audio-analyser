@@ -7,7 +7,7 @@ export const AppRoutes: React.FC = () => {
     <>
       <Switch>
         <Route path={ROUTES.ROOT} exact>
-          <Redirect to={ROUTES.DASHBOARD_ANALYSER} />
+          <Redirect to={ROUTES.DASHBOARD} />
         </Route>
         <Route path={ROUTES.DASHBOARD}>
           <DashboardView />
