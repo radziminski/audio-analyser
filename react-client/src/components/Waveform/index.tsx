@@ -58,7 +58,7 @@ export const Waveform: React.FC<Props> = ({
         );
       }) ?? null
     );
-  }, [peaks]);
+  }, [peaks, barBorderRadius, barSpacing, barWidth]);
 
   const onWaveformClicked = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -76,13 +76,7 @@ export const Waveform: React.FC<Props> = ({
       const ratio = relativePosition / containerWidth;
       audioElement.currentTime = ratio * audioElement.duration;
     },
-    [
-      containerRef.current,
-      audioElement,
-      dimensionsReady,
-      containerLeft,
-      containerWidth
-    ]
+    [audioElement, dimensionsReady, containerLeft, containerWidth]
   );
 
   return (

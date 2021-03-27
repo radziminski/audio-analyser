@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
 import Waveform from 'components/Waveform';
 import FrequencyMeter from 'components/FrequencyMeter';
@@ -6,11 +6,11 @@ import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
 import audioService from 'global-state/audio/audioController';
-import { useHistory, useParams } from 'react-router';
-import { ROUTES } from 'constants/routes';
+import { useParams } from 'react-router';
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
+  console.log(audioLoaded);
 
   const {
     isLoadingAudioBuffer,
@@ -21,9 +21,8 @@ export const AnalyserView: React.FC = () => {
   } = useStoreState((state) => state.audio);
 
   const { id: srcId } = useParams<{ id: string }>();
-  const history = useHistory();
 
-  const { loadAudioBuffer, play, pause, stop, loadAudio } = useStoreActions(
+  const { loadAudioBuffer, play, pause, loadAudio } = useStoreActions(
     (actions) => actions.audio
   );
 
@@ -39,14 +38,14 @@ export const AnalyserView: React.FC = () => {
       const src = audioSources[srcId];
       loadAudio(src);
     }
-  }, [srcId]);
+  }, [srcId, audioSources, loadAudio]);
 
   useEffect(() => {
     if (!currSrc) return;
 
     loadAudioBuffer();
     setAudioLoaded(true);
-  }, [currSrc]);
+  }, [currSrc, loadAudioBuffer]);
 
   const content = useMemo(() => {
     if (
@@ -56,7 +55,6 @@ export const AnalyserView: React.FC = () => {
       !audioService
     )
       return null;
-    console.log('Rendering...');
 
     return (
       <>
@@ -75,13 +73,7 @@ export const AnalyserView: React.FC = () => {
         <FrequencyMeter />
       </>
     );
-  }, [
-    audioService.audioElement,
-    audioLoaded,
-    isLoadingAudioBuffer,
-    didLoadAudioBuffer,
-    audioService
-  ]);
+  }, [isLoadingAudioBuffer, didLoadAudioBuffer]);
 
   return (
     <>

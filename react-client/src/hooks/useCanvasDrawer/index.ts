@@ -44,6 +44,8 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
     }
 
     return canvasDrawer?.remove();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef.current, dimensionsReady]);
 
   useEffect(() => {
@@ -64,6 +66,7 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
 
       setCanvasDrawer(currCanvasDrawer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerWidth, containerHeight]);
 
   if (!canvasDrawer) {

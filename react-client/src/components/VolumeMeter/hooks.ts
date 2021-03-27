@@ -59,6 +59,7 @@ export const useInitAnalysers = () => {
       });
       setAnalysersIds([]);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

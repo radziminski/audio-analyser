@@ -1,5 +1,5 @@
 import { action, thunk, Action, Thunk, computed, Computed } from 'easy-peasy';
-import audioService, { AudioService } from './audioController';
+import AudioService from './audioController';
 
 export type AudioAction<Payload = void> = Action<AudioState, Payload>;
 export type AudioThunk<Payload = void> = Thunk<AudioState, Payload>;
@@ -40,9 +40,9 @@ const audioState: AudioState = {
     change: require('assets/change.wav')
   },
 
-  loadAudioBuffer: thunk(async (actions, _, helpers) => {
+  loadAudioBuffer: thunk(async (actions, _) => {
     actions.setIsLoadingAudioBuffer(true);
-    await audioService.loadBuffer();
+    await AudioService.loadBuffer();
     actions.setIsLoadingAudioBuffer(false);
   }),
 
@@ -51,25 +51,25 @@ const audioState: AudioState = {
     if (payload) state.didLoadAudioBuffer = true;
   }),
 
-  currTime: computed((state) => audioService.audioElement?.currentTime || 0),
-  duration: computed((state) => audioService.audioElement?.duration || 0),
+  currTime: computed(() => AudioService.audioElement?.currentTime || 0),
+  duration: computed(() => AudioService.audioElement?.duration || 0),
 
-  setCurrTime: action((state, time) => {
-    audioService.setTime(time);
+  setCurrTime: action((_, time) => {
+    AudioService.setTime(time);
   }),
 
   play: action((state) => {
-    audioService.play();
+    AudioService.play();
     state.isPlaying = true;
   }),
 
   stop: action((state) => {
-    audioService.stop();
+    AudioService.stop();
     state.isPlaying = false;
   }),
 
   pause: action((state) => {
-    audioService.pause();
+    AudioService.pause();
     state.isPlaying = false;
   }),
 
@@ -78,9 +78,9 @@ const audioState: AudioState = {
   }),
 
   loadAudio: action((state, src) => {
-    audioService.stop();
+    AudioService.stop();
     state.isPlaying = false;
-    audioService.reloadAudio(src);
+    AudioService.reloadAudio(src);
 
     state.currSrc = src;
   })

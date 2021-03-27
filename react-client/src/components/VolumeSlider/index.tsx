@@ -2,7 +2,6 @@ import Box, { FlexBox } from 'components/Box';
 import SliderPrimary from 'components/SliderPrimary';
 import Icon, { SupportedIcon } from 'components/Icon';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useStoreState } from 'global-state/hooks';
 import audioService from 'global-state/audio/audioController';
 
 export const VolumeSlider: React.FC = () => {
@@ -16,7 +15,7 @@ export const VolumeSlider: React.FC = () => {
       setGainValue(value);
       setIsMuted(false);
     },
-    [audioService, setGainValue]
+    [setGainValue]
   );
 
   const muteVolume = () => {

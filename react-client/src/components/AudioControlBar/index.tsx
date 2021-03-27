@@ -35,7 +35,7 @@ export const AudioControlBar: React.FC = () => {
     return () =>
       currTimeCheckerInterval.current &&
       clearInterval(currTimeCheckerInterval.current);
-  }, [isPlaying, audioService]);
+  }, [isPlaying]);
 
   const goForward = () => {
     if (audioService) setCurrTime(audioService.audioElement.duration);

@@ -42,6 +42,8 @@ export const useCalculatePeaks = <T extends HTMLElement | null>(
     const barMultiplier = height / highestBar;
 
     setPeaks([...currBars.map((bar) => bar * barMultiplier)]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioBuffer, barWidth, barSpacing, dimensionsReady, width]);
 
   return {
@@ -69,6 +71,7 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
     canvasDrawer.noStroke();
 
     canvasDrawer.rect(0, 0, 2, height || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasDrawer, ready, dimensionsReady]);
 
   const cursorAnimationFunction = useCallback(() => {
@@ -96,6 +99,7 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
         canvasDrawer.rect(currPosition, 0, cursorWidth, height);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasDrawer, audioElement, cursorContainerRef]);
 
   useAnimationFrameLoop(cursorAnimationFunction);

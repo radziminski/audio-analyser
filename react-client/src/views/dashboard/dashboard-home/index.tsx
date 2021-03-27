@@ -1,9 +1,8 @@
-import Box, { FlexBox } from 'components/Box';
+import { FlexBox } from 'components/Box';
 import React from 'react';
 import DashboardContent from 'components/DashboardContent';
 import { useHistory } from 'react-router';
 import { ROUTES } from 'constants/routes';
-import { buttonStyle } from 'styled-system';
 
 export const DashboardHomeView: React.FC = () => {
   const history = useHistory();

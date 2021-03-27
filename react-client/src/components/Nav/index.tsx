@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from 'components/Box';
 import NavItem from 'components/NavItem';
 import { NavSelector, Container } from './parts';
@@ -48,17 +48,6 @@ const getCurrDashboardPathIndex = (path: string) => {
   }
 };
 
-const getCurrPathIndex = (path: string) => {
-  const routes = path.split('/').slice(1);
-  console.log(routes[0], ROUTES.DASHBOARD.replace('/', ''));
-  switch (routes[0]) {
-    case ROUTES.DASHBOARD.replace('/', ''):
-      return getCurrDashboardPathIndex(path);
-    default:
-      return 0;
-  }
-};
-
 export const Nav: React.FC = () => {
   const { pathname } = useLocation();
   const currRoute = getCurrDashboardPathIndex(pathname);
@@ -69,7 +58,7 @@ export const Nav: React.FC = () => {
         {NAV_LINKS.map((link, index) => (
           <li key={link.name}>
             <NavItem
-              selected={currRoute == index}
+              selected={currRoute === index}
               name={link.name}
               linkTo={link.linkTo}
               icon={link.icon}

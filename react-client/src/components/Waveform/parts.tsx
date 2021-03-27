@@ -63,11 +63,12 @@ export const Timeline: React.FC<TimelineProps> = ({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (duration != renderedDuration) setRenderedDuration(duration);
+      if (duration !== renderedDuration) setRenderedDuration(duration);
     }, 100);
     return () => {
       clearTimeout(timeout);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tickWidthWithSpacing = tickSpacing + tickWidth;

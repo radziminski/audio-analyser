@@ -1,5 +1,5 @@
 import AudioService from 'global-state/audio/audioController';
-import React, { useEffect, useRef, ReactElement } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Box from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { sampleToDecibel } from 'utils/audio';
