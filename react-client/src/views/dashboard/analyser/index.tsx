@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import VolumeMeter from 'components/VolumeMeter';
 import Waveform from 'components/Waveform';
+import FrequencyMeter from 'components/FrequencyMeter';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
@@ -71,6 +72,7 @@ export const AnalyserView: React.FC = () => {
           audioElement={audioService.audioElement}
         />
         <VolumeMeter />
+        <FrequencyMeter />
       </>
     );
   }, [
