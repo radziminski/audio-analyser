@@ -20,8 +20,8 @@ export interface Analyser {
   id: number;
 }
 
-export const LEFT_CHANNEL = 0;
-export const RIGHT_CHANNEL = 1;
+export const LEFT_CHANNEL = 1;
+export const RIGHT_CHANNEL = 0;
 
 export class AudioService implements AudioService {
   constructor() {

@@ -103,8 +103,8 @@ export const useInitMeter = ({
 
     analyserInstRight?.getFloatTimeDomainData(sampleBufferRight);
     analyserInstLeft?.getFloatTimeDomainData(sampleBufferLeft);
-    analyserAvgRight?.getFloatTimeDomainData(sampleBufferInstLeft);
-    analyserAvgLeft?.getFloatTimeDomainData(sampleBufferInstRight);
+    analyserAvgRight?.getFloatTimeDomainData(sampleBufferInstRight);
+    analyserAvgLeft?.getFloatTimeDomainData(sampleBufferInstLeft);
 
     // Compute average power over the interval.
     const instantaneousAverageLeft = calculateBufferAverage(sampleBufferLeft);
