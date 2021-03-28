@@ -42,7 +42,7 @@ const audioState: AudioState = {
     freqs: require('assets/freqs.wav')
   },
 
-  loadAudioBuffer: thunk(async (actions, _) => {
+  loadAudioBuffer: thunk(async (actions) => {
     actions.setIsLoadingAudioBuffer(true);
     await AudioService.loadBuffer();
     actions.setIsLoadingAudioBuffer(false);

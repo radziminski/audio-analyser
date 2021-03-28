@@ -29,7 +29,7 @@ interface Props {
   value: number;
   width?: number;
 }
-export const VolumeValueTag: React.FC<Props> = ({ value, width = 30 }) => {
+export const VolumeValueTag: React.FC<Props> = ({ value }) => {
   return (
     <VolumeValueTagContainer value={value}>{value}</VolumeValueTagContainer>
   );

@@ -7,6 +7,7 @@ import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
 import audioService from 'global-state/audio/audioController';
 import { useParams } from 'react-router';
+import { FlexBox } from 'components/Box';
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
@@ -69,8 +70,10 @@ export const AnalyserView: React.FC = () => {
           barBorderRadius={8}
           audioElement={audioService.audioElement}
         />
-        <VolumeMeter />
-        <FrequencyMeter />
+        <FlexBox justifyContent='space-between'>
+          <VolumeMeter />
+          <FrequencyMeter />
+        </FlexBox>
       </>
     );
   }, [isLoadingAudioBuffer, didLoadAudioBuffer]);

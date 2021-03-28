@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/d3-interpolate": "^2.0.0",
+    "curve-interpolator": "^2.0.8",
+    "d3-interpolate": "^2.0.1"
+  }
+}
