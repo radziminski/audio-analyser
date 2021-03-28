@@ -14,23 +14,49 @@ const FrequencyMeter: React.FC = () => {
 
   const getFreq = () => {
     if (!canvasDrawer) return;
+    if (!analyser.current) return;
     canvasDrawer.clear();
 
     const currAnalyser = analyser.current;
-    const buffer = new Float32Array(currAnalyser?.fftSize || 0);
-    currAnalyser?.getFloatFrequencyData(buffer);
+    const buffer = new Float32Array(currAnalyser.fftSize);
+    currAnalyser.getFloatFrequencyData(buffer);
 
-    buffer.forEach((sample, sampleNum) => {
-      if (sampleNum > 1023) return;
+    // console.log(buffer[4]);
+    // console.log(sampleToDecibel(Math.abs(buffer[4])));
+    const barWidth = 1;
+
+    for (
+      let sampleNum = 1;
+      sampleNum < currAnalyser?.fftSize / 2;
+      sampleNum++
+    ) {
+      const sample = (buffer[sampleNum] + buffer[sampleNum - 1]) / 2;
 
       if (sample === -Infinity || sample === 0) {
         canvasDrawer.stroke(COLORS.accentPrimary100);
         canvasDrawer.fill(COLORS.accentPrimary100);
-        return canvasDrawer.rect(sampleNum, height - 1, 1, 1);
+        return canvasDrawer.rect(sampleNum * barWidth, height - 1, barWidth, 1);
       }
-      const currSampleDec = (sampleToDecibel(Math.abs(sample)) * height) / 30;
-      canvasDrawer.rect(sampleNum, currSampleDec, 1, height - currSampleDec);
-    });
+      const currSampleDec = (sampleToDecibel(Math.abs(sample)) * height) / 23;
+      canvasDrawer.rect(
+        sampleNum * barWidth,
+        currSampleDec,
+        barWidth,
+        height - currSampleDec
+      );
+    }
+
+    // buffer.forEach((sample, sampleNum) => {
+    //   if (sampleNum > 511) return;
+
+    //   if (sample === -Infinity || sample === 0) {
+    //     canvasDrawer.stroke(COLORS.accentPrimary100);
+    //     canvasDrawer.fill(COLORS.accentPrimary100);
+    //     return canvasDrawer.rect(sampleNum, height - 1, 1, 1);
+    //   }
+    //   const currSampleDec = (sampleToDecibel(Math.abs(sample)) * height) / 23;
+    //   canvasDrawer.rect(sampleNum, currSampleDec, 1, height - currSampleDec);
+    // });
   };
 
   useAnimationFrameLoop(
@@ -40,7 +66,7 @@ const FrequencyMeter: React.FC = () => {
 
   useEffect(() => {
     const currAnalyser = AudioService.createAnalyser();
-    currAnalyser.analyserNode.fftSize = 1024;
+    currAnalyser.analyserNode.fftSize = 1024 * 2;
     analyser.current = currAnalyser.analyserNode;
     console.log(AudioService.buffer?.sampleRate);
     console.log(analyser.current.maxDecibels);
@@ -50,9 +76,7 @@ const FrequencyMeter: React.FC = () => {
   return (
     <>
       <button onClick={getFreq}>getFeq!</button>
-      <Box width={512} height={height} ref={container}>
-        {' '}
-      </Box>
+      <Box width={512} height={height} ref={container}></Box>
     </>
   );
 };
