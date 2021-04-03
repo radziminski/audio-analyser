@@ -38,7 +38,7 @@ const FrequencyMeter: React.FC = () => {
     const samplesInLogInter: number[][] = [];
     const samplesInLog: number[] = [];
 
-    let lowVal = 0;
+    const lowVal = 0;
 
     for (let sampleNum = 1; sampleNum < valuableSamplesNumber; sampleNum++) {
       // const sampleNumPerWidth = sampleNum;
