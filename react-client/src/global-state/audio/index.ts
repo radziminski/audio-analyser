@@ -61,6 +61,7 @@ const audioState: AudioState = {
   }),
 
   play: action((state) => {
+    AudioService.context.resume();
     AudioService.play();
     state.isPlaying = true;
   }),

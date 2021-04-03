@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import VolumeValueTag, { Container } from './parts';
+import VolumeValueTag, { CanvasContainer, Container } from './parts';
 import { useStartMeter } from './hooks';
 import Box from 'components/Box';
 import { getVolumeRelativeToContainer } from 'utils/audio';
@@ -12,6 +12,8 @@ export const VolumeMeter: React.FC = () => {
 
   return (
     <Container ref={containerRef}>
+      <CanvasContainer />
+
       {Array.from(Array(12).keys()).map((i) => (
         <Box
           key={i}

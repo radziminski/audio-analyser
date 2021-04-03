@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 export const Container = styled.div`
   display: flex;
   height: 100%;
@@ -9,6 +10,11 @@ export const Container = styled.div`
   border-radius: 12px;
   position: relative;
   overflow: hidden;
+`;
+
+export const CanvasContainer = styled.div`
+  height: 100%;
+  width: 100%;
 `;
 
 export const VolumeValueTagContainer = styled.div<{ value: number }>`
