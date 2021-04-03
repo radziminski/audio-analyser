@@ -22,6 +22,7 @@ export interface AudioState {
   setCurrTime: AudioAction<number>;
   setCurrSrc: AudioAction<string | null>;
   loadAudio: AudioAction<string>;
+  addAudioSources: AudioAction<Record<string, string>>;
 }
 
 const audioState: AudioState = {
@@ -86,6 +87,13 @@ const audioState: AudioState = {
     AudioService.reloadAudio(src);
 
     state.currSrc = src;
+  }),
+
+  addAudioSources: action((state, sources) => {
+    state.audioSources = {
+      ...state.audioSources,
+      ...sources
+    };
   })
 };
 

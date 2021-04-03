@@ -3,9 +3,25 @@ import React from 'react';
 import DashboardContent from 'components/DashboardContent';
 import { useHistory } from 'react-router';
 import { ROUTES } from 'constants/routes';
+import AudioService from 'global-state/audio/audioController';
+import { useStoreActions } from 'global-state/hooks';
 
 export const DashboardHomeView: React.FC = () => {
   const history = useHistory();
+  const { addAudioSources } = useStoreActions((state) => state.audio);
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || !files.length) return;
+
+    const sourceName = 'file';
+
+    addAudioSources({
+      [sourceName]: URL.createObjectURL(files[0])
+    });
+
+    history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'file'));
+  };
 
   return (
     <>
@@ -43,6 +59,11 @@ export const DashboardHomeView: React.FC = () => {
           >
             Change to volumes
           </button>
+          <input
+            type='file'
+            accept='.mp3, .wav, .flac, .m4a'
+            onChange={onFileChange}
+          />
         </FlexBox>
       </DashboardContent>
     </>
