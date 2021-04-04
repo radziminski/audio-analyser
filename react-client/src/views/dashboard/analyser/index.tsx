@@ -79,14 +79,12 @@ export const AnalyserView: React.FC = () => {
   }, [isLoadingAudioBuffer, didLoadAudioBuffer]);
 
   return (
-    <>
-      <DashboardContent
-        title='My_superb_audio_file.wav'
-        subTitles={['18:40', '24.09.2021', '30s']}
-      >
-        {content}
-      </DashboardContent>
-    </>
+    <DashboardContent
+      title='My_superb_audio_file.wav'
+      subTitles={['18:40', '24.09.2021', '30s']}
+    >
+      {content}
+    </DashboardContent>
   );
 };
 

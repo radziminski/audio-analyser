@@ -2,24 +2,19 @@ import AudioService from 'global-state/audio/audioController';
 import React, { useEffect, useRef } from 'react';
 import Box from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
-import { sampleToDecibel } from 'utils/audio';
 import { COLORS } from 'styles/theme';
-import { getFrequencyLabels } from './helpers';
+import { getFrequencyLabels, getLogValue } from './helpers';
 
-const toLog = function (value, min, max) {
-  const exp = (value - min) / (max - min);
-  return min * Math.pow(max / min, exp);
-};
-
+const barWidth = 1;
+const minDecibels = 23;
 const height = 400;
 const width = 512;
-
-const done = false;
 
 const FrequencyMeter: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
   const { canvasDrawer, ready } = useCanvasDrawer(container);
+  const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
 
   const getFreq = () => {
     if (!canvasDrawer) return;
@@ -30,61 +25,25 @@ const FrequencyMeter: React.FC = () => {
     const buffer = new Float32Array(currAnalyser.fftSize);
     currAnalyser.getFloatFrequencyData(buffer);
 
-    const barWidth = 1;
-
-    const valuableSamplesNumber = currAnalyser.fftSize / 2;
-    const minDecibels = 23;
-
-    const samplesInLogInter: number[][] = [];
     const samplesInLog: number[] = [];
 
-    const lowVal = 0;
-
     for (let sampleNum = 1; sampleNum < valuableSamplesNumber; sampleNum++) {
-      // const sampleNumPerWidth = sampleNum;
-      // const sample = buffer[sampleNum];
-      // const logIndex = toLog(sampleNumPerWidth, 1, valuableSamplesNumber);
-      // const low = Math.floor(logIndex);
-      // const high = Math.ceil(logIndex);
-      // const lv = buffer[low];
-      // const currSampleDec =
-      //   lv === Infinity || lv === -Infinity
-      //     ? height
-      //     : (sampleToDecibel(Math.abs(lv)) * height) / minDecibels;
-
-      // // samplesInLogInter.push([sampleNum, currSampleDec || 0.001]);
-      // if (low != lowVal) {
-      //   lowVal = low;
-      //   samplesInLogInter.push([sampleNum, currSampleDec || 0.001]);
-      // }
-
-      const sampleNumPerWidth2 = (sampleNum * valuableSamplesNumber) / width;
-      const sample2 = buffer[sampleNum];
-      const logIndex2 = toLog(sampleNumPerWidth2, 1, valuableSamplesNumber);
-      const low2 = Math.floor(logIndex2);
-      const high2 = Math.ceil(logIndex2);
-      const hv2 = buffer[high2];
-      const lv2 = buffer[low2];
-      const w = (logIndex2 - low2) / (high2 - low2);
-      const value = lv2 + (hv2 - lv2) * w;
-
-      const currSampleDecNew =
-        !Number.isFinite(lv2) || !Number.isFinite(hv2)
-          ? height
-          : (sampleToDecibel(Math.abs(value)) * height) / minDecibels;
-
-      samplesInLog.push(currSampleDecNew || 0.001);
+      samplesInLog.push(
+        getLogValue(
+          sampleNum,
+          buffer,
+          valuableSamplesNumber,
+          width,
+          height,
+          minDecibels
+        )
+      );
     }
-
-    // const interp = new CurveInterpolator(samplesInLogInter);
-
-    // const finalPoints = interp.getPoints(width).map((point) => point[1]);
 
     samplesInLog.slice(0, width - 2).forEach((point, sampleNum) => {
       const currHeight = point;
 
       canvasDrawer.stroke(COLORS.accentPrimary100);
-      canvasDrawer.fill(COLORS.accentPrimary100);
       canvasDrawer.rect(sampleNum, currHeight, barWidth, height - currHeight);
     });
   };
@@ -99,16 +58,6 @@ const FrequencyMeter: React.FC = () => {
     currAnalyser.analyserNode.fftSize = 1024 * 2;
     analyser.current = currAnalyser.analyserNode;
     analyser.current.smoothingTimeConstant = 0.9;
-
-    console.log(AudioService.buffer?.sampleRate);
-    console.log(analyser.current.maxDecibels);
-    console.log(analyser.current.minDecibels);
-    console.log(
-      'Frequency step: ',
-      (AudioService.buffer?.sampleRate || 0) /
-        2 /
-        (currAnalyser.analyserNode.fftSize / 2)
-    );
   }, []);
 
   console.log(getFrequencyLabels());

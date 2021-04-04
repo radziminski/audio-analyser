@@ -3,7 +3,6 @@ import React from 'react';
 import DashboardContent from 'components/DashboardContent';
 import { useHistory } from 'react-router';
 import { ROUTES } from 'constants/routes';
-import AudioService from 'global-state/audio/audioController';
 import { useStoreActions } from 'global-state/hooks';
 
 export const DashboardHomeView: React.FC = () => {
