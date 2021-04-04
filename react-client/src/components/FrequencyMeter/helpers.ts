@@ -5,6 +5,7 @@ export const getFrequencyLabels = () => {
   for (let power = 1; power <= 3; power++) {
     labels.push(
       ...points.reduce<number[]>((acc, curr) => {
+        if (power === 1 && curr === 1) return acc;
         acc.push(Math.pow(10, power) * curr);
         return acc;
       }, [])
@@ -24,10 +25,11 @@ export const getLogValue = (
   length: number,
   width: number,
   height: number,
-  minDecibels: number
+  minDecibels: number,
+  fftSize: number
 ) => {
-  const sampleNumPerWidth = (index * length) / width;
-  const logIndex = toLog(sampleNumPerWidth, 1, length);
+  const sampleNumPerWidth = (index * fftSize) / width;
+  const logIndex = toLog(sampleNumPerWidth, fftSize / width, fftSize);
   const lowIndex = Math.floor(logIndex);
   const highIndex = Math.ceil(logIndex);
   const highValue = samples[highIndex];
@@ -39,6 +41,10 @@ export const getLogValue = (
     !Number.isFinite(lowValue) || !Number.isFinite(highValue)
       ? height
       : (sampleToDecibel(Math.abs(value)) * height) / minDecibels;
+
+  // if (value && Number.isFinite(value)) {
+  //   console.log(index, logIndex, value);
+  // }
 
   return currSampleDecNew || 0.001;
 };

@@ -1,14 +1,56 @@
 import AudioService from 'global-state/audio/audioController';
 import React, { useEffect, useRef } from 'react';
-import Box from 'components/Box';
+import Box, { FlexBox } from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
-import { getFrequencyLabels, getLogValue } from './helpers';
+import { getFrequencyLabels, getLogValue, toLog } from './helpers';
+import Text from 'components/Text';
 
 const barWidth = 1;
-const minDecibels = 23;
+const minDecibels = 22.5;
 const height = 400;
-const width = 512;
+const width = 400;
+
+const fftSize = 1024 * 8;
+const maxFreq = 41000 / 2;
+
+const getLabelsLocations = (fftSize: number) => {
+  console.log(getFrequencyLabels());
+
+  const length = 41000 / 2;
+
+  const labels = getFrequencyLabels();
+  labels.push(10000, 20000);
+
+  const labelsValues = {};
+
+  const arr: number[] = [];
+
+  for (let sampleNum = 1; sampleNum < width; sampleNum++) {
+    const samplePerWidth = (sampleNum * maxFreq) / width;
+    const logIndex = toLog(samplePerWidth, maxFreq / width, maxFreq);
+    arr.push(logIndex);
+    labels.forEach((label) => {
+      if (
+        !labelsValues[label] ||
+        Math.abs(logIndex - label) < Math.abs(arr[labelsValues[label]] - label)
+      ) {
+        labelsValues[label] = sampleNum;
+      }
+    });
+  }
+
+  return labelsValues;
+};
+
+const omittedLabels = [4, 6, 8, 9];
+
+const printLabel = (label: string) => {
+  if (omittedLabels.some((currLabel) => label.startsWith(currLabel.toString())))
+    return null;
+  if (label.endsWith('000')) return label.substring(0, label.length - 3) + 'k';
+  return label;
+};
 
 const FrequencyMeter: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
@@ -35,7 +77,8 @@ const FrequencyMeter: React.FC = () => {
           valuableSamplesNumber,
           width,
           height,
-          minDecibels
+          minDecibels,
+          fftSize / 2
         )
       );
     }
@@ -55,17 +98,41 @@ const FrequencyMeter: React.FC = () => {
 
   useEffect(() => {
     const currAnalyser = AudioService.createAnalyser();
-    currAnalyser.analyserNode.fftSize = 1024 * 2;
+    currAnalyser.analyserNode.fftSize = fftSize;
     analyser.current = currAnalyser.analyserNode;
     analyser.current.smoothingTimeConstant = 0.9;
+
+    console.log(AudioService.buffer?.sampleRate);
   }, []);
 
   console.log(getFrequencyLabels());
+  const labelLocations = getLabelsLocations(fftSize);
+  console.log(labelLocations);
 
   return (
     <>
       <button onClick={() => getFreq()}>GET FREQ</button>
-      <Box width={width} height={height} ref={container}></Box>
+      <FlexBox flexDirection='column'>
+        <Box width={width} height={height} ref={container} />
+        <Box height={40} position='relative'>
+          {Object.keys(labelLocations).map((key) => (
+            <FlexBox
+              flexDirection='column'
+              position='absolute'
+              top={0}
+              left={labelLocations[key] - 5}
+              alignItems='center'
+              width='1px'
+              key={key}
+            >
+              <Box width='1px' height={20} background='white' />
+              <Text fontSize='10px' color='white'>
+                {printLabel(key)}
+              </Text>
+            </FlexBox>
+          ))}
+        </Box>
+      </FlexBox>
     </>
   );
 };
