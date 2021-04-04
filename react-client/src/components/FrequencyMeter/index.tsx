@@ -84,7 +84,7 @@ const FrequencyMeter: React.FC = () => {
     }
 
     samplesInLog.slice(0, width - 2).forEach((point, sampleNum) => {
-      const currHeight = point;
+      const currHeight = point * 0.8;
 
       canvasDrawer.stroke(COLORS.accentPrimary100);
       canvasDrawer.rect(sampleNum, currHeight, barWidth, height - currHeight);
