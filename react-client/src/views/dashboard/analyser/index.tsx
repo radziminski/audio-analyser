@@ -8,6 +8,7 @@ import DashboardContent from 'components/DashboardContent';
 import audioService from 'global-state/audio/audioController';
 import { useParams } from 'react-router';
 import { FlexBox } from 'components/Box';
+import Spectrogram from 'components/Spectrogram';
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
@@ -72,7 +73,10 @@ export const AnalyserView: React.FC = () => {
         />
         <FlexBox justifyContent='space-between'>
           <VolumeMeter />
-          <FrequencyMeter />
+          <FlexBox flexDirection='column' justifyContent='space-between'>
+            <FrequencyMeter />
+            <Spectrogram />
+          </FlexBox>
         </FlexBox>
       </>
     );

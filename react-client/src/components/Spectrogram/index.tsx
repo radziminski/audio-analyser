@@ -7,13 +7,13 @@ import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
 import Text from 'components/Text';
 
 const barWidth = 1;
-const minDecibels = 21;
+const minDecibels = 22.5;
 const height = 220;
 const width = 512;
 
 const fftSize = 1024 * 8;
 
-const FrequencyMeter: React.FC = () => {
+const Spectrogram: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
   const { canvasDrawer, ready } = useCanvasDrawer(container);
@@ -29,33 +29,6 @@ const FrequencyMeter: React.FC = () => {
     const currAnalyser = analyser.current;
     const buffer = new Float32Array(currAnalyser.fftSize);
     currAnalyser.getFloatFrequencyData(buffer);
-
-    const samplesInLog: number[] = [];
-
-    for (let sampleNum = 1; sampleNum < valuableSamplesNumber; sampleNum++) {
-      samplesInLog.push(
-        getLogValue(
-          sampleNum,
-          buffer,
-          valuableSamplesNumber,
-          width,
-          height,
-          minDecibels,
-          fftSize / 2
-        )
-      );
-    }
-
-    samplesInLog.slice(0, width - 2).forEach((point, sampleNum) => {
-      const currHeight = point;
-      canvasDrawer.stroke(COLORS.accentPrimary100);
-
-      // TODO: fix this, hack for line at the begining
-      if (currHeight < 50)
-        canvasDrawer.rect(sampleNum, currHeight, barWidth, 0);
-      else
-        canvasDrawer.rect(sampleNum, currHeight, barWidth, height - currHeight);
-    });
   };
 
   useAnimationFrameLoop(
@@ -70,8 +43,6 @@ const FrequencyMeter: React.FC = () => {
     analyser.current.smoothingTimeConstant = 0.9;
   }, []);
 
-  const labelLocations = getLabelsLocations(width, sampleRate || 0);
-
   return (
     <>
       {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
@@ -84,40 +55,12 @@ const FrequencyMeter: React.FC = () => {
           background={COLORS.background20}
           overflow='hidden'
         />
-        <Box height={40} position='relative' overflow='hidden' width='100%'>
-          {Object.keys(labelLocations).map((key) => (
-            <FlexBox
-              flexDirection='column'
-              position='absolute'
-              top={0}
-              left={`${labelLocations[key] - 5}px`}
-              alignItems='center'
-              width='1px'
-              key={key}
-              opacity={labelLocations[key] > 1 ? 1 : 0}
-              height={40}
-            >
-              {console.log(labelLocations[key])}
-              <Box
-                width='1px'
-                height={6}
-                background={COLORS.white}
-                opacity={0.6}
-                marginBottom='4px'
-                marginTop='2px'
-              />
-              <Text fontSize='10px' color='white'>
-                {printLabel(key)}
-              </Text>
-            </FlexBox>
-          ))}
-        </Box>
       </FlexBox>
     </>
   );
 };
 
-export default FrequencyMeter;
+export default Spectrogram;
 
 // const points = [
 //   [1.1, 1],
