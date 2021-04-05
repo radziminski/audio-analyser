@@ -3,11 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
-import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
-import Text from 'components/Text';
+// import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
+// import Text from 'components/Text';
 
-const barWidth = 1;
-const minDecibels = 22.5;
+// const barWidth = 1;
+// const minDecibels = 22.5;
 const height = 220;
 const width = 512;
 
@@ -17,9 +17,9 @@ const Spectrogram: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
   const { canvasDrawer, ready } = useCanvasDrawer(container);
-  const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
+  // const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
 
-  const sampleRate = AudioService.buffer?.sampleRate;
+  // const sampleRate = AudioService.buffer?.sampleRate;
 
   const getFreq = () => {
     if (!canvasDrawer) return;

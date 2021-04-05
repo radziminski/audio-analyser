@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 50px;
   background: ${({ theme }) => theme.colors.background50};
   margin-left: 400px;
-  min-height: 100vh;
+  height: 100vh;
   position: relative;
+`;
+
+export const ScrollContainer = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+  padding: 50px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Title = styled.div`

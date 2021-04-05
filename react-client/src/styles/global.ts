@@ -84,9 +84,36 @@ const defaultStylesReset = css`
     list-style: none;
   }
 
-  figure {
+  figure,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
     margin: 0;
     padding: 0;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+  }
+
+  h5,
+  p {
+    font-size: 1rem;
   }
 `;
 

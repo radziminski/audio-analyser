@@ -11,7 +11,7 @@ export interface AudioState {
   isPlaying: boolean;
   isLoadingAudioBuffer: boolean;
   didLoadAudioBuffer: boolean;
-  currSrc: string | null;
+  currSource: string | null;
   audioSources: Record<string, string>;
 
   setIsLoadingAudioBuffer: AudioAction<boolean>;
@@ -20,7 +20,7 @@ export interface AudioState {
   pause: AudioAction;
   stop: AudioAction;
   setCurrTime: AudioAction<number>;
-  setCurrSrc: AudioAction<string | null>;
+  setCurrSource: AudioAction<string | null>;
   loadAudio: AudioAction<string>;
   addAudioSources: AudioAction<Record<string, string>>;
 }
@@ -29,18 +29,17 @@ const audioState: AudioState = {
   isPlaying: false,
   isLoadingAudioBuffer: false,
   didLoadAudioBuffer: false,
-  currSrc: null,
+  currSource: null,
   audioSources: {
-    sampleLong: require('assets/sampleLong.mp3'),
-    sample: require('assets/sample.wav'),
-    sample2: require('assets/sample2.wav'),
-    sample3: require('assets/sample3.wav'),
+    song: require('assets/song.mp3'),
+    guitar: require('assets/guitar.wav'),
     volumes: require('assets/volumes.wav'),
     max: require('assets/max.wav'),
-    three: require('assets/three_over.wav'),
     change: require('assets/change.wav'),
     noise: require('assets/noise.wav'),
-    freqs: require('assets/freqs.wav')
+    freqs: require('assets/freqs.wav'),
+    mp3: require('assets/sampleMp3.mp3'),
+    mp3Long: require('assets/sampleLong.mp3')
   },
 
   loadAudioBuffer: thunk(async (actions) => {
@@ -77,8 +76,8 @@ const audioState: AudioState = {
     state.isPlaying = false;
   }),
 
-  setCurrSrc: action((state, src) => {
-    state.currSrc = src;
+  setCurrSource: action((state, src) => {
+    state.currSource = src;
   }),
 
   loadAudio: action((state, src) => {
@@ -86,7 +85,7 @@ const audioState: AudioState = {
     state.isPlaying = false;
     AudioService.reloadAudio(src);
 
-    state.currSrc = src;
+    state.currSource = src;
   }),
 
   addAudioSources: action((state, sources) => {

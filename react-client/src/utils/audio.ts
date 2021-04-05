@@ -9,7 +9,7 @@ export const calculateBufferAverage = (buffer: Float32Array) => {
   return sampleToDecibel(sumOfSquares / buffer.length);
 };
 
-export const calculateBufferMaxAverage = (buffer: Float32Array) => {
+export const calculateBufferMaxAverage = (_: Float32Array) => {
   // const maxSamples = buffer
   //   .sort()
   //   .reverse()

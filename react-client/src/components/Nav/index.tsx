@@ -19,7 +19,7 @@ const NAV_LINKS: NavLink[] = [
     icon: 'home-fill'
   },
   {
-    name: 'Project',
+    name: 'Projects',
     linkTo: ROUTES.DASHBOARD_PROJECTS,
     icon: 'projects-fill'
   },

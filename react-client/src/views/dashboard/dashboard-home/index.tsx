@@ -1,9 +1,31 @@
-import { FlexBox } from 'components/Box';
+import Box, { FlexBox } from 'components/Box';
 import React from 'react';
 import DashboardContent from 'components/DashboardContent';
 import { useHistory } from 'react-router';
 import { ROUTES } from 'constants/routes';
 import { useStoreActions } from 'global-state/hooks';
+import { COLORS } from 'styles/theme';
+import Anchor from 'components/Anchor';
+import { Heading4 } from 'components/Text';
+
+const MOCK_FILES = [
+  {
+    title: 'Example: Song',
+    source: 'song'
+  },
+  {
+    title: 'Example: Guitar Rec',
+    source: 'guitar'
+  },
+  {
+    title: 'Example: Different volumes',
+    source: 'volumes'
+  },
+  {
+    title: 'Example: Sine waves',
+    source: 'freqs'
+  }
+];
 
 export const DashboardHomeView: React.FC = () => {
   const history = useHistory();
@@ -25,44 +47,43 @@ export const DashboardHomeView: React.FC = () => {
   return (
     <>
       <DashboardContent title='Home'>
-        <FlexBox color='white' flexDirection='column'>
-          <button
-            style={{ color: 'white', padding: '20px' }}
-            onClick={() => {
-              history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample'));
-            }}
+        <FlexBox color='white' flexDirection='column' align-items='center'>
+          {MOCK_FILES.map((fileElement) => (
+            <Box
+              padding='20px'
+              color={COLORS.white}
+              textAlign='center'
+              key={fileElement.title}
+            >
+              <Anchor
+                to={ROUTES.DASHBOARD_ANALYSER.replace(
+                  ':id',
+                  fileElement.source
+                )}
+              >
+                {fileElement.title}
+              </Anchor>
+            </Box>
+          ))}
+          <Box
+            padding='20px'
+            marginTop='20px'
+            color={COLORS.white}
+            textAlign='center'
           >
-            Change to sample
-          </button>
-          <button
-            style={{ color: 'white', padding: '20px' }}
-            onClick={() => {
-              history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample2'));
-            }}
-          >
-            Change to sample2
-          </button>
-          <button
-            style={{ color: 'white', padding: '20px' }}
-            onClick={() => {
-              history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'sample3'));
-            }}
-          >
-            Change to sample3
-          </button>
-          <button
-            style={{ color: 'white', padding: '20px' }}
-            onClick={() => {
-              history.push(ROUTES.DASHBOARD_ANALYSER.replace(':id', 'volumes'));
-            }}
-          >
-            Change to volumes
-          </button>
-          <input
-            type='file'
-            accept='.mp3, .wav, .flac, .m4a'
-            onChange={onFileChange}
-          />
+            <Box marginBottom='10px'>
+              <Heading4 fontWeight={300} fontSize='1rem'>
+                Or upload your own file:
+              </Heading4>
+            </Box>
+
+            <input
+              type='file'
+              accept='audio/*'
+              onChange={onFileChange}
+              style={{ width: '110px', cursor: 'pointer' }}
+            />
+          </Box>
         </FlexBox>
       </DashboardContent>
     </>

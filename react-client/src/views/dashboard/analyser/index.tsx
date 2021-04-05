@@ -5,28 +5,36 @@ import FrequencyMeter from 'components/FrequencyMeter';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
-import audioService from 'global-state/audio/audioController';
+import AudioService from 'global-state/audio/audioController';
 import { useParams } from 'react-router';
-import { FlexBox } from 'components/Box';
+import Box, { FlexBox } from 'components/Box';
 import Spectrogram from 'components/Spectrogram';
+import { Heading2, Heading3 } from 'components/Text';
+import { COLORS } from 'styles/theme';
+import Anchor from 'components/Anchor';
+import { ROUTES } from 'constants/routes';
+import Loader from 'components/Loader';
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
-  console.log(audioLoaded);
 
   const {
     isLoadingAudioBuffer,
     didLoadAudioBuffer,
     isPlaying,
-    currSrc,
+    currSource,
     audioSources
   } = useStoreState((state) => state.audio);
 
   const { id: srcId } = useParams<{ id: string }>();
 
-  const { loadAudioBuffer, play, pause, loadAudio } = useStoreActions(
-    (actions) => actions.audio
-  );
+  const {
+    loadAudioBuffer,
+    play,
+    pause,
+    loadAudio,
+    setCurrSource
+  } = useStoreActions((actions) => actions.audio);
 
   usePlayOnSpace(
     () => play(),
@@ -36,32 +44,58 @@ export const AnalyserView: React.FC = () => {
 
   useEffect(() => {
     console.log(srcId);
+    const setAudioLoadedFunction = () => setAudioLoaded(true);
+
     if (srcId && audioSources[srcId]) {
       const src = audioSources[srcId];
+      setCurrSource(srcId);
       loadAudio(src);
+      AudioService.audioElement.addEventListener(
+        'canplay',
+        setAudioLoadedFunction
+      );
     }
-  }, [srcId, audioSources, loadAudio]);
+
+    return () =>
+      AudioService.audioElement.removeEventListener(
+        'canplay',
+        setAudioLoadedFunction
+      );
+  }, [srcId, audioSources, loadAudio, setCurrSource]);
+
+  const srcExists = currSource || (srcId && audioSources[srcId]);
 
   useEffect(() => {
-    if (!currSrc) return;
+    if (!currSource) return;
 
     loadAudioBuffer();
     setAudioLoaded(true);
-  }, [currSrc, loadAudioBuffer]);
+  }, [currSource, loadAudioBuffer]);
 
   const content = useMemo(() => {
     if (
-      !audioService.audioElement ||
+      !AudioService.audioElement ||
       isLoadingAudioBuffer ||
       !didLoadAudioBuffer ||
-      !audioService
+      !AudioService ||
+      !audioLoaded
     )
-      return null;
+      return (
+        <FlexBox
+          width='100%'
+          height='100%'
+          justifyContent='center'
+          alignItems='center'
+          paddingBottom='150px'
+        >
+          <Loader />
+        </FlexBox>
+      );
 
     return (
       <>
         <Waveform
-          audioBuffer={audioService?.buffer}
+          audioBuffer={AudioService?.buffer}
           isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
           didLoadAudioBuffer={didLoadAudioBuffer ?? false}
           barMinHeight={1}
@@ -69,7 +103,7 @@ export const AnalyserView: React.FC = () => {
           barSpacing={1}
           height={150}
           barBorderRadius={8}
-          audioElement={audioService.audioElement}
+          audioElement={AudioService.audioElement}
         />
         <FlexBox justifyContent='space-between'>
           <VolumeMeter />
@@ -80,7 +114,32 @@ export const AnalyserView: React.FC = () => {
         </FlexBox>
       </>
     );
-  }, [isLoadingAudioBuffer, didLoadAudioBuffer]);
+  }, [isLoadingAudioBuffer, didLoadAudioBuffer, audioLoaded]);
+
+  if (!srcExists) {
+    return (
+      <DashboardContent>
+        <FlexBox
+          justifyContent='center'
+          alignItems='center'
+          width='100%'
+          height='100%'
+          flexDirection='column'
+          paddingBottom='4rem'
+        >
+          <Heading2 fontWeight={400} color={COLORS.white}>
+            Choose a file to start analyzer!
+          </Heading2>
+          <Box marginTop='12px'>
+            <Heading3 fontWeight={300} fontSize='18px' color={COLORS.white}>
+              Browse files in your projects{' '}
+              <Anchor to={ROUTES.DASHBOARD_PROJECTS}>here</Anchor>.
+            </Heading3>
+          </Box>
+        </FlexBox>
+      </DashboardContent>
+    );
+  }
 
   return (
     <DashboardContent

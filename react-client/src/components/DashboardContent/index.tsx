@@ -1,5 +1,11 @@
 import React from 'react';
-import { Container, Title, SubTitles, SubTitle } from './parts';
+import {
+  Container,
+  Title,
+  SubTitles,
+  SubTitle,
+  ScrollContainer
+} from './parts';
 import AudioControlBar from '../AudioControlBar';
 
 interface Props {
@@ -11,16 +17,17 @@ const DashboardContent: React.FC<Props> = ({ children, subTitles, title }) => {
   return (
     <Container>
       <AudioControlBar />
-
-      {title && <Title>{title}</Title>}
-      {subTitles && subTitles.length > 0 && (
-        <SubTitles>
-          {subTitles.map((subTitle, index) => (
-            <SubTitle key={index}>{subTitle}</SubTitle>
-          ))}
-        </SubTitles>
-      )}
-      {children}
+      <ScrollContainer>
+        {title && <Title>{title}</Title>}
+        {subTitles && subTitles.length > 0 && (
+          <SubTitles>
+            {subTitles.map((subTitle, index) => (
+              <SubTitle key={index}>{subTitle}</SubTitle>
+            ))}
+          </SubTitles>
+        )}
+        {children}
+      </ScrollContainer>
     </Container>
   );
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
-import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
+import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from 'components/Text';
 
 const barWidth = 1;
