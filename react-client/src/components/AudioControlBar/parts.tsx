@@ -13,6 +13,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 5px 16px;
+  z-index: 1000;
 `;
 
 export const IconContainer = styled.div`
