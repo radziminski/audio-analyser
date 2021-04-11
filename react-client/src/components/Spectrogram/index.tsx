@@ -1,7 +1,7 @@
-import AudioService from 'global-state/audio/audioController';
-import React, { useEffect, useRef } from 'react';
-import Box, { FlexBox } from 'components/Box';
-import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
+// import AudioService from 'global-state/audio/audioController';
+import React, { useRef } from 'react';
+import { FlexBox } from 'components/Box';
+// import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
 // import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
 // import Text from 'components/Text';
@@ -11,10 +11,10 @@ import { COLORS } from 'styles/theme';
 const height = 220;
 const width = 512;
 
-const fftSize = 1024 * 8;
+// const fftSize = 1024 * 8;
 
 const Spectrogram: React.FC = () => {
-  const analyser = useRef<AnalyserNode>();
+  // const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
   // const { canvasDrawer, ready } = useCanvasDrawer(container);
   // const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;

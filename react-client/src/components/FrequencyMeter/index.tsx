@@ -5,7 +5,7 @@ import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from 'components/Text';
-import audioService from 'global-state/audio/audioController';
+// import audioService from 'global-state/audio/audioController';
 
 const barWidth = 1;
 const minDecibels = 21;
