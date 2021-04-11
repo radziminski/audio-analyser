@@ -9,20 +9,20 @@ export const calculateBufferAverage = (buffer: Float32Array) => {
   return sampleToDecibel(sumOfSquares / buffer.length);
 };
 
-export const calculateBufferMaxAverage = (_: Float32Array) => {
-  // const maxSamples = buffer
-  //   .sort()
-  //   .reverse()
-  //   .subarray(0, buffer.length / 4);
+export const calculateBufferMaxAverage = (buffer: Float32Array) => {
+  const maxSamples = buffer
+    .sort()
+    .reverse()
+    .subarray(0, buffer.length / 4);
 
-  // let sumOfSquares = 0;
-  // for (let i = 0; i < maxSamples.length; i++) {
-  //   const value = maxSamples[i] ** 2;
-  //   sumOfSquares += value;
-  // }
-  // const avgPower = sumOfSquares / maxSamples.length;
+  let sumOfSquares = 0;
+  for (let i = 0; i < maxSamples.length; i++) {
+    const value = maxSamples[i] ** 2;
+    sumOfSquares += value;
+  }
+  const avgPower = sumOfSquares / maxSamples.length;
 
-  // return sampleToDecibel(avgPower);
+  return sampleToDecibel(avgPower);
   return 1;
 };
 
