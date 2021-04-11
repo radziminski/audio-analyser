@@ -5,6 +5,7 @@ import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
 import { COLORS } from 'styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from 'components/Text';
+import audioService from 'global-state/audio/audioController';
 
 const barWidth = 1;
 const minDecibels = 21;
@@ -74,7 +75,11 @@ const FrequencyMeter: React.FC = () => {
 
   return (
     <>
-      {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
+      {/* <button
+        onClick={() => console.log(AudioService.audioElement.currentTime)}
+      >
+        GET FREQ
+      </button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <Box
           width={width}

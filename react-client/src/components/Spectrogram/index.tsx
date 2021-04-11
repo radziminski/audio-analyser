@@ -16,45 +16,50 @@ const fftSize = 1024 * 8;
 const Spectrogram: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
-  const { canvasDrawer, ready } = useCanvasDrawer(container);
+  // const { canvasDrawer, ready } = useCanvasDrawer(container);
   // const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
 
   // const sampleRate = AudioService.buffer?.sampleRate;
 
-  const getFreq = () => {
-    if (!canvasDrawer) return;
-    if (!analyser.current) return;
-    canvasDrawer.clear();
+  // const getFreq = () => {
+  //   if (!canvasDrawer) return;
+  //   if (!analyser.current) return;
+  //   canvasDrawer.clear();
 
-    const currAnalyser = analyser.current;
-    const buffer = new Float32Array(currAnalyser.fftSize);
-    currAnalyser.getFloatFrequencyData(buffer);
-  };
+  //   const currAnalyser = analyser.current;
+  //   const buffer = new Float32Array(currAnalyser.fftSize);
+  //   currAnalyser.getFloatFrequencyData(buffer);
+  // };
 
-  useAnimationFrameLoop(
-    getFreq,
-    ready && !!analyser.current && !!container.current
-  );
+  // useAnimationFrameLoop(
+  //   getFreq,
+  //   ready && !!analyser.current && !!container.current
+  // );
 
-  useEffect(() => {
-    const currAnalyser = AudioService.createAnalyser();
-    currAnalyser.analyserNode.fftSize = fftSize;
-    analyser.current = currAnalyser.analyserNode;
-    analyser.current.smoothingTimeConstant = 0.9;
-  }, []);
+  // useEffect(() => {
+  //   const currAnalyser = AudioService.createAnalyser();
+  //   currAnalyser.analyserNode.fftSize = fftSize;
+  //   analyser.current = currAnalyser.analyserNode;
+  //   analyser.current.smoothingTimeConstant = 0.9;
+  // }, []);
 
   return (
     <>
       {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
-        <Box
+        <FlexBox
           width={width}
           height={height}
           ref={container}
           borderRadius={14}
           background={COLORS.background20}
           overflow='hidden'
-        />
+          justifyContent='center'
+          alignItems='center'
+          color='red'
+        >
+          SPECTROGRAM WILL BE HERE
+        </FlexBox>
       </FlexBox>
     </>
   );
