@@ -45,6 +45,8 @@ services:
     build:
       dockerfile: Dockerfile.dev
       context: './node-api'
+    depends_on:
+      - postgres
     volumes:
       - /app/node_modules
       - ./node-api:/app
