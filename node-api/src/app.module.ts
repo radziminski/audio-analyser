@@ -1,17 +1,28 @@
+import { ENV } from './constants';
 import { ResponseLoggerMiddleware } from './common/middleware/response-logger.middleware';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 import { DatabaseModule } from './database/database.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LoggerModule } from './logger/logger.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [DatabaseModule, LoggerModule, UserProfileModule, UserModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: `.env.${ENV}`,
+      isGlobal: true,
+    }),
+    DatabaseModule,
+    LoggerModule,
+    UserProfileModule,
+    UserModule,
+    AuthModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

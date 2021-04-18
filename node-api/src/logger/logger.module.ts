@@ -3,9 +3,9 @@ import { Module } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import { format, transports } from 'winston';
 
-const { combine, timestamp, printf, errors, colorize, prettyPrint } = format;
+const { combine, timestamp, printf, errors } = format;
 
-const myFormat = printf(({ level, message, _, timestamp }) => {
+const myFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
 });
 
@@ -15,9 +15,7 @@ const myFormat = printf(({ level, message, _, timestamp }) => {
       format: combine(
         timestamp(),
         errors({ stack: true }),
-        colorize(),
         timestamp(),
-        prettyPrint(),
         myFormat,
       ),
       transports: [

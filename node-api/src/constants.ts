@@ -1,6 +1,13 @@
 import { ConnectionOptions } from 'typeorm';
 import * as winston from 'winston';
 
+// General
+export const ENV: 'dev' | 'prod' = 'dev';
+
+// AUTH
+export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
+export const JWT_EXPIRATION_S = '60s';
+
 // ENV
 export const PG_USER = process.env.PG_USER;
 export const PG_HOST = process.env.PG_HOST;

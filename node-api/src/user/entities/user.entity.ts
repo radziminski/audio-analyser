@@ -1,4 +1,4 @@
-import { UserProfile } from './../../user-profile/entities/user-profile.entity';
+import { UserProfile } from '../../user-profile/entities/user-profile.entity';
 import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 import { DB_TABLES } from '../../constants';
 

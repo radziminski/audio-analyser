@@ -1,4 +1,4 @@
-import { User } from './../../user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { DB_TABLES } from '../../constants';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
