@@ -21,6 +21,7 @@ export const DB_CONFIG: ConnectionOptions = {
 };
 export const DB_TABLES = {
   UserProfile: 'user_profile',
+  User: 'user_auth',
 };
 
 // PROVIDERS
