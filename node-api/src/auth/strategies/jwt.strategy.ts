@@ -1,4 +1,4 @@
-import { JWT_SECRET_CONFIG_VAR } from './../constants';
+import { JWT_SECRET_CONFIG_VAR } from '../../constants';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';

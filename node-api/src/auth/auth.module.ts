@@ -1,7 +1,7 @@
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JWT_EXPIRATION_S, JWT_SECRET_CONFIG_VAR } from './../constants';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from './../user/user.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';

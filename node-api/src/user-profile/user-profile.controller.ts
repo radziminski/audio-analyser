@@ -1,5 +1,5 @@
+import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
 import { logObject } from './../logger/utils';
-import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 // import { GetUserProfileDto } from './dto/get-user-profile.dto';
 import { UserProfile } from './entities/user-profile.entity';

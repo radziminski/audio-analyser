@@ -1,9 +1,6 @@
-import { LocalAuthGuard } from './local-auth.guard';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +13,7 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() registerDto: RegisterDto) {
-    console.log('s');
+  register() {
+    // TODO: Registration
   }
 }
