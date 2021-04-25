@@ -1,9 +1,8 @@
 import { Repository } from 'typeorm/repository/Repository';
-import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -12,23 +11,26 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+  async create(user: { email: string; password: string }) {
+    return this.userRepository.save(user);
   }
 
-  findAll() {
+  async findAll() {
     return this.userRepository.find();
   }
 
-  findOne(email: string) {
+  async findOne(email: string) {
     return this.userRepository.findOne(email);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user ${updateUserDto}`;
+  async updateEmail(currentEmail: string, newUser: { email: string }) {
+    return this.userRepository.update(currentEmail, { email: newUser.email });
+  }
+  async updatePassword(email: string, newUser: { password: string }) {
+    return this.userRepository.update(email, { password: newUser.password });
   }
 
-  remove(email: string) {
+  async remove(email: string) {
     return this.userRepository.delete(email);
   }
 }

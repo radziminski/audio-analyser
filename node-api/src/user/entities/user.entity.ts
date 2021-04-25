@@ -1,5 +1,6 @@
-import { UserProfile } from '../../user-profile/entities/user-profile.entity';
 import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+
+import { UserProfile } from '../../user-profile/entities/user-profile.entity';
 import { DB_TABLES } from '../../constants';
 
 @Entity({ name: DB_TABLES.User })

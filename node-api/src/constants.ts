@@ -9,12 +9,12 @@ export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
 export const JWT_EXPIRATION_S = '60s';
 
 // ENV
-export const PG_USER = process.env.PG_USER;
-export const PG_HOST = process.env.PG_HOST;
-export const PG_DATABASE = process.env.PG_DATABASE;
-export const PG_PASSWORD = process.env.PG_PASSWORD;
-export const PG_PORT = process.env.PG_PORT;
-export const API_PORT = process.env.API_PORT;
+export const { PG_USER } = process.env;
+export const { PG_HOST } = process.env;
+export const { PG_DATABASE } = process.env;
+export const { PG_PASSWORD } = process.env;
+export const { PG_PORT } = process.env;
+export const { API_PORT } = process.env;
 
 // DB
 export const DB_CONFIG: ConnectionOptions = {
@@ -38,7 +38,7 @@ export const PROVIDERS = {
 
 // LOGS
 export const LOGS_DIR = './logs';
-export const WINSTON_FILE_LOGGERS: Array<winston.transports.FileTransportOptions> = [
+export const WINSTON_FILE_LOGGERS: winston.transports.FileTransportOptions[] = [
   {
     filename: 'errors.log',
     level: 'warn',

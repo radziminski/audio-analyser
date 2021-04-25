@@ -1,6 +1,7 @@
-import { UserProfile } from './entities/user-profile.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+
+import { UserProfile } from './entities/user-profile.entity';
 import { UserProfileService } from './user-profile.service';
 import { UserProfileController } from './user-profile.controller';
 
@@ -8,5 +9,6 @@ import { UserProfileController } from './user-profile.controller';
   imports: [TypeOrmModule.forFeature([UserProfile])],
   providers: [UserProfileService],
   controllers: [UserProfileController],
+  exports: [UserProfileService],
 })
 export class UserProfileModule {}

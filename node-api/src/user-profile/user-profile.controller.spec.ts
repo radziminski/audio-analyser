@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { UserProfileController } from './user-profile.controller';
 
 describe('UserProfileController', () => {

@@ -1,13 +1,14 @@
-import { WINSTON_FILE_LOGGERS } from './../constants';
 import { Module } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import { format, transports } from 'winston';
 
+import { WINSTON_FILE_LOGGERS } from '../constants';
+
 const { combine, timestamp, printf, errors } = format;
 
-const myFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} [${level}]: ${message}`;
-});
+const myFormat = printf(
+  ({ level, message, timestamp }) => `${timestamp} [${level}]: ${message}`,
+);
 
 @Module({
   imports: [

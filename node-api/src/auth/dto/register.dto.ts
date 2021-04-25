@@ -1,12 +1,13 @@
 import {
   IsEmail,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterDto {
   @IsEmail()
   @IsString()
   email: string;
@@ -22,4 +23,12 @@ export class CreateUserDto {
       'Password should contain at least one lowercase and uppercase letter',
   })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  first_name: string;
+
+  @IsString()
+  @IsOptional()
+  last_name: string;
 }

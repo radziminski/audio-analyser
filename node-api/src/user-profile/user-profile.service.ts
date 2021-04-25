@@ -1,7 +1,8 @@
-import { CreateUserProfileDto } from './dto/create-user-profile.dto';
+import { UserRole } from './../common/types/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
+
 import { UserProfile } from './entities/user-profile.entity';
 
 @Injectable()
@@ -11,15 +12,15 @@ export class UserProfileService {
     private userProfileRepository: Repository<UserProfile>,
   ) {}
 
-  findAll(): Promise<UserProfile[]> {
+  async findAll(): Promise<UserProfile[]> {
     return this.userProfileRepository.find();
   }
 
-  findOne(id: string): Promise<UserProfile> {
+  async findOne(id: string): Promise<UserProfile> {
     return this.userProfileRepository.findOne(id);
   }
 
-  findOneByEmail(email: string): Promise<UserProfile> {
+  async findOneByEmail(email: string): Promise<UserProfile> {
     return this.userProfileRepository.findOne({
       where: {
         email,
@@ -27,12 +28,12 @@ export class UserProfileService {
     });
   }
 
-  create(user: CreateUserProfileDto): Promise<UserProfile> {
-    return this.userProfileRepository.save({
-      email: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name,
-    });
+  async create(user: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  }): Promise<UserProfile> {
+    return this.userProfileRepository.save({ ...user, role: UserRole.User });
   }
 
   async remove(id: string): Promise<void> {

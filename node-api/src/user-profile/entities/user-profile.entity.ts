@@ -1,6 +1,7 @@
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+
 import { User } from '../../user/entities/user.entity';
 import { DB_TABLES } from '../../constants';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
 @Entity({ name: DB_TABLES.UserProfile })
 export class UserProfile {

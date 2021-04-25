@@ -1,9 +1,4 @@
-import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
-import { logObject } from './../logger/utils';
-import { CreateUserProfileDto } from './dto/create-user-profile.dto';
-// import { GetUserProfileDto } from './dto/get-user-profile.dto';
-import { UserProfile } from './entities/user-profile.entity';
-import { UserProfileService } from './user-profile.service';
+import { RequestWithUser } from './../auth/types/index';
 import {
   Body,
   Request,
@@ -14,12 +9,18 @@ import {
   HttpStatus,
   Inject,
   Param,
-  Post,
   Res,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { Logger } from 'winston';
 import { Response } from 'express';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+// import { GetUserProfileDto } from './dto/get-user-profile.dto';
+import { UserProfile } from './entities/user-profile.entity';
+import { UserProfileService } from './user-profile.service';
 
 @Controller('user-profile')
 export class UserProfileController {
@@ -38,14 +39,12 @@ export class UserProfileController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getMine(@Request() req) {
-    this.logger.error('user');
-    logObject(this.logger, 'user', req.user);
+  async getMine(@Request() req: RequestWithUser) {
     const profile = await this.userProfileService.findOneByEmail(
       req.user.email,
     );
 
-    if (!profile)
+    if (!profile) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -53,6 +52,7 @@ export class UserProfileController {
         },
         HttpStatus.BAD_REQUEST,
       );
+    }
 
     return profile;
   }
@@ -61,7 +61,7 @@ export class UserProfileController {
   async getOne(@Param('id') id: string) {
     const user = await this.userProfileService.findOne(id);
 
-    if (!user)
+    if (!user) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -69,24 +69,17 @@ export class UserProfileController {
         },
         HttpStatus.BAD_REQUEST,
       );
+    }
 
     return user;
   }
 
-  @Post()
+  @Patch()
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Res() res: Response,
-    @Body() createUserDto: CreateUserProfileDto,
+    @Body() updateUserProfileDto: UpdateUserProfileDto,
   ) {
-    try {
-      const userProfile = await this.userProfileService.create(createUserDto);
-
-      return res.status(HttpStatus.CREATED).json({ userProfile });
-    } catch (error) {
-      return res.status(HttpStatus.BAD_REQUEST).json({
-        error,
-      });
-    }
+    //TODO: Implement updatating user profile
   }
 }
