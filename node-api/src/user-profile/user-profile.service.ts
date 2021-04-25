@@ -36,7 +36,7 @@ export class UserProfileService {
     return this.userProfileRepository.save({ ...user, role: UserRole.User });
   }
 
-  async remove(id: string): Promise<void> {
-    await this.userProfileRepository.delete(id);
+  async remove(email: string): Promise<void> {
+    await this.userProfileRepository.delete({ email });
   }
 }

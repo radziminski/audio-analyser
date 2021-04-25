@@ -33,8 +33,7 @@ export class AuthController {
     return this.authService.getToken(req.user.email);
   }
 
-  @UseGuards(LocalAuthGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(LocalAuthGuard, JwtAuthGuard)
   @Patch('change-password')
   @HttpCode(HttpStatus.OK)
   async changePassword(
@@ -58,16 +57,23 @@ export class AuthController {
         error: 'The user with given email already exists.',
       });
 
+    const {
+      email,
+      password,
+      first_name: firstName,
+      last_name: lastName,
+    } = registerDto;
+
     try {
-      await this.userService.create({
-        email: registerDto.email,
-        password: registerDto.password,
+      await this.authService.createUser({
+        email,
+        password,
       });
 
       const createdUserProfile = await this.userProfileService.create({
-        email: registerDto.email,
-        firstName: registerDto.first_name,
-        lastName: registerDto.last_name,
+        email,
+        firstName,
+        lastName,
       });
 
       return {

@@ -1,3 +1,4 @@
+import { EncryptionModule } from './../encryption/encryption.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
@@ -21,6 +22,7 @@ import { UserProfileModule } from 'src/user-profile/user-profile.module';
       }),
       inject: [ConfigService],
     }),
+    EncryptionModule,
     UserModule,
     UserProfileModule,
     PassportModule,

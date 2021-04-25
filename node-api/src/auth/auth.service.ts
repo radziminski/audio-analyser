@@ -1,3 +1,4 @@
+import { EncryptionService } from './../encryption/encryption.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -7,15 +8,21 @@ import { LoginCredentials } from './types';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    private readonly encryptionService: EncryptionService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
   async validateUser(credentials: LoginCredentials): Promise<boolean> {
     const { email, password } = credentials;
-    const foundUser = await this.usersService.findOne(email);
+    const foundUser = await this.userService.findOne(email);
 
-    return foundUser && foundUser.password === password;
+    const passwordMatch = this.encryptionService.compare(
+      password,
+      foundUser.password,
+    );
+
+    return foundUser && passwordMatch;
   }
 
   async getToken(email: string) {
@@ -24,5 +31,15 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async createUser(user: { email: string; password: string }) {
+    const { email, password } = user;
+    const hashedPassword = await this.encryptionService.hash(password);
+
+    return this.userService.create({
+      email,
+      password: hashedPassword,
+    });
   }
 }

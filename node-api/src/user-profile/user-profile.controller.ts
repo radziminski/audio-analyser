@@ -12,6 +12,7 @@ import {
   Res,
   UseGuards,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { Logger } from 'winston';
 import { Response } from 'express';
@@ -57,6 +58,23 @@ export class UserProfileController {
     return profile;
   }
 
+  @Patch()
+  @HttpCode(HttpStatus.CREATED)
+  async create(
+    @Res() res: Response,
+    @Body() updateUserProfileDto: UpdateUserProfileDto,
+  ) {
+    //TODO: Implement updatating user profile
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('me')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteMe(@Request() req: RequestWithUser) {
+    await this.userProfileService.remove(req.user.email);
+    return;
+  }
+
   @Get(':id')
   async getOne(@Param('id') id: string) {
     const user = await this.userProfileService.findOne(id);
@@ -74,12 +92,10 @@ export class UserProfileController {
     return user;
   }
 
-  @Patch()
-  @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Res() res: Response,
-    @Body() updateUserProfileDto: UpdateUserProfileDto,
-  ) {
-    //TODO: Implement updatating user profile
+  @Delete(':email')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProfile(@Param('email') email: string) {
+    await this.userProfileService.remove(email);
+    return;
   }
 }
