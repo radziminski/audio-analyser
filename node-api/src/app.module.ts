@@ -10,6 +10,8 @@ import { AppController } from './app.controller';
 import { LoggerModule } from './logger/logger.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { AuthModule } from './auth/auth.module';
     UserProfileModule,
     UserModule,
     AuthModule,
+    FileModule,
+    ProjectModule,
   ],
   controllers: [AppController],
 })

@@ -29,6 +29,10 @@ export const DB_CONFIG: ConnectionOptions = {
 export const DB_TABLES = {
   UserProfile: 'user_profile',
   User: 'user_auth',
+  File: 'file',
+  Project: 'project',
+  ProjectUser: 'project_user',
+  ProjectFile: 'project_file',
 };
 
 // PROVIDERS
