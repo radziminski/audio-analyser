@@ -17,15 +17,12 @@ export class AuthService {
     const { email, password } = credentials;
     const foundUser = await this.userService.findOne(email);
 
-    const passwordMatch = this.encryptionService.compare(
-      password,
-      foundUser.password,
+    return (
+      foundUser && this.encryptionService.compare(password, foundUser.password)
     );
-
-    return foundUser && passwordMatch;
   }
 
-  async getToken(email: string) {
+  getToken(email: string) {
     const payload = { email: email, sub: 1 };
 
     return {
@@ -36,6 +33,8 @@ export class AuthService {
   async createUser(user: { email: string; password: string }) {
     const { email, password } = user;
     const hashedPassword = await this.encryptionService.hash(password);
+
+    console.log(email);
 
     return this.userService.create({
       email,

@@ -24,10 +24,10 @@ export const logObject = (
       return `${indent}==> Object to deep for logs`;
     }
 
-    if (!obj[key].replace) {
+    if (!(obj[key] as string)?.replace) {
       return logObject(logger, key, obj[key], currIndent + 1);
     }
 
-    return logger.http(`${indent}==> [${key}]: ${obj[key]}`);
+    return logger.http(`${indent}==> [${key}]: ${obj[key] as string}`);
   });
 };

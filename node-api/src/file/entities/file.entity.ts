@@ -10,6 +10,9 @@ export class File {
   @Column()
   url: string;
 
+  @Column()
+  name: string;
+
   @Column({ name: 'created_at' })
   createdAt: number;
 
@@ -18,4 +21,10 @@ export class File {
 
   @Column()
   size: number;
+
+  @Column({ name: 'mime_type' })
+  mimeType: string;
+
+  @Column()
+  encoding: string;
 }

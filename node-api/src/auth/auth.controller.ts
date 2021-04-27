@@ -14,9 +14,9 @@ import {
 
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
-import { UserProfileService } from 'src/user-profile/user-profile.service';
+import { UserProfileService } from '../user-profile/user-profile.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
@@ -29,7 +29,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: RequestWithUser) {
+  login(@Request() req: RequestWithUser) {
     return this.authService.getToken(req.user.email);
   }
 
@@ -84,6 +84,7 @@ export class AuthController {
       };
     } catch (error) {
       throw new BadRequestException({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         error,
       });
     }

@@ -7,8 +7,11 @@ import { DB_TABLES } from '../../constants';
 export class User {
   @Column()
   @PrimaryColumn()
+  id: number;
+
+  @Column()
   @OneToOne(() => UserProfile, (profile) => profile.email)
-  @JoinColumn()
+  @JoinColumn({ name: 'email' })
   email: string;
 
   @Column()

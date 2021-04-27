@@ -7,7 +7,8 @@ import { WINSTON_FILE_LOGGERS } from '../constants';
 const { combine, timestamp, printf, errors } = format;
 
 const myFormat = printf(
-  ({ level, message, timestamp }) => `${timestamp} [${level}]: ${message}`,
+  ({ level, message, timestamp }) =>
+    `${timestamp as string} [${level}]: ${message}`,
 );
 
 @Module({

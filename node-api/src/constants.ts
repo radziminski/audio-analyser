@@ -6,7 +6,7 @@ export const ENV: 'dev' | 'prod' = 'dev';
 
 // AUTH
 export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
-export const JWT_EXPIRATION_S = '60s';
+export const JWT_EXPIRATION_S = '1000s';
 
 // ENV
 export const { PG_USER } = process.env;

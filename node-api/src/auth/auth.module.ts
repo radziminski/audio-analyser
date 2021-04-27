@@ -10,13 +10,13 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserProfileModule } from 'src/user-profile/user-profile.module';
+import { UserProfileModule } from '../user-profile/user-profile.module';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get(JWT_SECRET_CONFIG_VAR),
         signOptions: { expiresIn: JWT_EXPIRATION_S },
       }),

@@ -20,7 +20,7 @@ export class UserService {
   }
 
   async findOne(email: string) {
-    return this.userRepository.findOne(email);
+    return this.userRepository.findOne({ where: { email } });
   }
 
   async updateEmail(currentEmail: string, newUser: { email: string }) {

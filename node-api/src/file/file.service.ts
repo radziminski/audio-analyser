@@ -11,22 +11,27 @@ export class FileService {
     private fileRepository: Repository<File>,
   ) {}
 
-  create() {
-    // return this.fileRepository.create({
-    //   url: createFileDto.url,
-    //   length: createFileDto.length,
-    //   size: createFileDto.size,
-    // });
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async saveFileData(data: {
+    encoding?: string;
+    length?: number;
+    mimeType?: string;
+    name: string;
+    size?: number;
+    url: string;
+  }): Promise<File> {
+    return this.fileRepository.create(data);
   }
 
   findAll() {
-    return `This action returns all file`;
+    return this.fileRepository.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} file`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateFileDto: UpdateFileDto) {
     return `This action updates a #${id} file`;
   }
