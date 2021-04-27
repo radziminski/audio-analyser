@@ -1,5 +1,6 @@
 CREATE TABLE "user_auth" (
-  "email" TEXT PRIMARY KEY UNIQUE NOT NULL,
+  "id" SERIAL PRIMARY KEY,
+  "email" TEXT UNIQUE NOT NULL,
   "password" TEXT
 );
 
@@ -14,9 +15,12 @@ CREATE TABLE "user_profile" (
 CREATE TABLE "file" (
   "id" SERIAL PRIMARY KEY,
   "url" TEXT NOT NULL,
+  "name" TEXT,
   "created_at" TIMESTAMP NOT NULL,
   "length" INT,
-  "size" INT
+  "size" INT,
+  "encoding" TEXT,
+  "mime_type" TEXT
 );
 
 CREATE TABLE "project" (
