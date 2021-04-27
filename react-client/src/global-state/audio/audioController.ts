@@ -20,8 +20,12 @@ export interface Analyser {
   id: number;
 }
 
-export const LEFT_CHANNEL = 1;
-export const RIGHT_CHANNEL = 0;
+export const LEFT_CHANNEL = 0;
+export const RIGHT_CHANNEL = 1;
+export const AudioContext =
+  window.AudioContext || // Default
+  (window as any).webkitAudioContext || // Safari and old versions of Chrome
+  false;
 
 export class AudioService implements AudioService {
   constructor() {
