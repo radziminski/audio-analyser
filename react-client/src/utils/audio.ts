@@ -23,7 +23,6 @@ export const calculateBufferMaxAverage = (buffer: Float32Array) => {
   const avgPower = sumOfSquares / maxSamples.length;
 
   return sampleToDecibel(avgPower);
-  return 1;
 };
 
 // Makes no sense! - its updating every 8 bars so its too late
