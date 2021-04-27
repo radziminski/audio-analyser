@@ -1,4 +1,5 @@
 import { RequestWithUser } from './../auth/strategies/local.strategy';
+
 import {
   Controller,
   Get,
@@ -56,7 +57,7 @@ export class FileController {
           const id = uuidv4();
 
           if (file.mimetype === 'audio/mpeg') return cb(null, id + '.mp3');
-          if (file.mimetype === 'audio/wav') return cb(null, id + '.wav');
+          if (file.mimetype === 'audio/wave') return cb(null, id + '.wav');
 
           cb(null, id.toString());
         },
@@ -77,6 +78,10 @@ export class FileController {
 
     const savedFileData = await this.fileService.saveFileData(fileData);
 
-    return savedFileData;
+    return {
+      ...savedFileData,
+      // TODO: Append app url here
+      url: savedFileData.url,
+    };
   }
 }

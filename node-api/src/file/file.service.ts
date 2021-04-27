@@ -20,7 +20,10 @@ export class FileService {
     size?: number;
     url: string;
   }): Promise<File> {
-    return this.fileRepository.create(data);
+    return this.fileRepository.save({
+      ...data,
+      createdAt: new Date().toISOString(),
+    });
   }
 
   findAll() {

@@ -14,7 +14,7 @@ export class File {
   name: string;
 
   @Column({ name: 'created_at' })
-  createdAt: number;
+  createdAt: string;
 
   @Column()
   length: number;
