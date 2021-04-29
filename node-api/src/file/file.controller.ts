@@ -1,3 +1,4 @@
+import { supportedMimes } from './../constants';
 import { RequestWithUser } from './../auth/strategies/local.strategy';
 
 import {
@@ -12,6 +13,7 @@ import {
   UploadedFile,
   UseGuards,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -50,16 +52,21 @@ export class FileController {
   @UseInterceptors(
     FileInterceptor('audio', {
       storage: diskStorage({
-        destination: function (req, file, cb) {
+        destination: function (_, __, cb) {
           cb(null, 'files/audio');
         },
-        filename: function (req, file, cb) {
+        filename: function (_, file, cb) {
           const id = uuidv4();
 
           if (file.mimetype === 'audio/mpeg') return cb(null, id + '.mp3');
           if (file.mimetype === 'audio/wave') return cb(null, id + '.wav');
 
-          cb(null, id.toString());
+          cb(
+            new BadRequestException({
+              message: 'File format not supported.',
+            }),
+            null,
+          );
         },
       }),
     }),
@@ -68,6 +75,12 @@ export class FileController {
     @Request() req: RequestWithUser,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    if (!file) {
+      throw new BadRequestException({
+        message: 'You need to provide a valid file.',
+      });
+    }
+
     const fileData = {
       url: `${file.destination}/${file.filename}`,
       name: file.originalname,
