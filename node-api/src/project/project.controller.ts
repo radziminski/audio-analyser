@@ -1,3 +1,4 @@
+import { RequestWithUser } from './../auth/types/index';
 import {
   Controller,
   Get,
@@ -6,18 +7,34 @@ import {
   Put,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UserProfileService } from '../user-profile/user-profile.service';
 
 @Controller('project')
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly userProfileService: UserProfileService,
+  ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto);
+  async create(
+    @Req() req: RequestWithUser,
+    @Body() createProjectDto: CreateProjectDto,
+  ) {
+    const user = await this.userProfileService.findOneByEmail(req.user.email);
+
+    return this.projectService.create({
+      ...createProjectDto,
+      ownerId: user.id,
+    });
   }
 
   @Get()

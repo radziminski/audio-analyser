@@ -1,15 +1,46 @@
+import { Repository } from 'typeorm/repository/Repository';
+import { Project } from './entities/project.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ProjectUser } from './entities/project-user.entity';
 
 @Injectable()
 export class ProjectService {
-  create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
+  constructor(
+    @InjectRepository(Project)
+    private projectRepository: Repository<Project>,
+    @InjectRepository(ProjectUser)
+    private projectUserRepository: Repository<ProjectUser>,
+  ) {}
+
+  async create(project: {
+    description: string;
+    ownerId: number;
+    title: string;
+  }) {
+    const createdProject = await this.projectRepository.save({
+      title: project.title,
+      description: project.description,
+      createdAt: new Date().toISOString(),
+      editedAt: new Date().toISOString(),
+    });
+
+    const projectUser = await this.projectUserRepository.save({
+      userProfileId: project.ownerId,
+      projectId: createdProject.id,
+    });
+
+    return {
+      project: createdProject,
+      owner: projectUser,
+    };
   }
 
   findAll() {
-    return `This action returns all project`;
+    return this.projectRepository.find({
+      relations: ['users', 'files'],
+    });
   }
 
   findOne(id: number) {

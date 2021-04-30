@@ -1,5 +1,6 @@
+import { ProjectFile } from './../../project/entities/project-file.entity';
 import { DB_TABLES } from './../../constants';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: DB_TABLES.File })
 export class File {
@@ -27,4 +28,7 @@ export class File {
 
   @Column()
   encoding: string;
+
+  @OneToMany(() => ProjectFile, (projectFile) => projectFile.fileId)
+  projectFiles: ProjectFile[];
 }

@@ -1,15 +1,25 @@
+import { Project } from './project.entity';
 import { DB_TABLES } from '../../constants';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
+import { File } from '../../file/entities/file.entity';
 
 @Entity({ name: DB_TABLES.ProjectFile })
-export class ProjectUser {
+export class ProjectFile {
   @Column()
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'file_id' })
-  fileId: string;
+  @ManyToOne(() => File, (file) => file.projectFiles)
+  @JoinColumn({ name: 'file_id' })
+  fileId: number;
 
-  @Column({ name: 'project_id' })
-  projectId: string;
+  @ManyToOne(() => Project, (project) => project.files)
+  @JoinColumn({ name: 'project_id' })
+  projectId: number;
 }

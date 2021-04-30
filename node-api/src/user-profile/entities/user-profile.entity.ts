@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { ProjectUser } from './../../project/entities/project-user.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
 import { DB_TABLES } from '../../constants';
@@ -20,4 +27,7 @@ export class UserProfile {
 
   @Column()
   role: string;
+
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.userProfileId)
+  projectUsers: ProjectUser[];
 }

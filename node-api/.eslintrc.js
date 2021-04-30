@@ -5,7 +5,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: [
-    '@typescript-eslint/eslint-plugin', 
+    '@typescript-eslint/eslint-plugin',
     'sort-keys-fix',
     'typescript-sort-keys',
     'import',
@@ -32,5 +32,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'linebreak-style': 'off',
   },
 };
