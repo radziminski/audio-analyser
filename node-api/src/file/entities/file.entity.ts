@@ -1,10 +1,9 @@
 import { ProjectFile } from './../../project/entities/project-file.entity';
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class File {
-  @Column()
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -16,16 +15,16 @@ export class File {
   @Column({ name: 'created_at' })
   createdAt: string;
 
-  @Column()
+  @Column({ nullable: true })
   length: number;
 
-  @Column()
+  @Column({ nullable: true })
   size: number;
 
-  @Column({ name: 'mime_type' })
+  @Column({ name: 'mime_type', nullable: true })
   mimeType: string;
 
-  @Column()
+  @Column({ nullable: true })
   encoding: string;
 
   @OneToMany(() => ProjectFile, (projectFile) => projectFile.file)
