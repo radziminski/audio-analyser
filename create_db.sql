@@ -33,14 +33,14 @@ CREATE TABLE "project" (
 
 CREATE TABLE "project_user" (
   "id" SERIAL PRIMARY KEY,
-  "user_profile_id" INT NOT NULL,
-  "project_id" INT NOT NULL
+  "user_profile_id" INT,
+  "project_id" INT
 );
 
 CREATE TABLE "project_file" (
   "id" SERIAL PRIMARY KEY,
-  "file_id" INT NOT NULL,
-  "project_id" INT NOT NULL
+  "file_id" INT,
+  "project_id" INT
 );
 
 ALTER TABLE "user_profile" ADD FOREIGN KEY ("email") REFERENCES "user_auth" ("email");

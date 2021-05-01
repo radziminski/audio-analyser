@@ -1,13 +1,7 @@
 import { ProjectFile } from './project-file.entity';
 import { ProjectUser } from './project-user.entity';
 import { DB_TABLES } from './../../constants';
-import {
-  Entity,
-  Column,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: DB_TABLES.Project })
 export class Project {
@@ -27,9 +21,13 @@ export class Project {
   @Column({ name: 'edited_at' })
   editedAt: string;
 
-  @OneToMany(() => ProjectUser, (projectUser) => projectUser.userProfileId)
-  users: ProjectUser[];
+  // @OneToMany(() => ProjectUser, (projectUser) => projectUser.project, {
+  //   cascade: true,
+  // })
+  // users: ProjectUser[];
 
-  @OneToMany(() => ProjectFile, (projectFile) => projectFile.fileId)
+  @OneToMany(() => ProjectFile, (projectFile) => projectFile.file, {
+    cascade: true,
+  })
   files: ProjectFile[];
 }

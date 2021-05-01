@@ -30,15 +30,24 @@ export class AuthService {
     };
   }
 
-  async createUser(user: { email: string; password: string }) {
-    const { email, password } = user;
+  async createUser(user: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    password: string;
+  }) {
+    const { email, password, firstName, lastName } = user;
     const hashedPassword = await this.encryptionService.hash(password);
 
-    console.log(email);
-
-    return this.userService.create({
-      email,
-      password: hashedPassword,
-    });
+    return this.userService.createWithProfile(
+      {
+        email,
+        password: hashedPassword,
+      },
+      {
+        firstName,
+        lastName,
+      },
+    );
   }
 }

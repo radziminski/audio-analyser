@@ -29,6 +29,6 @@ export class File {
   @Column()
   encoding: string;
 
-  @OneToMany(() => ProjectFile, (projectFile) => projectFile.fileId)
+  @OneToMany(() => ProjectFile, (projectFile) => projectFile.file)
   projectFiles: ProjectFile[];
 }

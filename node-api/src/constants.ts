@@ -25,9 +25,10 @@ export const DB_CONFIG: ConnectionOptions = {
   password: PG_PASSWORD,
   database: PG_DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
+  synchronize: true,
 };
 export const DB_TABLES = {
-  UserProfile: 'user_profile',
+  UserProfile: 'profile',
   User: 'user_auth',
   File: 'file',
   Project: 'project',

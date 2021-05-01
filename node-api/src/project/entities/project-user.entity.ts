@@ -1,25 +1,16 @@
+import { User } from './../../user/entities/user.entity';
 import { Project } from './project.entity';
 import { DB_TABLES } from './../../constants';
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-} from 'typeorm';
-import { UserProfile } from '../../user-profile/entities/user-profile.entity';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: DB_TABLES.ProjectUser })
 export class ProjectUser {
-  @Column()
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserProfile, (user) => user.projectUsers)
-  @JoinColumn({ name: 'user_profile_id' })
-  userProfileId: number;
+  // @ManyToOne(() => User, (user) => user.projectUsers)
+  // user: User;
 
-  @ManyToOne(() => Project, (project) => project.users)
-  @JoinColumn({ name: 'project_id' })
-  projectId: number;
+  // @ManyToOne(() => Project, (project) => project.users)
+  // project: Project;
 }

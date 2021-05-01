@@ -20,40 +20,38 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('all')
   async getAllUsers() {
     return this.userService.findAll();
   }
 
-  @Patch(':email')
-  updateUser(
-    @Param('email') email: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.userService.updateEmail(email, updateUserDto);
-  }
-
-  @Delete(':email')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async removeUser(@Param('email') email: string) {
-    await this.userService.remove(email);
-    return;
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getMe(@Request() req: RequestWithUser) {
+    return this.userService.findOne(req.user.email);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('me')
+  @Patch()
   updateMe(
     @Request() req: RequestWithUser,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.updateEmail(req.user.email, updateUserDto);
+    return this.userService.updateOne(req.user.email, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('me')
+  @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteMe(@Request() req: RequestWithUser) {
-    await this.userService.remove(req.user.email);
+    await this.userService.removeByEmail(req.user.email);
+    return;
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeUser(@Param('id') id: number) {
+    await this.userService.remove(id);
     return;
   }
 }

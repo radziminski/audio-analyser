@@ -1,19 +1,34 @@
-import { Column, Entity, OneToOne, PrimaryColumn, JoinColumn } from 'typeorm';
+import { ProjectUser } from './../../project/entities/project-user.entity';
+import {
+  Column,
+  Entity,
+  OneToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  Unique,
+} from 'typeorm';
 
-import { UserProfile } from '../../user-profile/entities/user-profile.entity';
 import { DB_TABLES } from '../../constants';
 
 @Entity({ name: DB_TABLES.User })
 export class User {
-  @Column()
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  @OneToOne(() => UserProfile, (profile) => profile.email)
-  @JoinColumn({ name: 'email' })
   email: string;
 
   @Column()
   password: string;
+
+  // @Column()
+  // role: string;
+
+  // @OneToOne(() => UserProfile, { cascade: true })
+  // @JoinColumn()
+  // profile: UserProfile;
+
+  // @OneToMany(() => ProjectUser, (projectUser) => projectUser.user)
+  // projectUsers: ProjectUser[];
 }

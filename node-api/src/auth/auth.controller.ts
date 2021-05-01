@@ -16,7 +16,6 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
-import { UserProfileService } from '../user-profile/user-profile.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
@@ -24,7 +23,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly userProfileService: UserProfileService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -65,23 +63,14 @@ export class AuthController {
     } = registerDto;
 
     try {
-      await this.authService.createUser({
+      const user = await this.authService.createUser({
         email,
         password,
-      });
-
-      const createdUserProfile = await this.userProfileService.create({
-        email,
         firstName,
         lastName,
       });
 
-      return {
-        id: createdUserProfile.id,
-        email: createdUserProfile.email,
-        first_name: createdUserProfile.firstName,
-        last_name: createdUserProfile.lastName,
-      };
+      return user;
     } catch (error) {
       throw new BadRequestException({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

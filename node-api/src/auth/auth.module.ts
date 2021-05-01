@@ -10,7 +10,6 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserProfileModule } from '../user-profile/user-profile.module';
 
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { UserProfileModule } from '../user-profile/user-profile.module';
     }),
     EncryptionModule,
     UserModule,
-    UserProfileModule,
     PassportModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
