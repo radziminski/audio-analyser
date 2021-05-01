@@ -35,14 +35,14 @@ export class UserService {
       lastName: string;
     },
   ) {
-    // const userProfile = new UserProfile();
-    // userProfile.firstName = profile.firstName;
-    // userProfile.lastName = profile.lastName;
+    const userProfile = new Profile();
+    userProfile.firstName = profile.firstName;
+    userProfile.lastName = profile.lastName;
 
     return this.userRepository.save({
       ...user,
       role: user.role ?? UserRole.User,
-      // profile: userProfile,
+      profile: userProfile,
     });
   }
 

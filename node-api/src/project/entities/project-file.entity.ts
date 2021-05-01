@@ -1,5 +1,4 @@
 import { Project } from './project.entity';
-import { DB_TABLES } from '../../constants';
 import {
   Entity,
   Column,
@@ -9,7 +8,7 @@ import {
 } from 'typeorm';
 import { File } from '../../file/entities/file.entity';
 
-@Entity({ name: DB_TABLES.ProjectFile })
+@Entity()
 export class ProjectFile {
   @Column()
   @PrimaryGeneratedColumn()

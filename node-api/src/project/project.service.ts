@@ -1,3 +1,4 @@
+import { FileService } from './../file/file.service';
 import { UserService } from './../user/user.service';
 import { Repository } from 'typeorm/repository/Repository';
 import { Project } from './entities/project.entity';
@@ -6,6 +7,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectUser } from './entities/project-user.entity';
 import { ProjectFile } from './entities/project-file.entity';
+import { File } from '../file/entities/file.entity';
 
 @Injectable()
 export class ProjectService {
@@ -17,6 +19,7 @@ export class ProjectService {
     @InjectRepository(ProjectFile)
     private readonly projectFileRepository: Repository<ProjectFile>,
     private readonly userService: UserService,
+    private readonly fileService: FileService,
   ) {}
 
   /// PROJECTS
@@ -53,10 +56,11 @@ export class ProjectService {
       .leftJoinAndSelect('project.users', 'projectUser')
       .leftJoinAndSelect('projectUser.user', 'user')
       .leftJoinAndSelect('project.files', 'file')
-      .where('user.email = :email', { email })
       .getMany();
 
-    return allProjects;
+    return allProjects.filter((project) =>
+      project.users.find((user) => user.user.email === email),
+    );
   }
 
   findOne(id: number) {
@@ -75,8 +79,12 @@ export class ProjectService {
 
   /// PROJECT USERS
 
-  async addProjectUser(projectId: number, userEmail: string) {
-    const user = await this.userService.findOne(userEmail);
+  async addProjectUser(
+    projectId: number,
+    currUserEmail: string,
+    newUserEmail: string,
+  ) {
+    const user = await this.userService.findOne(newUserEmail);
 
     if (!user)
       throw new BadRequestException({
@@ -85,12 +93,19 @@ export class ProjectService {
 
     const project = await this.findOne(projectId);
 
-    return this.projectUserRepository.save(project, {});
+    const newProjectUser = new ProjectUser();
+    newProjectUser.user = user;
+
+    return this.projectRepository.save({
+      ...project,
+      users: [...project.users, newProjectUser],
+    });
   }
 
-  // deleteProjectUser(projectUser: { project: number; user: number }) {
-  //   return this.projectUserRepository.delete(projectUser);
-  // }
+  deleteProjectUser(projectId: number, userEmail: string) {
+    // TODO
+    return this.projectUserRepository.delete({});
+  }
 
   // deleteAllProjectUsers(project: number) {
   //   return this.projectUserRepository.delete({ project });
@@ -104,9 +119,26 @@ export class ProjectService {
 
   /// PROJECT FILES
 
-  // addProjectFile(projectFile: { file: number; project: number }) {
-  //   return this.projectFileRepository.save(projectFile);
-  // }
+  async addProjectFile(projectId: number, file: File) {
+    if (!file)
+      throw new BadRequestException({
+        message: 'Such File does not exist',
+      });
+
+    const project = await this.findOne(projectId);
+
+    const newProjectFile = new ProjectFile();
+    newProjectFile.file = file;
+
+    return this.projectRepository.save({
+      ...project,
+      files: [...project.files, newProjectFile],
+    });
+  }
+
+  async saveFileData(file: Express.Multer.File) {
+    return this.fileService.saveFileData(file);
+  }
 
   // deleteProjectFile(projectFile: { file: number; project: number }) {
   //   return this.projectFileRepository.delete(projectFile);

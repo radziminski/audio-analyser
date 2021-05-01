@@ -1,3 +1,6 @@
+import { FileService } from './../file/file.service';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { RequestWithUser } from './../auth/types/index';
 import {
   Controller,
@@ -9,11 +12,16 @@ import {
   Delete,
   UseGuards,
   Req,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AddProjectUserDto } from './dto/add-project-user.dto';
+import { AddProjectFileDto } from './dto/add-project-file.dto';
 
 @Controller('project')
 export class ProjectController {
@@ -66,5 +74,51 @@ export class ProjectController {
     return this.projectService.findAllProjectUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('users/:id')
+  addProjectUser(
+    @Param('id') id: string,
+    @Req() req: RequestWithUser,
+    @Body() addProjectUserDto: AddProjectUserDto,
+  ) {
+    return this.projectService.addProjectUser(
+      +id,
+      req.user.email,
+      addProjectUserDto.email,
+    );
+  }
+
   /// PROJECT FILES
+
+  @UseGuards(JwtAuthGuard)
+  @Post('files/upload')
+  @UseInterceptors(
+    FileInterceptor('audio', {
+      storage: diskStorage({
+        destination: function (_, __, cb) {
+          cb(null, 'files/audio');
+        },
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        filename: FileService.saveFile,
+      }),
+    }),
+  )
+  async uploadFile(
+    @Req() req: RequestWithUser,
+    @Body() addProjectFileDto: AddProjectFileDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException({
+        message: 'You need to provide a valid file.',
+      });
+    }
+
+    const savedFileData = await this.projectService.saveFileData(file);
+
+    return this.projectService.addProjectFile(
+      addProjectFileDto.projectId,
+      savedFileData,
+    );
+  }
 }

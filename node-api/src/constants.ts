@@ -27,14 +27,6 @@ export const DB_CONFIG: ConnectionOptions = {
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,
 };
-export const DB_TABLES = {
-  UserProfile: 'profile',
-  User: 'user_auth',
-  File: 'file',
-  Project: 'project',
-  ProjectUser: 'project_user',
-  ProjectFile: 'project_file',
-};
 
 // PROVIDERS
 export const PROVIDERS = {

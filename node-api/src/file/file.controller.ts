@@ -21,7 +21,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
 
 @Controller('file')
 export class FileController {
@@ -55,19 +54,8 @@ export class FileController {
         destination: function (_, __, cb) {
           cb(null, 'files/audio');
         },
-        filename: function (_, file, cb) {
-          const id = uuidv4();
-
-          if (file.mimetype === 'audio/mpeg') return cb(null, id + '.mp3');
-          if (file.mimetype === 'audio/wave') return cb(null, id + '.wav');
-
-          cb(
-            new BadRequestException({
-              message: 'File format not supported.',
-            }),
-            null,
-          );
-        },
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        filename: FileService.saveFile,
       }),
     }),
   )
@@ -81,15 +69,7 @@ export class FileController {
       });
     }
 
-    const fileData = {
-      url: `${file.destination}/${file.filename}`,
-      name: file.originalname,
-      size: file.size,
-      encoding: file.encoding,
-      mimeType: file.mimetype,
-    };
-
-    const savedFileData = await this.fileService.saveFileData(fileData);
+    const savedFileData = await this.fileService.saveFileData(file);
 
     return {
       ...savedFileData,

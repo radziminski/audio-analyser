@@ -1,8 +1,7 @@
 import { ProjectFile } from './../../project/entities/project-file.entity';
-import { DB_TABLES } from './../../constants';
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
-@Entity({ name: DB_TABLES.File })
+@Entity()
 export class File {
   @Column()
   @PrimaryColumn()

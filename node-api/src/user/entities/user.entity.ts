@@ -1,3 +1,4 @@
+import { Profile } from './profile.entity';
 import { ProjectUser } from './../../project/entities/project-user.entity';
 import {
   Column,
@@ -6,12 +7,9 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
   OneToMany,
-  Unique,
 } from 'typeorm';
 
-import { DB_TABLES } from '../../constants';
-
-@Entity({ name: DB_TABLES.User })
+@Entity({ name: 'user_auth' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,13 +20,15 @@ export class User {
   @Column()
   password: string;
 
-  // @Column()
-  // role: string;
+  @Column()
+  role: string;
 
-  // @OneToOne(() => UserProfile, { cascade: true })
-  // @JoinColumn()
-  // profile: UserProfile;
+  @OneToOne(() => Profile, { cascade: true })
+  @JoinColumn({ name: 'profile_id' })
+  profile: Profile;
 
-  // @OneToMany(() => ProjectUser, (projectUser) => projectUser.user)
-  // projectUsers: ProjectUser[];
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.user, {
+    cascade: true,
+  })
+  projectUsers: ProjectUser[];
 }
