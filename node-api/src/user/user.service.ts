@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { User } from './entities/user.entity';
-import { UserRole } from '../common/types';
+import { UserRole } from '../auth/roles/user-role.enum';
 import { Profile } from './entities/profile.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 

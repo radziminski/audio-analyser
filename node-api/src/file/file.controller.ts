@@ -18,6 +18,7 @@ import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('file')
 export class FileController {
@@ -45,7 +46,8 @@ export class FileController {
     return;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(ThrottlerGuard, JwtAuthGuard)
+  @Throttle(1, 30)
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),

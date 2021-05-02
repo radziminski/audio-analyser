@@ -1,3 +1,4 @@
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { FileService } from './../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { RequestWithUser } from './../auth/types/index';
@@ -113,7 +114,8 @@ export class ProjectController {
   /////////// PROJECT FILES ////////////
   //////////////////////////////////////
 
-  @UseGuards(JwtAuthGuard, ProjectUserGuard)
+  @UseGuards(ThrottlerGuard, JwtAuthGuard, ProjectUserGuard)
+  @Throttle(1, 30)
   @Post(':id/files/upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),

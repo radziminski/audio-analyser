@@ -4,6 +4,7 @@ import * as winston from 'winston';
 // General
 export const ENV: 'dev' | 'prod' =
   process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+export const REQUESTS_PER_MINUTE_LIMIT = 15;
 
 // AUTH
 export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
