@@ -124,6 +124,11 @@ export class ProjectService {
         message: 'User with such email does not exist.',
       });
 
+    if (project.users.find((projectUser) => projectUser.userId === user.id))
+      throw new BadRequestException({
+        message: 'User is already in the project.',
+      });
+
     const newProjectUser = new ProjectUser();
     newProjectUser.user = user;
 

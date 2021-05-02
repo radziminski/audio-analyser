@@ -1,4 +1,3 @@
-import { supportedMimes } from './../constants';
 import { RequestWithUser } from './../auth/strategies/local.strategy';
 
 import {
@@ -20,7 +19,6 @@ import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { diskStorage } from 'multer';
 
 @Controller('file')
 export class FileController {
@@ -65,7 +63,6 @@ export class FileController {
 
     return {
       ...savedFileData,
-      // TODO: Append app url here
       url: savedFileData.url,
     };
   }
