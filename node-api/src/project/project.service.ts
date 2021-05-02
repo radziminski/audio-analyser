@@ -211,7 +211,7 @@ export class ProjectService {
     }
   }
 
-  async saveFileData(file: Express.Multer.File) {
+  async saveFileData(file: Express.MulterS3.File) {
     return this.fileService.saveFileData(file);
   }
 

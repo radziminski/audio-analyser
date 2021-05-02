@@ -10,6 +10,12 @@ export class File {
   url: string;
 
   @Column()
+  key: string;
+
+  @Column()
+  acl: string;
+
+  @Column()
   name: string;
 
   @Column({ name: 'created_at' })
@@ -21,11 +27,8 @@ export class File {
   @Column({ nullable: true })
   size: number;
 
-  @Column({ name: 'mime_type', nullable: true })
+  @Column({ name: 'mime_type' })
   mimeType: string;
-
-  @Column({ nullable: true })
-  encoding: string;
 
   @OneToMany(() => ProjectFile, (projectFile) => projectFile.file)
   projectFiles: ProjectFile[];

@@ -119,7 +119,7 @@ export class ProjectController {
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
   )
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.MulterS3.File,
     @Param('id') id: string,
   ) {
     if (!file) {

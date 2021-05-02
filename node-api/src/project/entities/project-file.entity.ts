@@ -20,7 +20,7 @@ export class ProjectFile {
   @JoinColumn({ name: 'file_id' })
   file: File;
 
-  @Column({ name: 'file_id', nullable: true })
+  @Column({ name: 'file_id' })
   fileId: number;
 
   @ManyToOne(() => Project, (project) => project.files, {
@@ -30,6 +30,6 @@ export class ProjectFile {
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
-  @Column({ name: 'project_id', nullable: true })
+  @Column({ name: 'project_id' })
   projectId: number;
 }

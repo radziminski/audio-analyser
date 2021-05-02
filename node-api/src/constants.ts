@@ -1,17 +1,16 @@
 import { ConnectionOptions } from 'typeorm';
 import * as winston from 'winston';
 
-console.log(process.env);
 // General
 // export const ENV: 'dev' | 'prod' =
 //   process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 export const ENV = 'prod';
-export const ASSETS_BASE_URL_CONFIG_VAR = 'ASSETS_BASE_URL';
 
 // AUTH
 export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
 export const JWT_EXPIRATION_S = '1000s';
 
+// AWS S3 - ASSETS
 export const { AWS_ACCESS_KEY_ID } = process.env;
 export const { AWS_SECRET_ACCESS_KEY } = process.env;
 export const { AWS_S3_BUCKET_NAME } = process.env;

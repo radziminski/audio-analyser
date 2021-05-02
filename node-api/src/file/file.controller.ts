@@ -1,5 +1,3 @@
-import { RequestWithUser } from './../auth/strategies/local.strategy';
-
 import {
   Controller,
   Get,
@@ -11,8 +9,9 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
-  Request,
   BadRequestException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -40,8 +39,10 @@ export class FileController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fileService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string) {
+    await this.fileService.remove(+id);
+    return;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -49,10 +50,7 @@ export class FileController {
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
   )
-  async uploadFile(
-    @Request() req: RequestWithUser,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
+  async uploadFile(@UploadedFile() file: Express.MulterS3.File) {
     if (!file) {
       throw new BadRequestException({
         message: 'You need to provide a valid file.',

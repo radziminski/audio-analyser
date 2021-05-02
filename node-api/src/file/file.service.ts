@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
-  ASSETS_BASE_URL_CONFIG_VAR,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
+  AWS_S3_BUCKET_NAME,
 } from './../constants';
-import { ConfigService } from '@nestjs/config';
-import { diskStorage } from 'multer';
 import { Repository } from 'typeorm/repository/Repository';
 import { File } from './entities/file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,21 +14,15 @@ import { v4 as uuidv4 } from 'uuid';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 
-console.log({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
-});
-
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
 });
 const s3 = new AWS.S3();
 
 @Injectable()
 export class FileService {
   constructor(
-    private configService: ConfigService,
     @InjectRepository(File)
     private fileRepository: Repository<File>,
   ) {}
@@ -43,11 +35,11 @@ export class FileService {
     return this.fileRepository.findOne(id);
   }
 
-  async saveFileData(file: Express.Multer.File): Promise<File> {
+  async saveFileData(file: Express.MulterS3.File): Promise<File> {
     const fileData = {
-      url: `${this.configService.get<string>(ASSETS_BASE_URL_CONFIG_VAR)}/${
-        file.filename
-      }`,
+      url: file.location,
+      key: file.key,
+      acl: file.acl,
       name: file.originalname,
       size: file.size,
       encoding: file.encoding,
@@ -65,8 +57,27 @@ export class FileService {
     return `This action updates a #${id} file`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} file`;
+  async remove(id: number) {
+    const file = await this.findOne(id);
+
+    if (!file)
+      throw new BadRequestException({ message: 'Given file does not exist.' });
+
+    console.log(AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME);
+    console.log(process.env);
+
+    // TODO: error handling?
+    if (file.key)
+      s3.deleteObject(
+        { Bucket: 'audio-analyser-radziminski', Key: file.key },
+        (err, data) => {
+          console.log(err, data);
+        },
+      );
+
+    await this.fileRepository.delete(file);
+
+    return;
   }
 
   static getMulterFilename(
@@ -87,15 +98,10 @@ export class FileService {
     );
   }
 
-  static multerFileStorage = diskStorage({
-    destination: function (_, __, cb) {
-      cb(null, 'files/audio');
-    },
-  });
-
   static multerS3Storage = multerS3({
     s3: s3,
-    bucket: 'audio-analyser-radziminski',
+    bucket: AWS_S3_BUCKET_NAME,
+    acl: 'public-read',
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
@@ -104,13 +110,6 @@ export class FileService {
   });
 
   static audioFileInterceptorOptions = {
-    // storage: diskStorage({
-    //   destination: function (_, __, cb) {
-    //     cb(null, 'files/audio');
-    //   },
-    //   // eslint-disable-next-line @typescript-eslint/unbound-method
-    //   filename: FileService.getMulterFilename,
-    // }),
     storage: FileService.multerS3Storage,
   };
 }

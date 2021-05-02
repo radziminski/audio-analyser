@@ -20,7 +20,7 @@ export class ProjectUser {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ name: 'user_id', nullable: true })
+  @Column({ name: 'user_id' })
   userId: number;
 
   @ManyToOne(() => Project, (project) => project.users, {
@@ -30,6 +30,6 @@ export class ProjectUser {
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
-  @Column({ name: 'project_id', nullable: true })
+  @Column({ name: 'project_id' })
   projectId: number;
 }
