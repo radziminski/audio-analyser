@@ -3,11 +3,16 @@ import { UserService } from './../user/user.service';
 import { Repository } from 'typeorm/repository/Repository';
 import { Project } from './entities/project.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectUser } from './entities/project-user.entity';
 import { ProjectFile } from './entities/project-file.entity';
 import { File } from '../file/entities/file.entity';
+import { isNumber } from 'lodash';
 
 @Injectable()
 export class ProjectService {
@@ -22,27 +27,9 @@ export class ProjectService {
     private readonly fileService: FileService,
   ) {}
 
-  /// PROJECTS
-
-  async create(project: {
-    description: string;
-    ownerEmail: string;
-    title: string;
-  }) {
-    const owner = await this.userService.findOne(project.ownerEmail);
-
-    const createdProject = await this.projectRepository.save({
-      title: project.title,
-      description: project.description,
-      createdAt: new Date().toISOString(),
-      editedAt: new Date().toISOString(),
-      users: [{ user: owner }],
-    });
-
-    return {
-      project: createdProject,
-    };
-  }
+  //////////////////////////////////////
+  ////////////// PROJECTS //////////////
+  //////////////////////////////////////
 
   findAll() {
     return this.projectRepository.find({
@@ -51,47 +38,91 @@ export class ProjectService {
   }
 
   async findAllForUser(email: string) {
-    const allProjects = await this.projectRepository
-      .createQueryBuilder('project')
-      .leftJoinAndSelect('project.users', 'projectUser')
-      .leftJoinAndSelect('projectUser.user', 'user')
-      .leftJoinAndSelect('project.files', 'file')
-      .getMany();
+    const allProjects = await this.findAll();
 
     return allProjects.filter((project) =>
-      project.users.find((user) => user.user.email === email),
+      this.checkIfProjectUser(project, email),
     );
   }
 
   findOne(id: number) {
     return this.projectRepository.findOne(id, {
-      relations: ['users', 'files'],
+      relations: ['users', 'files', 'users.user', 'files.file'],
     });
   }
 
+  async findOneIfProjectUser(id: number, email: string) {
+    const project = await this.findOne(id);
+
+    if (!project)
+      throw new BadRequestException({ message: 'Project does not exist.' });
+
+    if (!this.checkIfProjectUser(project, email))
+      throw new UnauthorizedException({
+        message: "You don't have rights to this project",
+      });
+
+    return project;
+  }
+
+  async create(project: { description: string; title: string }) {
+    const createdProject = await this.projectRepository.save({
+      title: project.title,
+      description: project.description,
+      createdAt: new Date().toISOString(),
+    });
+
+    return {
+      project: createdProject,
+    };
+  }
+
+  async createWithProjectUser(project: {
+    description: string;
+    email: string;
+    title: string;
+  }) {
+    const user = await this.userService.findOneByEmail(project.email);
+
+    const createdProject = await this.projectRepository.save({
+      title: project.title,
+      description: project.description,
+      createdAt: new Date().toISOString(),
+      users: [{ user }],
+    });
+
+    return {
+      project: createdProject,
+    };
+  }
+
   update(id: number, updateProjectDto: UpdateProjectDto) {
-    return this.projectRepository.update(id, { ...updateProjectDto });
+    return this.projectRepository.update(id, {
+      ...updateProjectDto,
+      editedAt: new Date().toISOString(),
+    });
   }
 
   remove(id: number) {
     return this.projectRepository.delete(id);
   }
 
-  /// PROJECT USERS
+  checkIfProjectUser(project: Project, email: string) {
+    return !!project.users.find((user) => user?.user?.email === email);
+  }
 
-  async addProjectUser(
-    projectId: number,
-    currUserEmail: string,
-    newUserEmail: string,
-  ) {
-    const user = await this.userService.findOne(newUserEmail);
+  //////////////////////////////////////
+  /////////// PROJECT USERS ////////////
+  //////////////////////////////////////
+
+  async addProjectUser(id: number, newUserEmail: string) {
+    const project = await this.findOne(id);
+    const user = await this.userService.findOneByEmail(newUserEmail);
 
     if (!user)
       throw new BadRequestException({
         message: 'User with such email does not exist.',
       });
-
-    const project = await this.findOne(projectId);
 
     const newProjectUser = new ProjectUser();
     newProjectUser.user = user;
@@ -102,33 +133,57 @@ export class ProjectService {
     });
   }
 
-  deleteProjectUser(projectId: number, userEmail: string) {
-    // TODO
-    return this.projectUserRepository.delete({});
-  }
+  async deleteProjectUser(
+    id: number,
+    currUserEmail: string,
+    toBeRemovedUserId: number,
+  ) {
+    const project = await this.findOne(id);
 
-  // deleteAllProjectUsers(project: number) {
-  //   return this.projectUserRepository.delete({ project });
-  // }
+    const user = await this.userService.findOneByEmail(currUserEmail);
 
-  findAllProjectUsers() {
-    return this.projectUserRepository.find({
-      relations: ['project', 'user'],
+    if (project.users.length < 2 && user.id === toBeRemovedUserId)
+      throw new BadRequestException({
+        message: "You can't leave since you are the only user in this project.",
+      });
+
+    return this.projectUserRepository.delete({
+      projectId: id,
+      userId: toBeRemovedUserId,
     });
   }
 
-  /// PROJECT FILES
+  findAllProjectUsers() {
+    return this.projectUserRepository.find();
+  }
 
-  async addProjectFile(projectId: number, file: File) {
+  //////////////////////////////////////
+  /////////// PROJECT FILES ////////////
+  //////////////////////////////////////
+
+  async addProjectFile(id: number, file: File | number) {
     if (!file)
       throw new BadRequestException({
         message: 'Such File does not exist',
       });
 
-    const project = await this.findOne(projectId);
+    const project = await this.findOne(id);
 
     const newProjectFile = new ProjectFile();
-    newProjectFile.file = file;
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    if (isNumber(file)) {
+      const savedFile = await this.fileService.findOne(file);
+
+      if (!savedFile)
+        throw new BadRequestException({
+          message: 'File with given id does not exist',
+        });
+
+      newProjectFile.file = savedFile;
+    } else {
+      newProjectFile.file = file;
+    }
 
     return this.projectRepository.save({
       ...project,
@@ -136,15 +191,26 @@ export class ProjectService {
     });
   }
 
+  async deleteProjectFile(id: number, fileId: number) {
+    const projects = await this.findAll();
+
+    await this.projectFileRepository.delete({ projectId: id, fileId });
+
+    if (
+      !projects.find(
+        (project) =>
+          !!project.files.find((projectFile) => projectFile.fileId === fileId),
+      )
+    ) {
+      this.fileService.remove(fileId);
+    }
+  }
+
   async saveFileData(file: Express.Multer.File) {
     return this.fileService.saveFileData(file);
   }
 
-  // deleteProjectFile(projectFile: { file: number; project: number }) {
-  //   return this.projectFileRepository.delete(projectFile);
-  // }
-
-  // deleteAllProjectFiles(project: number) {
-  //   return this.projectFileRepository.delete({ project });
-  // }
+  findAllProjectFiles() {
+    return this.projectFileRepository.find();
+  }
 }

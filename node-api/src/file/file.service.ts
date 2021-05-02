@@ -1,3 +1,4 @@
+import { diskStorage } from 'multer';
 import { Repository } from 'typeorm/repository/Repository';
 import { File } from './entities/file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -45,7 +46,7 @@ export class FileService {
     return `This action removes a #${id} file`;
   }
 
-  static saveFile(
+  static getMulterFilename(
     req,
     file: Express.Multer.File,
     cb: (error: Error, filename: string) => void,
@@ -62,4 +63,20 @@ export class FileService {
       null,
     );
   }
+
+  static multerStorage = diskStorage({
+    destination: function (_, __, cb) {
+      cb(null, 'files/audio');
+    },
+  });
+
+  static audioFileInterceptorOptions = {
+    storage: diskStorage({
+      destination: function (_, __, cb) {
+        cb(null, 'files/audio');
+      },
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      filename: FileService.getMulterFilename,
+    }),
+  };
 }

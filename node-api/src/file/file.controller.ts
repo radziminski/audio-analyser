@@ -49,15 +49,7 @@ export class FileController {
   @UseGuards(JwtAuthGuard)
   @Post('upload')
   @UseInterceptors(
-    FileInterceptor('audio', {
-      storage: diskStorage({
-        destination: function (_, __, cb) {
-          cb(null, 'files/audio');
-        },
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        filename: FileService.saveFile,
-      }),
-    }),
+    FileInterceptor('audio', FileService.audioFileInterceptorOptions),
   )
   async uploadFile(
     @Request() req: RequestWithUser,

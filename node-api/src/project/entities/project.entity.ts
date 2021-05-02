@@ -4,7 +4,6 @@ import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Project {
-  @Column()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,7 +24,7 @@ export class Project {
   })
   users: ProjectUser[];
 
-  @OneToMany(() => ProjectFile, (projectFile) => projectFile.file, {
+  @OneToMany(() => ProjectFile, (projectFile) => projectFile.project, {
     cascade: true,
   })
   files: ProjectFile[];

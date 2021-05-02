@@ -27,8 +27,6 @@ export class User {
   @JoinColumn({ name: 'profile_id' })
   profile: Profile;
 
-  @OneToMany(() => ProjectUser, (projectUser) => projectUser.user, {
-    cascade: true,
-  })
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.user)
   projectUsers: ProjectUser[];
 }

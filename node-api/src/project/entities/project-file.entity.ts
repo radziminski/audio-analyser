@@ -1,24 +1,35 @@
 import { Project } from './project.entity';
 import {
   Entity,
-  Column,
   ManyToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  Column,
 } from 'typeorm';
 import { File } from '../../file/entities/file.entity';
 
 @Entity()
 export class ProjectFile {
-  @Column()
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => File, (file) => file.projectFiles)
+  @ManyToOne(() => File, (file) => file.projectFiles, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'file_id' })
   file: File;
 
-  @ManyToOne(() => Project, (project) => project.files)
+  @Column({ name: 'file_id', nullable: true })
+  fileId: number;
+
+  @ManyToOne(() => Project, (project) => project.files, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'project_id' })
   project: Project;
+
+  @Column({ name: 'project_id', nullable: true })
+  projectId: number;
 }

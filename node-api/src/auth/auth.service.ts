@@ -15,7 +15,7 @@ export class AuthService {
 
   async validateUser(credentials: LoginCredentials): Promise<boolean> {
     const { email, password } = credentials;
-    const foundUser = await this.userService.findOne(email);
+    const foundUser = await this.userService.findOneByEmail(email);
 
     return (
       foundUser && this.encryptionService.compare(password, foundUser.password)

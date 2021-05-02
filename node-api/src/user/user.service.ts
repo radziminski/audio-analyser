@@ -46,7 +46,14 @@ export class UserService {
     });
   }
 
-  async findOne(email: string) {
+  async findOne(id: number) {
+    return this.userRepository.findOne({
+      relations: ['profile'],
+      where: { id },
+    });
+  }
+
+  async findOneByEmail(email: string) {
     return this.userRepository.findOne({
       relations: ['profile'],
       where: { email },

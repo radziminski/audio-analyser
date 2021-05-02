@@ -1,6 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class AddProjectFileDto {
-  @IsString()
-  projectId: number;
+  @IsNumber()
+  fileId: number;
 }

@@ -49,7 +49,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    const user = await this.userService.findOne(registerDto.email);
+    const user = await this.userService.findOneByEmail(registerDto.email);
     if (user)
       throw new BadRequestException({
         error: 'The user with given email already exists.',
