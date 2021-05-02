@@ -1,18 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   AWS_S3_BUCKET_NAME,
+  MAX_FILE_SIZE,
+  MAX_TOTAL_FILES_SIZE,
 } from './../constants';
 import { Repository } from 'typeorm/repository/Repository';
 import { File } from './entities/file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { v4 as uuidv4 } from 'uuid';
 
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { getRepository } from 'typeorm';
 
 AWS.config.update({
   accessKeyId: AWS_ACCESS_KEY_ID,
@@ -40,16 +47,27 @@ export class FileService {
       url: file.location,
       key: file.key,
       acl: file.acl,
+      originalName: file.originalname,
       name: file.originalname,
       size: file.size,
-      encoding: file.encoding,
       mimeType: file.mimetype,
     };
 
-    return this.fileRepository.save({
+    const savedFile = await this.fileRepository.save({
       ...fileData,
       createdAt: new Date().toISOString(),
     });
+
+    const totalFileSize = await this.getTotalFilesSize();
+
+    if (totalFileSize > MAX_TOTAL_FILES_SIZE) {
+      await this.remove(savedFile.id);
+      throw new ServiceUnavailableException({
+        message: 'Server storage is fully used.',
+      });
+    }
+
+    return savedFile;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,15 +81,12 @@ export class FileService {
     if (!file)
       throw new BadRequestException({ message: 'Given file does not exist.' });
 
-    console.log(AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME);
-    console.log(process.env);
-
     // TODO: error handling?
     if (file.key)
       s3.deleteObject(
         { Bucket: 'audio-analyser-radziminski', Key: file.key },
-        (err, data) => {
-          console.log(err, data);
+        (err) => {
+          if (err) console.log(err);
         },
       );
 
@@ -80,8 +95,23 @@ export class FileService {
     return;
   }
 
+  async getTotalFilesSize() {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const totalSize = +(
+        await getRepository(File)
+          .createQueryBuilder('file')
+          .select('SUM(file.size)', 'total_size')
+          .getRawOne()
+      )['total_size'];
+      return totalSize;
+    } catch (e) {
+      throw new ServiceUnavailableException();
+    }
+  }
+
   static getMulterFilename(
-    req,
+    _: Express.Request,
     file: Express.Multer.File,
     cb: (error: Error, filename: string) => void,
   ) {
@@ -102,14 +132,18 @@ export class FileService {
     s3: s3,
     bucket: AWS_S3_BUCKET_NAME,
     acl: 'public-read',
-    metadata: function (req, file, cb) {
+    metadata: function (_, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     // eslint-disable-next-line @typescript-eslint/unbound-method
     key: FileService.getMulterFilename,
   });
 
-  static audioFileInterceptorOptions = {
+  static audioFileInterceptorOptions: MulterOptions = {
+    limits: {
+      files: 1,
+      fileSize: MAX_FILE_SIZE,
+    },
     storage: FileService.multerS3Storage,
   };
 }

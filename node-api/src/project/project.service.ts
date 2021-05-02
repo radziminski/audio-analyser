@@ -185,6 +185,11 @@ export class ProjectService {
           message: 'File with given id does not exist',
         });
 
+      if (project.files.find((projectFile) => projectFile.fileId === file))
+        throw new BadRequestException({
+          message: 'File is already in the project.',
+        });
+
       newProjectFile.file = savedFile;
     } else {
       newProjectFile.file = file;
@@ -197,18 +202,11 @@ export class ProjectService {
   }
 
   async deleteProjectFile(id: number, fileId: number) {
-    const projects = await this.findAll();
+    if (!(await this.checkIfFileExistsInOtherProjects(fileId))) {
+      await this.fileService.remove(fileId);
+    }
 
     await this.projectFileRepository.delete({ projectId: id, fileId });
-
-    if (
-      !projects.find(
-        (project) =>
-          !!project.files.find((projectFile) => projectFile.fileId === fileId),
-      )
-    ) {
-      this.fileService.remove(fileId);
-    }
   }
 
   async saveFileData(file: Express.MulterS3.File) {
@@ -217,5 +215,14 @@ export class ProjectService {
 
   findAllProjectFiles() {
     return this.projectFileRepository.find();
+  }
+
+  async checkIfFileExistsInOtherProjects(fileId: number) {
+    const projects = await this.findAll();
+
+    return !!projects.find(
+      (project) =>
+        !!project.files.find((projectFile) => projectFile.fileId === fileId),
+    );
   }
 }

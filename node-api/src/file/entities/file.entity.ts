@@ -18,6 +18,9 @@ export class File {
   @Column()
   name: string;
 
+  @Column({ name: 'original_name', nullable: true })
+  originalName: string;
+
   @Column({ name: 'created_at' })
   createdAt: string;
 

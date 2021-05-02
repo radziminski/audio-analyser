@@ -2,9 +2,8 @@ import { ConnectionOptions } from 'typeorm';
 import * as winston from 'winston';
 
 // General
-// export const ENV: 'dev' | 'prod' =
-//   process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-export const ENV = 'prod';
+export const ENV: 'dev' | 'prod' =
+  process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 
 // AUTH
 export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
@@ -14,6 +13,8 @@ export const JWT_EXPIRATION_S = '1000s';
 export const { AWS_ACCESS_KEY_ID } = process.env;
 export const { AWS_SECRET_ACCESS_KEY } = process.env;
 export const { AWS_S3_BUCKET_NAME } = process.env;
+export const MAX_FILE_SIZE = Math.pow(1024, 2) * 70; // 70 MiB
+export const MAX_TOTAL_FILES_SIZE = Math.pow(1024, 3) * 10; // 10 GiB
 
 // ENV
 export const { PG_USER } = process.env;
