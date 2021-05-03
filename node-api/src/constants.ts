@@ -5,9 +5,9 @@ import * as winston from 'winston';
 export const ENV: 'dev' | 'prod' =
   process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 export const REQUESTS_PER_MINUTE_LIMIT = 15;
-
+export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 // AUTH
-export const JWT_SECRET_CONFIG_VAR = 'JWT_SECRET';
+export const { JWT_SECRET } = process.env;
 export const JWT_EXPIRATION_S = '1000s';
 
 // AWS S3 - ASSETS

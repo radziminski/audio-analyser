@@ -1,8 +1,7 @@
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 
-import { ENV, REQUESTS_PER_MINUTE_LIMIT } from './constants';
+import { REQUESTS_PER_MINUTE_LIMIT } from './constants';
 import { ResponseLoggerMiddleware } from './common/middleware/response-logger.middleware';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 import { DatabaseModule } from './database/database.module';
@@ -19,10 +18,6 @@ import { APP_GUARD } from '@nestjs/core';
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: REQUESTS_PER_MINUTE_LIMIT,
-    }),
-    ConfigModule.forRoot({
-      envFilePath: `.env.${ENV}`,
-      isGlobal: true,
     }),
     DatabaseModule,
     LoggerModule,

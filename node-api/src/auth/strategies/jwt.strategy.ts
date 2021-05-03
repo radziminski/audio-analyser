@@ -1,22 +1,30 @@
-import { ConfigService } from '@nestjs/config';
+import { RequestUser } from '../types/index';
+import { JWT_SECRET } from './../../constants';
+import { AuthService } from './../auth.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-import { JWT_SECRET_CONFIG_VAR } from '../../constants';
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private configService: ConfigService) {
+  constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      secretOrKey: configService.get(JWT_SECRET_CONFIG_VAR),
+      secretOrKey: JWT_SECRET,
     });
   }
 
-  validate(payload: { email: string }) {
-    return { userId: payload.email, email: payload.email };
+  async validate(payload: {
+    email: string;
+    sub: number;
+  }): Promise<RequestUser> {
+    const user = await this.authService.getUser(payload.sub);
+
+    return {
+      id: user.id,
+      email: user.email,
+      roles: user.roles,
+    };
   }
 }

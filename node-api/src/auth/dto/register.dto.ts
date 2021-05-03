@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { PASSWORD_REGEX } from '../../constants';
 
 export class RegisterDto {
   @IsEmail()
@@ -18,7 +19,7 @@ export class RegisterDto {
   @MaxLength(50, {
     message: 'Password should be maximum 50 characters long',
   })
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  @Matches(PASSWORD_REGEX, {
     message:
       'Password should contain at least one lowercase and uppercase letter',
   })

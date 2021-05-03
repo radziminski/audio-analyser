@@ -1,3 +1,4 @@
+import { RolesGuard } from './../auth/guards/user-roles.guard';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { FileService } from './../file/file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -25,6 +26,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AddProjectUserDto } from './dto/add-project-user.dto';
 import { AddProjectFileDto } from './dto/add-project-file.dto';
 import { ProjectUserGuard } from './guards/project-user.guard';
+import { Roles } from '../auth/roles/roles.decorator';
+import { UserRole } from '../auth/roles/user-role.enum';
 
 @Controller('project')
 export class ProjectController {
@@ -34,6 +37,8 @@ export class ProjectController {
   ////////////// PROJECTS //////////////
   //////////////////////////////////////
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Get('all')
   getAll() {
     return this.projectService.findAll();
@@ -84,6 +89,8 @@ export class ProjectController {
   /////////// PROJECT USERS ////////////
   //////////////////////////////////////
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Get(':id/users')
   getAllProjectUsers() {
     return this.projectService.findAllProjectUsers();
@@ -115,7 +122,7 @@ export class ProjectController {
   //////////////////////////////////////
 
   @UseGuards(ThrottlerGuard, JwtAuthGuard, ProjectUserGuard)
-  @Throttle(1, 30)
+  @Throttle(2, 30)
   @Post(':id/files/upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
@@ -155,6 +162,8 @@ export class ProjectController {
     return;
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Get(':id/files')
   getAllProjectFiles() {
     return this.projectService.findAllProjectFiles();

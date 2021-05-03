@@ -12,15 +12,12 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
-    @InjectRepository(Profile)
-    private readonly profileRepository: Repository<Profile>,
   ) {}
 
-  async create(user: { email: string; password: string; role?: string }) {
+  async create(user: { email: string; password: string; roles?: string[] }) {
     return this.userRepository.save({
       ...user,
-      role: user.role ?? UserRole.User,
+      roles: user.roles ?? [UserRole.User],
     });
   }
 
@@ -28,7 +25,7 @@ export class UserService {
     user: {
       email: string;
       password: string;
-      role?: string;
+      roles?: string[];
     },
     profile: {
       firstName: string;
@@ -41,7 +38,7 @@ export class UserService {
 
     return this.userRepository.save({
       ...user,
-      role: user.role ?? UserRole.User,
+      roles: user.roles ?? [UserRole.User],
       profile: userProfile,
     });
   }
@@ -57,6 +54,14 @@ export class UserService {
     return this.userRepository.findOne({
       relations: ['profile'],
       where: { email },
+    });
+  }
+
+  async findOneWithPwdByEmail(email: string) {
+    return this.userRepository.findOne({
+      relations: ['profile'],
+      where: { email },
+      select: ['id', 'email', 'password', 'roles'],
     });
   }
 

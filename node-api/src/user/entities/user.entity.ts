@@ -17,11 +17,11 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column()
-  role: string;
+  @Column('varchar', { array: true, nullable: true })
+  roles: string[];
 
   @OneToOne(() => Profile, { cascade: true })
   @JoinColumn({ name: 'profile_id' })

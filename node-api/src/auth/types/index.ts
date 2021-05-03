@@ -3,8 +3,11 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RequestUser {
+  email: string;
+  id: number;
+  roles: string[];
+}
 export type RequestWithUser = Request & {
-  user: {
-    email: string;
-  };
+  user: RequestUser;
 };

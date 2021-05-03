@@ -3,3 +3,6 @@ export enum UserRole {
   Editor = 'editor',
   User = 'user',
 }
+
+export const isUserRole = (str: string): str is UserRole =>
+  Object.values(UserRole).some((role) => role === str);

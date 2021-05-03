@@ -1,5 +1,5 @@
 import { EncryptionService } from './../encryption/encryption.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
@@ -13,21 +13,45 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(credentials: LoginCredentials): Promise<boolean> {
+  async validateUser(credentials: LoginCredentials) {
     const { email, password } = credentials;
-    const foundUser = await this.userService.findOneByEmail(email);
+    const foundUser = await this.userService.findOneWithPwdByEmail(email);
 
-    return (
-      foundUser && this.encryptionService.compare(password, foundUser.password)
-    );
+    if (
+      !(
+        foundUser &&
+        (await this.encryptionService.compare(password, foundUser.password))
+      )
+    )
+      throw new UnauthorizedException();
+
+    return { id: foundUser.id, email: foundUser.email, roles: foundUser.roles };
   }
 
-  getToken(email: string) {
-    const payload = { email: email, sub: 1 };
+  getToken(user: { email: string; id: number }) {
+    const payload = { email: user.email, sub: user.id };
 
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async getUser(id: number) {
+    const user = await this.userService.findOne(id);
+
+    if (!user)
+      throw new UnauthorizedException({ message: 'User does not exist.' });
+
+    return user;
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.userService.findOneByEmail(email);
+
+    if (!user)
+      throw new UnauthorizedException({ message: 'User does not exist.' });
+
+    return user;
   }
 
   async createUser(user: {
@@ -39,7 +63,7 @@ export class AuthService {
     const { email, password, firstName, lastName } = user;
     const hashedPassword = await this.encryptionService.hash(password);
 
-    return this.userService.createWithProfile(
+    const created = await this.userService.createWithProfile(
       {
         email,
         password: hashedPassword,
@@ -49,5 +73,10 @@ export class AuthService {
         lastName,
       },
     );
+
+    return {
+      ...created,
+      password: undefined,
+    };
   }
 }

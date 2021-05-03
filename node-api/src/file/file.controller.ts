@@ -1,3 +1,5 @@
+import { RolesGuard } from './../auth/guards/user-roles.guard';
+import { UserRole } from './../auth/roles/user-role.enum';
 import {
   Controller,
   Get,
@@ -19,26 +21,35 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { Roles } from '../auth/roles/roles.decorator';
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
+  @Roles(UserRole.Admin, UserRole.Editor)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   findAll() {
     return this.fileService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.fileService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
     return this.fileService.update(+id, updateFileDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
@@ -47,6 +58,7 @@ export class FileController {
   }
 
   @UseGuards(ThrottlerGuard, JwtAuthGuard)
+  @Roles(UserRole.Admin, UserRole.Editor)
   @Throttle(1, 30)
   @Post('upload')
   @UseInterceptors(
