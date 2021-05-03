@@ -1,6 +1,6 @@
 import { API_BASE_URL, DEVELOPMENT_ENV, ENV } from './../constants/constants';
 import axios, { AxiosInstance } from 'axios';
-import AxiosLogger from 'axios-logger';
+import * as AxiosLogger from 'axios-logger';
 import axiosRetry from 'axios-retry';
 
 export class RequestService {
@@ -17,14 +17,15 @@ export class RequestService {
   }
 
   setLoggerInterceptor() {
-    // this.client.interceptors.request.use(
-    //   AxiosLogger.requestLogger,
-    //   AxiosLogger.errorLogger
-    // );
-    // this.client.interceptors.response.use(
-    //   AxiosLogger.responseLogger,
-    //   AxiosLogger.errorLogger
-    // );
+    this.client.interceptors.request.use(
+      AxiosLogger.requestLogger,
+      AxiosLogger.errorLogger
+    );
+
+    this.client.interceptors.response.use(
+      AxiosLogger.responseLogger,
+      AxiosLogger.errorLogger
+    );
   }
 
   setRetryInterceptor() {
