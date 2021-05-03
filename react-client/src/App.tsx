@@ -1,6 +1,7 @@
 import audioService from 'global-state/audio/audioController';
 import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import AuthService from 'services/AuthService';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from 'styles/global';
 import { defaultTheme } from 'styles/theme';
@@ -15,6 +16,10 @@ const App: React.FC = () => {
       audioService.init(audioRef.current);
       setAudioServiceReady(true);
     }
+    AuthService.login({
+      email: 'janek1@test.com',
+      password: 'Abcdefg1'
+    }).then((data) => console.log(data));
   }, [audioRef]);
 
   return (

@@ -1,3 +1,4 @@
+import { API_ROUTES } from './../constants/api-routes';
 import RequestService from './RequestService';
 
 export interface ILoginCredentials {
@@ -13,8 +14,13 @@ export interface IRegisterCredentials {
 }
 
 export class AuthService {
-  login(credentials: ILoginCredentials) {
-    console.log('login will be here');
+  async login(credentials: ILoginCredentials) {
+    const response = await RequestService.client.post(
+      API_ROUTES.LOGIN,
+      credentials
+    );
+
+    return response.data;
   }
 }
 

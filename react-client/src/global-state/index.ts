@@ -1,5 +1,5 @@
 import { createStore } from 'easy-peasy';
-import { WavesurferService } from 'services';
+import WavesurferService from 'services/WavesurferService';
 import { StoreInjections, AppState } from './types';
 import audioState from './audio';
 

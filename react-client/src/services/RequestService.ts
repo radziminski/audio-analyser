@@ -17,15 +17,14 @@ export class RequestService {
   }
 
   setLoggerInterceptor() {
-    this.client.interceptors.request.use(
-      AxiosLogger.requestLogger,
-      AxiosLogger.errorLogger
-    );
-
-    this.client.interceptors.response.use(
-      AxiosLogger.responseLogger,
-      AxiosLogger.errorLogger
-    );
+    // this.client.interceptors.request.use(
+    //   AxiosLogger.requestLogger,
+    //   AxiosLogger.errorLogger
+    // );
+    // this.client.interceptors.response.use(
+    //   AxiosLogger.responseLogger,
+    //   AxiosLogger.errorLogger
+    // );
   }
 
   setRetryInterceptor() {
