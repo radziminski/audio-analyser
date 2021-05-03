@@ -12,6 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(join(__dirname, '..', 'files/audio'));
   app.use(helmet());
+  app.enableCors();
 
   await app.listen(API_PORT);
   console.log(`Listening on port ${API_PORT}...`);
