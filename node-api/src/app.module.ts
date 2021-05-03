@@ -2,7 +2,6 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 
 import { REQUESTS_PER_MINUTE_LIMIT } from './constants';
-import { ResponseLoggerMiddleware } from './common/middleware/response-logger.middleware';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 import { DatabaseModule } from './database/database.module';
 import { AppController } from './app.controller';
@@ -37,6 +36,5 @@ import { APP_GUARD } from '@nestjs/core';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(RequestLoggerMiddleware).forRoutes('*');
-    consumer.apply(ResponseLoggerMiddleware).forRoutes('*');
   }
 }
