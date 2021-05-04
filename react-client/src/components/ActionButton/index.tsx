@@ -2,7 +2,6 @@ import Button from 'components/Button';
 import styled from 'styled-components';
 import React from 'react';
 import Loader from 'components/Loader';
-import Box from 'components/Box';
 
 const Container = styled(Button)`
   width: 100%;

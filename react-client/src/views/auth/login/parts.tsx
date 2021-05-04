@@ -25,7 +25,7 @@ export const LoginForm: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated) history.push(ROUTES.DASHBOARD);
-  }, [isAuthenticated]);
+  }, [isAuthenticated, history]);
 
   return (
     <Form onSubmit={onSubmit}>

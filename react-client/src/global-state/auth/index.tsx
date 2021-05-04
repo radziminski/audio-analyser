@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { Action, Thunk, action, thunk } from 'easy-peasy';
 import AuthService, { ILoginCredentials } from 'services/AuthService';
 
