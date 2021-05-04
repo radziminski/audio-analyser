@@ -9,6 +9,7 @@ export interface CustomTheme {
     background50: string;
     background70: string;
     primary100: string;
+    primary80: string;
     secondary100: string;
     accentPrimary100: string;
     accentSecondary100: string;
@@ -86,6 +87,7 @@ export const COLORS = {
   background50: '#25294A',
   background70: '#2A2F54',
   primary100: '#7033FF',
+  primary80: '#5a29cc',
   secondary100: '#2A99FF',
   accentPrimary100: '#44F3FE',
   accentSecondary100: '#EE249F'

@@ -7,7 +7,6 @@ import AnalyserView from './analyser';
 import ProjectsView from './projects';
 
 const DashboardView: React.FC = () => {
-  console.log('in dashboard view');
   return (
     <>
       <NavPanel />

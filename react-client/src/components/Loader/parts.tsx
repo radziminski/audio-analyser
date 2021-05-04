@@ -1,18 +1,27 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+const DEFAULT_LOADER_SIZE = 80;
+const DEFAULT_LOADER_STROKE_SIZE = 6;
+
+export const Container = styled.div<{
+  size?: number;
+  strokeSize?: number;
+  color?: string;
+}>`
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: ${(props) => props.size ?? DEFAULT_LOADER_SIZE}px;
+  height: ${(props) => props.size ?? DEFAULT_LOADER_SIZE}px;
   div {
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 6px solid #fff;
+    width: ${(props) => (props.size ?? DEFAULT_LOADER_SIZE) * 0.8}px;
+    height: ${(props) => (props.size ?? DEFAULT_LOADER_SIZE) * 0.8}px;
+    margin: ${(props) => (props.size ?? DEFAULT_LOADER_SIZE) * 0.1}px;
+    border: ${(props) =>
+        (props.strokeSize ?? DEFAULT_LOADER_STROKE_SIZE) * 0.8}px
+      solid #fff;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #fff transparent transparent transparent;

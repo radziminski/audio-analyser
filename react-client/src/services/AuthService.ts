@@ -14,13 +14,13 @@ export interface IRegisterCredentials {
 }
 
 export class AuthService {
-  async login(credentials: ILoginCredentials) {
+  async login(credentials: ILoginCredentials): Promise<string> {
     const response = await RequestService.client.post(
       API_ROUTES.LOGIN,
       credentials
     );
 
-    return response.data;
+    return response.data['access_token'];
   }
 }
 
