@@ -1,3 +1,4 @@
+import { UserDto } from './../dtos/user/user-dto';
 import { API_ROUTES } from './../constants/api-routes';
 import RequestService from './RequestService';
 
@@ -9,8 +10,8 @@ export interface ILoginCredentials {
 export interface IRegisterCredentials {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export class AuthService {
@@ -21,6 +22,15 @@ export class AuthService {
     );
 
     return response.data['access_token'];
+  }
+
+  async register(credentials: IRegisterCredentials): Promise<UserDto> {
+    const response = await RequestService.client.post(
+      API_ROUTES.REGISTER,
+      credentials
+    );
+
+    return response.data;
   }
 }
 

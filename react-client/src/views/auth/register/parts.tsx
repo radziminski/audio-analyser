@@ -21,10 +21,21 @@ export const RegisterForm: React.FC = () => {
   const { authError, isLoading, isAuthenticated } = useStoreState(
     (store) => store.auth
   );
-  const { register } = useStoreActions((store) => store.auth);
+  const { register, setError } = useStoreActions((store) => store.auth);
 
   const onSubmit = async () => {
-    // void register({ email, password });
+    if (password !== repeatPassword) {
+      return setError('Passwords do not match.');
+    }
+
+    const res = await register({
+      email,
+      password,
+      firstName: firstName || undefined,
+      lastName: lastName || undefined
+    });
+
+    if (res) history.push(ROUTES.AUTH_LOGIN);
   };
 
   useEffect(() => {

@@ -17,6 +17,8 @@ export const LeftBar = styled.div`
 export const RightBar = styled.div`
   width: 60%;
   height: 100%;
-  padding: 10rem;
+  padding: 8rem 10rem;
   position: relative;
+  display: flex;
+  align-items: center;
 `;
