@@ -1,32 +1,7 @@
-import { Action, Thunk, action, thunk } from 'easy-peasy';
-import AuthService, {
-  ILoginCredentials,
-  IRegisterCredentials
-} from 'services/AuthService';
+import { AuthState } from './types';
+import { action, thunk } from 'easy-peasy';
 
-export type AuthAction<Payload = void, Result = void> = Action<
-  AuthState,
-  Payload
->;
-export type AuthThunk<Payload = void, Result = void> = Thunk<
-  AuthState,
-  Payload
->;
-
-const TOKEN_STORAGE_KEY = 'token';
-
-export interface AuthState {
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  authError: string | null;
-
-  setIsLoading: AuthAction<boolean>;
-  setIsAuthenticated: AuthAction;
-  setError: AuthAction<string | null>;
-  login: AuthThunk<ILoginCredentials, boolean>;
-  register: AuthThunk<IRegisterCredentials, boolean>;
-  logout: AuthThunk;
-}
+import AuthService from 'services/AuthService';
 
 const authState: AuthState = {
   isLoading: false,
@@ -48,12 +23,13 @@ const authState: AuthState = {
   login: thunk(async (actions, payload) => {
     actions.setIsLoading(true);
     actions.setError(null);
+
     try {
       const token = await AuthService.login(payload);
 
-      localStorage.setItem(TOKEN_STORAGE_KEY, token);
-      actions.setIsAuthenticated();
+      AuthService.setTokens({ accessToken: token });
 
+      actions.setIsAuthenticated();
       return true;
     } catch (error) {
       if (error.response?.status === 401)

@@ -1,7 +1,7 @@
 export interface ProfileDto {
   id: number;
   firstName: string;
-  lasName: string;
+  lastName: string;
 }
 
 export interface UserDto {
