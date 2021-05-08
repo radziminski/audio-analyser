@@ -1,12 +1,14 @@
 import Box, { FlexBox } from 'components/Box';
 import { Heading2, Heading3, Paragraph } from 'components/Text';
+import { ROUTES } from 'constants/routes';
 import React from 'react';
-import { FONT_WEIGHTS } from 'styles/theme';
+import { Link } from 'react-router-dom';
+import { COLORS, FONT_WEIGHTS } from 'styles/theme';
 import LoginForm from './parts';
 
 const LoginView: React.FC = () => {
   return (
-    <FlexBox flexDirection='column' maxWidth='600px'>
+    <FlexBox flexDirection='column' maxWidth='600px' paddingBottom='2rem'>
       <Heading2 fontSize='2rem' fontWeight={FONT_WEIGHTS.medium}>
         Login
       </Heading2>

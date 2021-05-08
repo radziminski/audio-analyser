@@ -5,7 +5,7 @@ import Icon from 'components/Icon';
 import Box, { FlexBox } from 'components/Box';
 import AudioTimer from 'components/AudioTimer';
 import VolumeSlider from 'components/VolumeSlider';
-import audioService from 'global-state/audio/audioController';
+import audioService from 'services/AudioControllerService';
 
 const ICON_SIZE_SMALL = 24;
 const ICON_SIZE_BIG = 34;

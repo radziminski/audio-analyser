@@ -1,9 +1,9 @@
-import { UserState } from './user/types';
-import { AuthState } from './auth/types';
-import { AudioState } from './audio/index';
+import { IUserState } from './user/types';
+import { IAuthState } from './auth/types';
+import { IAudioState } from './audio/types';
 
-export interface AppState {
-  audio: AudioState;
-  auth: AuthState;
-  user: UserState;
+export interface IAppState {
+  audio: IAudioState;
+  auth: IAuthState;
+  user: IUserState;
 }

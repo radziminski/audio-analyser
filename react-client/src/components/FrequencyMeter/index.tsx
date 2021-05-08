@@ -1,4 +1,4 @@
-import AudioService from 'global-state/audio/audioController';
+import AudioService from 'services/AudioControllerService';
 import React, { useEffect, useRef } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';

@@ -17,7 +17,7 @@ export const LoginForm: React.FC = () => {
   const { authError, isLoading, isAuthenticated } = useStoreState(
     (store) => store.auth
   );
-  const { login } = useStoreActions((store) => store.auth);
+  const { login, setError } = useStoreActions((store) => store.auth);
 
   const onSubmit = async () => {
     void login({ email, password });
@@ -26,6 +26,10 @@ export const LoginForm: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) history.push(ROUTES.DASHBOARD);
   }, [isAuthenticated, history]);
+
+  useEffect(() => {
+    setError(null);
+  }, [setError]);
 
   return (
     <Form onSubmit={onSubmit}>
@@ -47,6 +51,8 @@ export const LoginForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Your email'
+          name='email'
+          autoComplete='email'
         />
       </Box>
       <Box marginTop='2rem'>
@@ -56,6 +62,8 @@ export const LoginForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Your password'
+          name='password'
+          autoComplete='current-password'
         />
       </Box>
       <Box marginTop='4rem'>

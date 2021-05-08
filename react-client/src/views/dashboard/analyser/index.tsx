@@ -5,7 +5,7 @@ import FrequencyMeter from 'components/FrequencyMeter';
 import { useStoreState, useStoreActions } from 'global-state/hooks';
 import { usePlayOnSpace } from 'hooks/usePlayOnSpace';
 import DashboardContent from 'components/DashboardContent';
-import AudioService from 'global-state/audio/audioController';
+import AudioService from 'services/AudioControllerService';
 import { useParams } from 'react-router';
 import Box, { FlexBox } from 'components/Box';
 import Spectrogram from 'components/Spectrogram';

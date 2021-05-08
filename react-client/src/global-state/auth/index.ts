@@ -1,15 +1,15 @@
-import { AuthState } from './types';
+import { IAuthState } from './types';
 import { action, thunk } from 'easy-peasy';
 
 import AuthService from 'services/AuthService';
 
-const authState: AuthState = {
+const authState: IAuthState = {
   isLoading: false,
   isAuthenticated: false,
   authError: null,
 
-  setIsAuthenticated: action((state) => {
-    state.isAuthenticated = true;
+  setIsAuthenticated: action((state, payload) => {
+    state.isAuthenticated = payload;
   }),
 
   setIsLoading: action((state, payload) => {
@@ -25,17 +25,15 @@ const authState: AuthState = {
     actions.setError(null);
 
     try {
-      const token = await AuthService.login(payload);
+      await AuthService.login(payload);
 
-      AuthService.setTokens({ accessToken: token });
-
-      actions.setIsAuthenticated();
+      actions.setIsAuthenticated(true);
       return true;
     } catch (error) {
       if (error.response?.status === 401)
         actions.setError('Incorrect password or user does not exist.');
     } finally {
-      setTimeout(() => actions.setIsLoading(false), 1000);
+      actions.setIsLoading(false);
     }
 
     return false;
@@ -47,19 +45,28 @@ const authState: AuthState = {
     try {
       await AuthService.register(payload);
 
+      actions.setIsAuthenticated(true);
       return true;
     } catch (error) {
       error.response?.data?.message &&
-        actions.setError(error.response.data.message);
+        actions.setError(
+          Array.isArray(error.response.data.message)
+            ? error.response.data.message[0]
+            : error.response.data.message
+        );
     } finally {
-      setTimeout(() => actions.setIsLoading(false), 1000);
+      actions.setIsLoading(false);
     }
 
     return false;
   }),
 
-  logout: thunk(async (actions, payload) => {
-    // TODO
+  logout: action((state) => {
+    state.isLoading = false;
+    state.isAuthenticated = false;
+    state.authError = null;
+
+    AuthService.logout();
   })
 };
 

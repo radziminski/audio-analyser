@@ -1,15 +1,18 @@
-import Box from 'components/Box';
+import Box, { FlexBox } from 'components/Box';
 import Logo from 'components/Logo';
 import { Heading2, Paragraph } from 'components/Text';
 import { ROUTES } from 'constants/routes';
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, useLocation } from 'react-router';
 import { COLORS, FONT_WEIGHTS } from 'styles/theme';
 import RegisterView from './register';
 import LoginView from './login';
 import { Container, LeftBar, RightBar } from './parts';
+import { Link } from 'react-router-dom';
 
 export const AuthView: React.FC = () => {
+  const location = useLocation();
+
   return (
     <Container>
       <LeftBar>
@@ -42,6 +45,38 @@ export const AuthView: React.FC = () => {
         </Box>
       </LeftBar>
       <RightBar>
+        <FlexBox marginBottom='2rem'>
+          <Link to={ROUTES.AUTH_LOGIN}>
+            <Box
+              background={
+                location.pathname === ROUTES.AUTH_LOGIN
+                  ? COLORS.primary100
+                  : 'transparent'
+              }
+              border={`1px solid ${COLORS.primary100}`}
+              width='1rem'
+              height='1rem'
+              marginRight='1rem'
+              borderRadius='4px'
+              cursor='pointer'
+            />
+          </Link>
+
+          <Link to={ROUTES.AUTH_REGISTER}>
+            <Box
+              background={
+                location.pathname === ROUTES.AUTH_REGISTER
+                  ? COLORS.primary100
+                  : 'transparent'
+              }
+              border={`1px solid ${COLORS.primary100}`}
+              width='1rem'
+              height='1rem'
+              borderRadius='4px'
+              cursor='pointer'
+            />
+          </Link>
+        </FlexBox>
         <Switch>
           <Route path={ROUTES.AUTH_LOGIN} component={LoginView} />
           <Route path={ROUTES.AUTH_REGISTER} component={RegisterView} />

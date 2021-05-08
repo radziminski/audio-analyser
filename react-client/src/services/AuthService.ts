@@ -1,6 +1,6 @@
-import { UserDto } from './../dtos/user/user-dto';
 import { API_ROUTES } from './../constants/api-routes';
 import RequestService from './RequestService';
+import { UserWithTokensDto } from 'dtos/auth/user-with-tokens-dto';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'token';
 
@@ -27,14 +27,23 @@ export class AuthService {
       credentials
     );
 
-    return response.data['access_token'];
+    const accessToken = response.data['access_token'];
+
+    this.setTokens({ accessToken });
+
+    return accessToken;
   }
 
-  async register(credentials: IRegisterCredentials): Promise<UserDto> {
+  async register(
+    credentials: IRegisterCredentials
+  ): Promise<UserWithTokensDto> {
     const response = await RequestService.client.post(
       API_ROUTES.REGISTER,
       credentials
     );
+
+    const accessToken = response.data.tokens['access_token'];
+    this.setTokens({ accessToken });
 
     return response.data;
   }
@@ -54,8 +63,12 @@ export class AuthService {
     localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
   }
 
-  async logout() {
-    // TODO
+  hasStoredTokens() {
+    return !!localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  }
+
+  logout() {
+    this.clearTokens();
   }
 }
 

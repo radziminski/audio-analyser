@@ -23,6 +23,10 @@ export const RegisterForm: React.FC = () => {
   );
   const { register, setError } = useStoreActions((store) => store.auth);
 
+  useEffect(() => {
+    setError(null);
+  }, [setError]);
+
   const onSubmit = async () => {
     if (password !== repeatPassword) {
       return setError('Passwords do not match.');
@@ -44,7 +48,7 @@ export const RegisterForm: React.FC = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Box height='1rem'>
+      <Box height='1.4rem'>
         {authError && (
           <Heading3
             fontSize='0.8rem'

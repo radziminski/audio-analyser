@@ -12,7 +12,7 @@ import {
   RiRewindFill,
   RiSpeedFill
 } from 'react-icons/ri';
-import { TiArrowSortedDown } from 'react-icons/ti';
+import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 // import { AiFillHome } from 'react-icons/ai';
 // import { IoIosCreate } from 'react-icons/io';
 // import { GiSoundWaves } from 'react-icons/gi';
@@ -23,6 +23,7 @@ export type SupportedIcon =
   | 'pause-circle'
   | 'user-fill'
   | 'arrow-down-fill'
+  | 'arrow-up-fill'
   | 'home-fill'
   | 'projects-fill'
   | 'audio'
@@ -49,6 +50,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiUser3Fill />;
       case 'arrow-down-fill':
         return <TiArrowSortedDown />;
+      case 'arrow-up-fill':
+        return <TiArrowSortedUp />;
       case 'home-fill':
         return <RiHome5Fill />;
       case 'projects-fill':

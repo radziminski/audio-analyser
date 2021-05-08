@@ -1,8 +1,8 @@
-import { UserState } from './types';
+import { IUserState } from './types';
 import UserService from './../../services/UserService';
 import { action, thunk } from 'easy-peasy';
 
-const userState: UserState = {
+const userState: IUserState = {
   user: null,
   isLoading: false,
 
@@ -34,11 +34,14 @@ const userState: UserState = {
         roles: userDto.roles
       };
 
-      actions.setIsLoading(false);
       actions.setUser(user);
+
+      return user;
+      // eslint-disable-next-line no-useless-catch
     } catch (error) {
-      actions.setIsLoading(false);
       throw error;
+    } finally {
+      actions.setIsLoading(false);
     }
   })
 };

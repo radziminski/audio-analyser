@@ -1,8 +1,8 @@
 import { createTypedHooks } from 'easy-peasy';
 
-import { AppState } from './types';
+import { IAppState } from './types';
 
-const typedHooks = createTypedHooks<AppState>();
+const typedHooks = createTypedHooks<IAppState>();
 
 export const useStoreDispatch = typedHooks.useStoreDispatch;
 export const useStoreState = typedHooks.useStoreState;

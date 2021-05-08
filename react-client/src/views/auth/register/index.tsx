@@ -1,5 +1,7 @@
+import Anchor from 'components/Anchor';
 import Box, { FlexBox } from 'components/Box';
 import { Heading2, Heading3, Paragraph } from 'components/Text';
+import { ROUTES } from 'constants/routes';
 import React from 'react';
 import { FONT_WEIGHTS } from 'styles/theme';
 import RegisterForm from './parts';
@@ -20,7 +22,8 @@ export const RegisterView: React.FC = () => {
       <Box marginTop='2rem' marginBottom='1rem'>
         <Paragraph fontSize='1rem'>
           Welcome to Audio Analyser! Please provide your email and data to
-          create a new account.
+          create a new account. If you already have a new account login{' '}
+          <Anchor to={ROUTES.AUTH_LOGIN}>here.</Anchor>
         </Paragraph>
       </Box>
 

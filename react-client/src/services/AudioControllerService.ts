@@ -14,16 +14,20 @@ export interface AudioService {
   currAnalyserId: number;
 }
 
+export const LEFT_CHANNEL = 0;
+export const RIGHT_CHANNEL = 1;
+
+export type AudioChannel = 0 | 1;
+
 export interface Analyser {
   analyserNode: AnalyserNode;
-  channel: 0 | 1;
+  channel: AudioChannel;
   id: number;
 }
 
-export const LEFT_CHANNEL = 0;
-export const RIGHT_CHANNEL = 1;
 export const AudioContext =
   window.AudioContext || // Default
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).webkitAudioContext || // Safari and old versions of Chrome
   false;
 

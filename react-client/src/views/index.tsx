@@ -1,3 +1,4 @@
+import ProtectedRoute from 'components/ProtectedRoute';
 import { ROUTES } from 'constants/routes';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
@@ -13,9 +14,9 @@ export const AppRoutes: React.FC = () => {
         <Route path={ROUTES.AUTH}>
           <AuthView />
         </Route>
-        <Route path={ROUTES.DASHBOARD}>
+        <ProtectedRoute path={ROUTES.DASHBOARD}>
           <DashboardView />
-        </Route>
+        </ProtectedRoute>
       </Switch>
     </>
   );

@@ -5,15 +5,15 @@ export enum UserRole {
   Admin = 'admin'
 }
 
-export type UserAction<Payload = void> = Action<UserState, Payload>;
+export type UserAction<Payload = void> = Action<IUserState, Payload>;
 
 export type UserThunk<Payload = void, Result = void> = Thunk<
-  UserState,
+  IUserState,
   Payload,
   Result
 >;
 
-export interface User {
+export interface IUser {
   id: number;
   profileId: number;
   email: string;
@@ -22,12 +22,12 @@ export interface User {
   roles: string[];
 }
 
-export interface UserState {
+export interface IUserState {
   isLoading: boolean;
-  user: User | null;
+  user: IUser | null;
 
   setIsLoading: UserAction<boolean>;
-  setUser: UserAction<User>;
+  setUser: UserAction<IUser>;
   clear: UserAction;
-  fetchUser: UserThunk<void, User>;
+  fetchUser: UserThunk<void, IUser>;
 }

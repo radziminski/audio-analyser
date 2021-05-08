@@ -20,5 +20,6 @@ export const RightBar = styled.div`
   padding: 8rem 10rem;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 `;
