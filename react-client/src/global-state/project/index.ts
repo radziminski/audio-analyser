@@ -1,11 +1,16 @@
 import { CreateProjectDto } from './../../dtos/project/create-project-dto';
 import { IProject, IProjectState } from './types';
 import ProjectService from './../../services/ProjectService';
-import { action, thunk } from 'easy-peasy';
+import { action, thunk, computed } from 'easy-peasy';
 
 const projectState: IProjectState = {
   projects: null,
   isLoading: false,
+  fetchedAll: false,
+
+  project: computed((state) => (id: number) =>
+    state.projects?.find((p) => p.id === id)
+  ),
 
   setIsLoading: action((state, payload) => {
     state.isLoading = payload;
@@ -13,6 +18,10 @@ const projectState: IProjectState = {
 
   setProjects: action((state, payload) => {
     state.projects = payload;
+  }),
+
+  setFetchedAll: action((state, payload) => {
+    state.fetchedAll = payload;
   }),
 
   clearProjects: action((state) => {
@@ -42,8 +51,41 @@ const projectState: IProjectState = {
       }));
 
       actions.setProjects(projects);
+      actions.setFetchedAll(true);
 
       return projects;
+      // eslint-disable-next-line no-useless-catch
+    } catch (error) {
+      throw error;
+    } finally {
+      actions.setIsLoading(false);
+    }
+  }),
+
+  fetchProject: thunk(async (actions, payload, helpers) => {
+    actions.setIsLoading(true);
+
+    try {
+      const projectDto = await ProjectService.fetchProject(payload);
+
+      const project: IProject = {
+        id: projectDto.id,
+        title: projectDto.title,
+        description: projectDto.description,
+        createdAt: projectDto.createdAt,
+        editedAt: projectDto.editedAt,
+        files: projectDto.files.map((file) => file.file),
+        users: projectDto.users.map((user) => ({
+          id: user.user?.id,
+          email: user.user?.email,
+          profileId: user.user?.profile?.id,
+          roles: user.user?.roles
+        }))
+      };
+
+      actions.setProjects([...(helpers.getState().projects ?? []), project]);
+
+      return project;
       // eslint-disable-next-line no-useless-catch
     } catch (error) {
       throw error;

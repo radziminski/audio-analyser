@@ -10,6 +10,14 @@ export class ProjectService {
     return response.data;
   }
 
+  async fetchProject(id: number): Promise<ProjectWithUsersAndFilesDto> {
+    const response = await RequestService.client.get(
+      `${API_ROUTES.PROJECT}/${id}`
+    );
+
+    return response.data;
+  }
+
   async createProject(
     createProjectDto: CreateProjectDto
   ): Promise<ProjectWithUsersAndFilesDto> {

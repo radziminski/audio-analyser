@@ -28,15 +28,8 @@ export const TableList: React.FC<Props> = ({
             noArrow={column.noArrow}
           />
         ))}
+        {children}
       </Container>
-      <Box borderRadius='10px' overflow='hidden'>
-        <Container
-          columnsWidths={columns.map((column) => column.width)}
-          maxHeight={maxHeight}
-        >
-          {children}
-        </Container>
-      </Box>
     </>
   );
 };

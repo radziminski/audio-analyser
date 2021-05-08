@@ -117,7 +117,7 @@ export const RegisterForm: React.FC = () => {
 
       <Box marginTop='4rem'>
         <ActionButton isLoading={isLoading} type='submit'>
-          Login
+          Sing Up
         </ActionButton>
       </Box>
     </Form>

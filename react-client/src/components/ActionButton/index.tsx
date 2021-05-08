@@ -3,17 +3,18 @@ import styled from 'styled-components';
 import React from 'react';
 import Loader from 'components/Loader';
 
-export type ButtonType = 'submit' | 'danger' | 'normal';
+export type ButtonType = 'danger' | 'submit' | 'normal';
 
 const Container = styled(Button)<{
   padding?: string;
   fontSize?: string;
   height?: string;
-  type?: ButtonType;
+  btnType?: ButtonType;
 }>`
   width: 100%;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.primary100};
+  background-color: ${({ theme, btnType }) =>
+    btnType === 'danger' ? theme.colors.danger100 : theme.colors.primary100};
   color: ${({ theme }) => theme.colors.white};
   padding: ${({ padding }) => padding ?? '1rem 2rem'};
   font-size: ${({ fontSize }) => fontSize ?? '1rem'};
@@ -21,7 +22,8 @@ const Container = styled(Button)<{
   height: ${({ height }) => height ?? '3.2rem'};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary80};
+    background-color: ${({ theme, btnType }) =>
+      btnType === 'danger' ? theme.colors.danger70 : theme.colors.primary80};
   }
 `;
 
@@ -50,6 +52,7 @@ export const ActionButton: React.FC<Props> = ({
       height={height}
       onClick={onClick}
       type={type === 'submit' ? type : undefined}
+      btnType={type}
     >
       {isLoading ? <Loader size={20} strokeSize={3} /> : children}
     </Container>

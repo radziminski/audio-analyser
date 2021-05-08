@@ -13,6 +13,8 @@ export interface CustomTheme {
     secondary100: string;
     accentPrimary100: string;
     accentSecondary100: string;
+    danger100: string;
+    danger70: string;
   };
   radiuses: {
     regular: number;
@@ -90,7 +92,9 @@ export const COLORS = {
   primary80: '#5a29cc',
   secondary100: '#2A99FF',
   accentPrimary100: '#44F3FE',
-  accentSecondary100: '#EE249F'
+  accentSecondary100: '#EE249F',
+  danger100: '#c0392b',
+  danger70: '#86281e'
 };
 
 export const RADIUSES = {

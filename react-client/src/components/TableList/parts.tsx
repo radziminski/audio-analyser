@@ -15,15 +15,6 @@ export const Container = styled.div<{
   grid-template-columns: ${({ columnsWidths }) =>
     columnsWidths.map((width) => width + 'fr ')};
   max-height: ${({ maxHeight }) => maxHeight};
-
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  ::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
-  }
 `;
 
 export const Label: React.FC<{ text: string; noArrow?: boolean }> = ({

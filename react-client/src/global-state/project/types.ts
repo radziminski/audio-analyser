@@ -1,4 +1,4 @@
-import { Action, Thunk } from 'easy-peasy';
+import { Action, Thunk, Computed } from 'easy-peasy';
 import { IUser } from 'global-state/user/types';
 
 export type ProjectAction<Payload = void> = Action<IProjectState, Payload>;
@@ -8,6 +8,8 @@ export type ProjectThunk<Payload = void, Result = void> = Thunk<
   Payload,
   Result
 >;
+
+export type ProjectComputed<Result = void> = Computed<IProjectState, Result>;
 
 export interface IProject {
   id: number;
@@ -35,11 +37,15 @@ export interface IFile {
 export interface IProjectState {
   isLoading: boolean;
   projects: IProject[] | null;
+  project: ProjectComputed<(id: number) => IProject | undefined>;
+  fetchedAll: boolean;
 
   setIsLoading: ProjectAction<boolean>;
+  setFetchedAll: ProjectAction<boolean>;
   setProjects: ProjectAction<IProject[]>;
   clearProjects: ProjectAction;
   fetchProjects: ProjectThunk<void, IProject[]>;
+  fetchProject: ProjectThunk<number, IProject>;
   createProject: ProjectThunk<
     { title: string; description: string },
     IProject[]

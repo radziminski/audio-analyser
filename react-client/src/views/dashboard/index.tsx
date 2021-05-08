@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from 'react-router';
 import DashboardHomeView from './dashboard-home';
 import AnalyserView from './analyser';
 import ProjectsView from './projects';
+import ProjectView from './project';
 
 const DashboardView: React.FC = () => {
   return (
@@ -21,8 +22,11 @@ const DashboardView: React.FC = () => {
         <Route path={ROUTES.DASHBOARD_ANALYSER}>
           <AnalyserView />
         </Route>
-        <Route path={ROUTES.DASHBOARD_PROJECTS}>
+        <Route path={ROUTES.DASHBOARD_PROJECTS} exact>
           <ProjectsView />
+        </Route>
+        <Route path={ROUTES.DASHBOARD_PROJECT}>
+          <ProjectView />
         </Route>
       </Switch>
     </>

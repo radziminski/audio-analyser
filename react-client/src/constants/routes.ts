@@ -6,5 +6,6 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   DASHBOARD_HOME: '/dashboard/home',
   DASHBOARD_ANALYSER: '/dashboard/analyser/:id',
-  DASHBOARD_PROJECTS: '/dashboard/projects'
+  DASHBOARD_PROJECTS: '/dashboard/projects',
+  DASHBOARD_PROJECT: '/dashboard/projects/:id'
 };

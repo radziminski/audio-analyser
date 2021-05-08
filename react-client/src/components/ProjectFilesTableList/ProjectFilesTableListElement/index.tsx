@@ -2,20 +2,20 @@ import ActionButton from 'components/ActionButton';
 import Box, { FlexBox } from 'components/Box';
 import Text from 'components/Text';
 import { ROUTES } from 'constants/routes';
-import { IProject } from 'global-state/project/types';
+import { IFile } from 'global-state/project/types';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Field } from './parts';
 
 interface Props {
-  project: IProject;
+  file: IFile;
   isEven?: boolean;
 }
 
 const formatDate = (date: string) => date?.replace('T', ' ').split('.')[0];
 
-export const ProjectTableListElement: React.FC<Props> = ({
-  project,
+export const ProjectFileTableListElement: React.FC<Props> = ({
+  file,
   isEven
 }) => {
   const history = useHistory();
@@ -24,18 +24,24 @@ export const ProjectTableListElement: React.FC<Props> = ({
     <>
       <Field padding='1.5rem 1rem' differentColor={isEven}>
         <Box marginBottom='0.2rem'>
-          <Text fontSize='1.2rem'>{project.title}</Text>
+          <Text fontSize='1.2rem'>{file.name}</Text>
         </Box>
-        {project.description && (
-          <Text fontSize='0.6rem'>{project.description}</Text>
+        {file.originalName && (
+          <Text fontSize='0.6rem'>{file.originalName}</Text>
         )}
       </Field>
       <Field differentColor={isEven}>
-        <Text fontSize='0.9rem'>{formatDate(project.createdAt)}</Text>
+        <Text fontSize='0.9rem'>{file.size}</Text>
       </Field>
       <Field differentColor={isEven}>
-        <Text fontSize='0.9rem'>{formatDate(project.editedAt ?? 'never')}</Text>
+        <Text fontSize='0.9rem'>{file.length}</Text>
       </Field>
+      <Field differentColor={isEven}>
+        <Text fontSize='0.9rem'>
+          {file.createdAt ? formatDate(file.createdAt) : 'Unknown'}
+        </Text>
+      </Field>
+
       <Field differentColor={isEven}>
         <FlexBox>
           <Box width='90px' marginRight='1rem'>
@@ -43,13 +49,13 @@ export const ProjectTableListElement: React.FC<Props> = ({
               height='2rem'
               padding='0'
               fontSize='0.8rem'
-              onClick={() =>
+              onClick={() => {
                 history.push(
-                  ROUTES.DASHBOARD_PROJECT.replace(':id', project.id.toString())
-                )
-              }
+                  ROUTES.DASHBOARD_ANALYSER.replace(':id', file.id.toString())
+                );
+              }}
             >
-              Enter
+              Analyze!
             </ActionButton>
           </Box>
           <Box width='90px' marginRight='1rem'>
@@ -68,4 +74,4 @@ export const ProjectTableListElement: React.FC<Props> = ({
   );
 };
 
-export default ProjectTableListElement;
+export default ProjectFileTableListElement;

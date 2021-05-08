@@ -27,6 +27,7 @@ export class RequestLoggerMiddleware implements NestMiddleware {
       '==================================================================================',
     );
 
-    next();
+    // DELETE THIS!!! TODO:
+    setTimeout(() => next(), 1000);
   }
 }

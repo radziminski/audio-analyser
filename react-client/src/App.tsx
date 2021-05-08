@@ -33,7 +33,7 @@ const App: React.FC = () => {
         <GlobalStyles />
         <Router>{audioServiceReady && <AppRoutes />}</Router>
       </ThemeProvider>
-      <audio ref={audioRef} />
+      <audio ref={audioRef} crossOrigin='anonymous' />
     </div>
   );
 };
