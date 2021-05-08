@@ -52,7 +52,7 @@ export const LoginForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Your email'
           name='email'
-          autoComplete='email'
+          autoComplete='on'
         />
       </Box>
       <Box marginTop='2rem'>
@@ -62,8 +62,8 @@ export const LoginForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Your password'
-          name='password'
-          autoComplete='current-password'
+          name='current-password'
+          autoComplete='on'
         />
       </Box>
       <Box marginTop='4rem'>

@@ -66,6 +66,8 @@ export const RegisterForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Ex. john@gmail.com'
+          name='email'
+          autoComplete='on'
         />
       </Box>
       <FlexBox marginTop='2rem' justifyContent='space-between'>
@@ -76,6 +78,8 @@ export const RegisterForm: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Strong Password'
+            name='new-password'
+            autoComplete='on'
           />
         </Box>
         <Box width='48%'>
@@ -85,6 +89,8 @@ export const RegisterForm: React.FC = () => {
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
             placeholder='Repeat password'
+            name='new-password'
+            autoComplete='on'
           />
         </Box>
       </FlexBox>
