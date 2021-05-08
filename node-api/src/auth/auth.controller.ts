@@ -70,7 +70,12 @@ export class AuthController {
         lastName,
       });
 
-      return user;
+      const tokens = this.authService.getToken({
+        email: user.email,
+        id: user.id,
+      });
+
+      return { user, tokens };
     } catch (error) {
       throw new BadRequestException({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
