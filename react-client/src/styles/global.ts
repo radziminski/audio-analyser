@@ -115,6 +115,62 @@ const defaultStylesReset = css`
   p {
     font-size: 1rem;
   }
+
+  @keyframes slide-in-bottom {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out-little {
+    0% {
+      visibility: visible;
+      opacity: 0.2;
+    }
+    99% {
+      visibility: visible;
+      opacity: 0;
+    }
+    100% {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in-little {
+    0% {
+      visibility: hidden;
+      opacity: 0;
+    }
+    1% {
+      visibility: visible;
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      visibility: hidden;
+      opacity: 0;
+    }
+    1% {
+      visibility: visible;
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 `;
 
 export const GlobalStyles = createGlobalStyle`

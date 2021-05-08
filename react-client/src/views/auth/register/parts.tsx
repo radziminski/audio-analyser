@@ -116,7 +116,9 @@ export const RegisterForm: React.FC = () => {
       </FlexBox>
 
       <Box marginTop='4rem'>
-        <ActionButton isLoading={isLoading}>Login</ActionButton>
+        <ActionButton isLoading={isLoading} type='submit'>
+          Login
+        </ActionButton>
       </Box>
     </Form>
   );

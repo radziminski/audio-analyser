@@ -10,7 +10,8 @@ import {
   RiVolumeDownFill,
   RiVolumeMuteFill,
   RiRewindFill,
-  RiSpeedFill
+  RiSpeedFill,
+  RiCloseFill
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 // import { AiFillHome } from 'react-icons/ai';
@@ -31,7 +32,8 @@ export type SupportedIcon =
   | 'volume-up-fill'
   | 'volume-down-fill'
   | 'skip-forward-fill'
-  | 'skip-backward-fill';
+  | 'skip-backward-fill'
+  | 'close';
 
 export interface Props {
   icon: SupportedIcon;
@@ -68,6 +70,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiRewindFill />;
       case 'skip-forward-fill':
         return <RiSpeedFill />;
+      case 'close':
+        return <RiCloseFill />;
     }
   };
   return (

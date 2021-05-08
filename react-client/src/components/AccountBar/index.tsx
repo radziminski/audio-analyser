@@ -24,7 +24,8 @@ export const AccountBar: React.FC = () => {
   const { user } = useStoreState((state) => state.user);
   const {
     auth: { logout },
-    user: { clear }
+    user: { clear },
+    project: { clearProjects }
   } = useStoreActions((state) => state);
   const history = useHistory();
 
@@ -33,6 +34,7 @@ export const AccountBar: React.FC = () => {
   const onLogout = () => {
     logout();
     clear();
+    clearProjects();
     history.push(ROUTES.AUTH_LOGIN);
   };
 

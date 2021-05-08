@@ -2,7 +2,7 @@ import { FileDto } from 'dtos/file/file-dto';
 
 export interface ProjectFileDto {
   id: number;
-  userId: number;
+  fileId: number;
   projectId: number;
-  user: FileDto;
+  file: FileDto;
 }
