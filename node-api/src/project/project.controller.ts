@@ -122,7 +122,7 @@ export class ProjectController {
   //////////////////////////////////////
 
   @UseGuards(ThrottlerGuard, JwtAuthGuard, ProjectUserGuard)
-  @Throttle(2, 30)
+  @Throttle(10, 60 * 10)
   @Post(':id/files/upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
