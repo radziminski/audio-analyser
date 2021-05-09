@@ -15,18 +15,34 @@ import Anchor from 'components/Anchor';
 import { ROUTES } from 'constants/routes';
 import Loader from 'components/Loader';
 
+const getFileDateTime = (datetime: string) => {
+  const date = new Date(datetime);
+
+  return {
+    date: date.toUTCString(),
+    time: date.toISOString()
+  };
+};
+
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
 
   const {
-    isLoadingAudioBuffer,
-    didLoadAudioBuffer,
-    isPlaying,
-    currSource,
-    audioSources
-  } = useStoreState((state) => state.audio);
+    audio: {
+      isLoadingAudioBuffer,
+      didLoadAudioBuffer,
+      isPlaying,
+      currSource,
+      audioSources
+    },
+    project: { projects }
+  } = useStoreState((state) => state);
 
   const { id: srcId } = useParams<{ id: string }>();
+  const file = projects
+    ?.map((project) => project.files)
+    .flat()
+    .find((file) => file?.id === +srcId);
 
   const {
     loadAudioBuffer,
@@ -142,8 +158,12 @@ export const AnalyserView: React.FC = () => {
 
   return (
     <DashboardContent
-      title='My_superb_audio_file.wav'
-      subTitles={['18:40', '24.09.2021', '30s']}
+      title={file?.name ?? 'Audio File'}
+      subTitles={
+        file
+          ? [getFileDateTime(file.createdAt ?? '').date, '2:00']
+          : ['Unknown']
+      }
       canGoBack
     >
       {content}
