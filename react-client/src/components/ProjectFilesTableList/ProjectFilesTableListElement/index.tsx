@@ -24,10 +24,27 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
     <>
       <Field padding='1.5rem 1rem' differentColor={isEven}>
         <Box marginBottom='0.2rem'>
-          <Text fontSize='1.2rem'>{file.name}</Text>
+          <Text
+            as='div'
+            fontSize='1.2rem'
+            textOverflow='ellipsis'
+            whiteSpace='nowrap'
+            overflow='hidden'
+            maxWidth='250px'
+          >
+            {file.name}
+          </Text>
         </Box>
         {file.originalName && (
-          <Text fontSize='0.6rem'>{file.originalName}</Text>
+          <Text
+            fontSize='0.6rem'
+            as='div'
+            textOverflow='ellipsis'
+            whiteSpace='nowrap'
+            maxWidth='250px'
+          >
+            {file.originalName}
+          </Text>
         )}
       </Field>
       <Field differentColor={isEven}>

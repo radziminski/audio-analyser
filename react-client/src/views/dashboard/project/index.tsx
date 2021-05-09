@@ -67,6 +67,7 @@ export const ProjectView: React.FC = () => {
       <DashboardContent
         title={project?.title ?? 'Project'}
         subTitles={[project?.description || '']}
+        canGoBack
       >
         <Box height='2rem' />
         <ProjectFilesTableList files={project.files} />

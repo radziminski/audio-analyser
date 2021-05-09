@@ -1,4 +1,7 @@
-import styled from 'styled-components';
+import styled, {
+  CSSProperties,
+  StyledComponentPropsWithRef
+} from 'styled-components';
 
 import {
   color,
@@ -7,12 +10,37 @@ import {
   textShadow,
   TextShadowProps,
   typography,
-  TypographyProps
+  TypographyProps,
+  system
 } from 'styled-system';
 
-export type TextProps = ColorProps & TextShadowProps & TypographyProps;
+export type TextProps = ColorProps &
+  TextShadowProps &
+  TypographyProps &
+  Pick<
+    CSSProperties,
+    | 'textDecoration'
+    | 'textTransform'
+    | 'whiteSpace'
+    | 'textOverflow'
+    | 'overflow'
+    | 'maxWidth'
+  > &
+  StyledComponentPropsWithRef<'span'>;
 
-const textStyledSystem = compose(color, textShadow, typography);
+const textStyledSystem = compose(
+  color,
+  textShadow,
+  typography,
+  system({
+    overflow: true,
+    textDecoration: true,
+    textOverflow: true,
+    textTransform: true,
+    whiteSpace: true,
+    maxWidth: true
+  })
+);
 
 export const Text = styled.span<TextProps>`
   ${textStyledSystem}

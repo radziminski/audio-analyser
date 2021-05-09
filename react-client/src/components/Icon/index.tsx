@@ -14,6 +14,7 @@ import {
   RiCloseFill
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
+import { MdKeyboardBackspace } from 'react-icons/md';
 // import { AiFillHome } from 'react-icons/ai';
 // import { IoIosCreate } from 'react-icons/io';
 // import { GiSoundWaves } from 'react-icons/gi';
@@ -33,6 +34,7 @@ export type SupportedIcon =
   | 'volume-down-fill'
   | 'skip-forward-fill'
   | 'skip-backward-fill'
+  | 'back'
   | 'close';
 
 export interface Props {
@@ -72,6 +74,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiSpeedFill />;
       case 'close':
         return <RiCloseFill />;
+      case 'back':
+        return <MdKeyboardBackspace />;
     }
   };
   return (

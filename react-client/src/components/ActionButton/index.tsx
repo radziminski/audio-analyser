@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import React from 'react';
 import Loader from 'components/Loader';
 
-export type ButtonType = 'danger' | 'submit' | 'normal';
+export type ButtonType = 'danger' | 'submit' | 'normal' | 'text';
 
 const Container = styled(Button)<{
   padding?: string;
@@ -15,16 +15,29 @@ const Container = styled(Button)<{
   width: 100%;
   border-radius: ${({ borderRadius }) => borderRadius ?? '0.5rem'};
   background-color: ${({ theme, btnType }) =>
-    btnType === 'danger' ? theme.colors.danger100 : theme.colors.primary100};
-  color: ${({ theme }) => theme.colors.white};
+    btnType === 'danger'
+      ? theme.colors.danger100
+      : btnType === 'text'
+      ? 'transparent'
+      : theme.colors.primary100};
+  color: ${({ theme, btnType }) =>
+    btnType === 'text' ? theme.colors.white : theme.colors.white};
   padding: ${({ padding }) => padding ?? '1rem 2rem'};
   font-size: ${({ fontSize }) => fontSize ?? '1rem'};
   transition: all 0.2s;
   height: ${({ height }) => height ?? '3.2rem'};
 
+  opacity: ${({ btnType }) => (btnType === 'text' ? 0.8 : 1)};
+
   &:hover {
     background-color: ${({ theme, btnType }) =>
-      btnType === 'danger' ? theme.colors.danger70 : theme.colors.primary80};
+      btnType === 'danger'
+        ? theme.colors.danger70
+        : btnType === 'text'
+        ? 'transparent'
+        : theme.colors.primary80};
+    color: ${({ theme }) => theme.colors.white};
+    opacity: 1;
   }
 `;
 

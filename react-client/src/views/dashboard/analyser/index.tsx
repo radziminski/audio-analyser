@@ -145,6 +145,7 @@ export const AnalyserView: React.FC = () => {
     <DashboardContent
       title='My_superb_audio_file.wav'
       subTitles={['18:40', '24.09.2021', '30s']}
+      canGoBack
     >
       {content}
     </DashboardContent>
