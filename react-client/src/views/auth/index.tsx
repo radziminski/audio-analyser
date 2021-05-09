@@ -9,6 +9,7 @@ import RegisterView from './register';
 import LoginView from './login';
 import { Container, LeftBar, RightBar } from './parts';
 import { Link } from 'react-router-dom';
+import NotFoundView from 'views/not-found';
 
 export const AuthView: React.FC = () => {
   const location = useLocation();
@@ -80,6 +81,9 @@ export const AuthView: React.FC = () => {
         <Switch>
           <Route path={ROUTES.AUTH_LOGIN} component={LoginView} />
           <Route path={ROUTES.AUTH_REGISTER} component={RegisterView} />
+          <Route>
+            <NotFoundView light />
+          </Route>
         </Switch>
       </RightBar>
     </Container>

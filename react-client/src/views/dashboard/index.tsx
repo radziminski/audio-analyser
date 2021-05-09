@@ -6,6 +6,8 @@ import DashboardHomeView from './dashboard-home';
 import AnalyserView from './analyser';
 import ProjectsView from './projects';
 import ProjectView from './project';
+import NotFoundView from 'views/not-found';
+import Box from 'components/Box';
 
 const DashboardView: React.FC = () => {
   return (
@@ -27,6 +29,11 @@ const DashboardView: React.FC = () => {
         </Route>
         <Route path={ROUTES.DASHBOARD_PROJECT}>
           <ProjectView />
+        </Route>
+        <Route>
+          <Box marginLeft='300px'>
+            <NotFoundView />
+          </Box>
         </Route>
       </Switch>
     </>

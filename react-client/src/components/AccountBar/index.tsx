@@ -74,7 +74,10 @@ export const AccountBar: React.FC = () => {
       </Container>
       {tooltipOpened && (
         <Tooltip ref={tooltipRef}>
-          <TooltipItem onClick={onLogout}>Logout</TooltipItem>
+          <TooltipItem onClick={onLogout}>
+            <Icon icon='logout' size={16} />{' '}
+            <Box marginLeft='0.5rem'>Logout</Box>
+          </TooltipItem>
         </Tooltip>
       )}
     </Center>

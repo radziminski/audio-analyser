@@ -37,37 +37,43 @@ export const ProjectView: React.FC = () => {
           'There was a problem with getting the project files. Try again by reloading the page.'
         );
     }
-  }, []);
+  }, [fetchProject, history, id]);
 
-  const onDeleteProjectFile = useCallback(async (fileId: number) => {
-    const projectId = Number(id);
-    await deleteProjectFile({ id: projectId, fileId });
-  }, []);
+  const onDeleteProjectFile = useCallback(
+    async (fileId: number) => {
+      const projectId = Number(id);
+      await deleteProjectFile({ id: projectId, fileId });
+    },
+    [id, deleteProjectFile]
+  );
 
-  const showDeleteProjectFileModal = useCallback(async (id: number) => {
-    openModal({
-      modal: ModalType.confirmAction,
-      args: {
-        title: 'Are you sure about deleting this file?',
-        message: `The file will be deleted from this project. 
+  const showDeleteProjectFileModal = useCallback(
+    async (id: number) => {
+      openModal({
+        modal: ModalType.confirmAction,
+        args: {
+          title: 'Are you sure about deleting this file?',
+          message: `The file will be deleted from this project. 
         If the file was added only to this project, it will be deleted permanently from the server. 
         This action cannot be undone.`,
-        onConfirm: async () => {
-          try {
-            modifyModalArgs({ isActionLoading: true, error: undefined });
-            await onDeleteProjectFile(id);
-            closeModal();
-          } catch (err) {
-            modifyModalArgs({
-              error:
-                'There was a problem with deleting the project. Try again later.',
-              isActionLoading: false
-            });
+          onConfirm: async () => {
+            try {
+              modifyModalArgs({ isActionLoading: true, error: undefined });
+              await onDeleteProjectFile(id);
+              closeModal();
+            } catch (err) {
+              modifyModalArgs({
+                error:
+                  'There was a problem with deleting the project. Try again later.',
+                isActionLoading: false
+              });
+            }
           }
         }
-      }
-    });
-  }, []);
+      });
+    },
+    [openModal, modifyModalArgs, onDeleteProjectFile, closeModal]
+  );
 
   useEffect(() => {
     if (!project) {
@@ -86,7 +92,7 @@ export const ProjectView: React.FC = () => {
         }, {})
       );
     }
-  }, [project?.files]);
+  }, [project, addAudioSources]);
 
   if (!project)
     return (

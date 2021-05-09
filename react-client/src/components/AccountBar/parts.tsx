@@ -77,6 +77,7 @@ export const TooltipItem = styled.button`
   text-align: left;
   font-weight: ${({ theme }) => theme.fontWeights.light};
   opacity: 0.8;
+  display: flex;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.background70};

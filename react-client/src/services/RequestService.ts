@@ -46,6 +46,19 @@ export class RequestService {
   setRetryInterceptor() {
     axiosRetry(this.client, { retries: 3 });
   }
+
+  setLogoutOnUnauthorizedInterceptor(logout: () => void) {
+    this.client.interceptors.response.use(
+      (config) => config,
+      (error) => {
+        if (error.response?.status === 401) {
+          logout();
+        }
+
+        return Promise.reject(error);
+      }
+    );
+  }
 }
 
 const requestServiceSingleton = new RequestService();

@@ -1,6 +1,6 @@
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router';
 import LoadingView from 'views/loading';
 
@@ -20,16 +20,16 @@ export const ProtectedRoute: React.FC<Props> = (props) => {
     auth: { logout }
   } = useStoreActions((store) => store);
 
-  const logoutAndRedirectToLogin = () => {
+  const logoutAndRedirectToLogin = useCallback(() => {
     logout();
     history.push(ROUTES.AUTH_LOGIN);
-  };
+  }, [logout, history]);
 
   useEffect(() => {
     if (!isAuthenticated) logoutAndRedirectToLogin();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, logoutAndRedirectToLogin]);
 
-  const getMe = async () => {
+  const getMe = useCallback(async () => {
     try {
       await fetchUser();
     } catch (error) {
@@ -39,11 +39,11 @@ export const ProtectedRoute: React.FC<Props> = (props) => {
           'There was a problem with accessing the servers. Reload the page to try again.'
         );
     }
-  };
+  }, [fetchUser, logoutAndRedirectToLogin, setError]);
 
   useEffect(() => {
     if (!user) getMe();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, getMe, user]);
 
   if (isAuthenticated && user) return <Route {...props} />;
 

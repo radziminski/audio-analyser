@@ -11,7 +11,8 @@ import {
   RiVolumeMuteFill,
   RiRewindFill,
   RiSpeedFill,
-  RiCloseFill
+  RiCloseFill,
+  RiLogoutBoxLine
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 import { MdKeyboardBackspace } from 'react-icons/md';
@@ -35,6 +36,7 @@ export type SupportedIcon =
   | 'skip-forward-fill'
   | 'skip-backward-fill'
   | 'back'
+  | 'logout'
   | 'close';
 
 export interface Props {
@@ -74,6 +76,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiSpeedFill />;
       case 'close':
         return <RiCloseFill />;
+      case 'logout':
+        return <RiLogoutBoxLine />;
       case 'back':
         return <MdKeyboardBackspace />;
     }

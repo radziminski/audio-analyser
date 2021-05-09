@@ -10,9 +10,12 @@ interface Props {
 }
 
 export const FileDropZone: React.FC<Props> = ({ onFileChange, disabled }) => {
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length) onFileChange(acceptedFiles[0]);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length) onFileChange(acceptedFiles[0]);
+    },
+    [onFileChange]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

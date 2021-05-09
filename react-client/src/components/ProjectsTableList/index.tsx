@@ -37,9 +37,12 @@ export const ProjectsTableList: React.FC = () => {
   } = useStoreActions((state) => state);
   const history = useHistory();
 
-  const onEnterProject = useCallback((id: number) => {
-    history.push(ROUTES.DASHBOARD_PROJECT.replace(':id', id.toString()));
-  }, []);
+  const onEnterProject = useCallback(
+    (id: number) => {
+      history.push(ROUTES.DASHBOARD_PROJECT.replace(':id', id.toString()));
+    },
+    [history]
+  );
 
   const getProjects = useCallback(async () => {
     setError(null);
@@ -50,7 +53,7 @@ export const ProjectsTableList: React.FC = () => {
         'There was a problem with fetching the projects. Reload the page to try again.'
       );
     }
-  }, []);
+  }, [setError, fetchProjects]);
 
   const onDeleteProject = (id: number) => {
     openModal({
@@ -77,7 +80,7 @@ export const ProjectsTableList: React.FC = () => {
 
   useEffect(() => {
     if (!projects || !fetchedAll) getProjects();
-  }, [projects]);
+  }, [projects, fetchedAll, getProjects]);
 
   return (
     <>

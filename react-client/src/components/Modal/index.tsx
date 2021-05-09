@@ -34,6 +34,7 @@ export const ModalsContainer: React.FC = () => {
           />
         );
       default:
+        // eslint-disable-next-line no-throw-literal
         throw 'No such modal!';
     }
   };
