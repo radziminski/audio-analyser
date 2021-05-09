@@ -1,4 +1,3 @@
-import { Center } from 'components/Box';
 import { Heading5 } from 'components/Text';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -7,9 +6,10 @@ import { Container } from './parts';
 
 interface Props {
   onFileChange: (file: File) => void;
+  disabled?: boolean;
 }
 
-export const FileDropZone: React.FC<Props> = ({ onFileChange }) => {
+export const FileDropZone: React.FC<Props> = ({ onFileChange, disabled }) => {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length) onFileChange(acceptedFiles[0]);
   }, []);
@@ -17,12 +17,12 @@ export const FileDropZone: React.FC<Props> = ({ onFileChange }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <Container {...getRootProps()}>
-      <input {...getInputProps()} />
+    <Container {...getRootProps()} disabled={disabled}>
+      {!disabled && <input {...getInputProps()} />}
       <Heading5 fontWeight={FONT_WEIGHTS.normal} fontSize='1rem'>
         {isDragActive
           ? 'Drop the file here!'
-          : 'Drag & drop the file here, or click to select files manually'}
+          : 'Drag & drop the file here, or click to select file manually'}
       </Heading5>
     </Container>
   );

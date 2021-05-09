@@ -30,14 +30,20 @@ const Container = styled(Button)<{
   opacity: ${({ btnType }) => (btnType === 'text' ? 0.8 : 1)};
 
   &:hover {
-    background-color: ${({ theme, btnType }) =>
-      btnType === 'danger'
-        ? theme.colors.danger70
-        : btnType === 'text'
-        ? 'transparent'
-        : theme.colors.primary80};
-    color: ${({ theme }) => theme.colors.white};
-    opacity: 1;
+    &:not(:disabled) {
+      background-color: ${({ theme, btnType }) =>
+        btnType === 'danger'
+          ? theme.colors.danger70
+          : btnType === 'text'
+          ? 'transparent'
+          : theme.colors.primary80};
+      color: ${({ theme }) => theme.colors.white};
+      opacity: 1;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
   }
 `;
 
@@ -49,6 +55,7 @@ interface Props {
   onClick?: () => void;
   type?: ButtonType;
   borderRadius?: string;
+  disabled?: boolean;
 }
 
 export const ActionButton: React.FC<Props> = ({
@@ -59,17 +66,19 @@ export const ActionButton: React.FC<Props> = ({
   height,
   onClick,
   borderRadius,
-  type
+  type,
+  disabled
 }) => {
   return (
     <Container
       padding={padding}
       fontSize={fontSize}
       height={height}
-      onClick={onClick}
+      onClick={!isLoading && !disabled ? () => onClick && onClick() : undefined}
       type={type === 'submit' ? type : undefined}
       btnType={type}
       borderRadius={borderRadius}
+      disabled={disabled}
     >
       {isLoading ? <Loader size={20} strokeSize={3} /> : children}
     </Container>

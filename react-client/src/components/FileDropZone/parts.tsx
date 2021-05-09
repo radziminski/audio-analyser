@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ disabled?: boolean }>`
   width: 100%;
   height: 100%;
 
@@ -16,9 +16,9 @@ export const Container = styled.div`
 
   opacity: 0.6;
   transition: opacity 0.2s;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
-    opacity: 0.86;
+    opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   }
 `;
