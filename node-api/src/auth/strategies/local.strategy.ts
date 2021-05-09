@@ -20,7 +20,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!validatedUser) {
       throw new UnauthorizedException({
         status: 401,
-        error: 'Password incorrect or User does not exist.',
+        message: 'Password incorrect or User does not exist.',
       });
     }
 

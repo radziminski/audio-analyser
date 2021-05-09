@@ -54,7 +54,7 @@ export class AuthController {
     );
     if (user)
       throw new BadRequestException({
-        error: 'The user with given email already exists.',
+        message: 'The user with given email already exists.',
       });
 
     const {
