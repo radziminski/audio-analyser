@@ -103,7 +103,13 @@ export class ProjectService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const project = await this.findOne(id);
+
+    for (const file of project.files) {
+      await this.deleteProjectFile(id, file?.file?.id);
+    }
+
     return this.projectRepository.delete(id);
   }
 
@@ -202,7 +208,7 @@ export class ProjectService {
   }
 
   async deleteProjectFile(id: number, fileId: number) {
-    if (!(await this.checkIfFileExistsInOtherProjects(fileId))) {
+    if (!(await this.checkIfFileExistsInOtherProjects(fileId, id))) {
       await this.fileService.remove(fileId);
     }
 
@@ -217,12 +223,13 @@ export class ProjectService {
     return this.projectFileRepository.find();
   }
 
-  async checkIfFileExistsInOtherProjects(fileId: number) {
+  async checkIfFileExistsInOtherProjects(fileId: number, projectId: number) {
     const projects = await this.findAll();
 
     return !!projects.find(
       (project) =>
-        !!project.files.find((projectFile) => projectFile.fileId === fileId),
+        !!project.files.find((projectFile) => projectFile.fileId === fileId) &&
+        project.id !== projectId,
     );
   }
 }

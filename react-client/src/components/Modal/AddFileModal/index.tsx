@@ -4,7 +4,7 @@ import FileDropZone from 'components/FileDropZone';
 import Text, { Paragraph } from 'components/Text';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React, { useState } from 'react';
-import { FONT_WEIGHTS } from 'styles/theme';
+import { COLORS, FONT_WEIGHTS } from 'styles/theme';
 import ModalWrapper from '../ModalWrapper';
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 
 export const AddFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const [file, setFile] = useState<File>();
+  const [error, setError] = useState<boolean>();
 
   const { uploadProjectFile } = useStoreActions((state) => state.project);
   const { isLoadingProject } = useStoreState((state) => state.project);
@@ -24,13 +25,13 @@ export const AddFileModal: React.FC<Props> = ({ onClose, projectId }) => {
 
   const onUpload = async () => {
     if (!file) return;
-
+    setError(false);
     try {
       await uploadProjectFile({ id: projectId, file });
 
       onClose && onClose();
     } catch (error) {
-      //TODO
+      setError(true);
     }
   };
 
@@ -65,6 +66,18 @@ export const AddFileModal: React.FC<Props> = ({ onClose, projectId }) => {
         </Box>
       )}
 
+      {error && (
+        <Box marginBottom='1.5rem'>
+          <Paragraph
+            fontSize='0.8rem'
+            textAlign='center'
+            color={COLORS.danger100}
+            fontWeight={FONT_WEIGHTS.medium}
+          >
+            There was a problem with uploading the file. Try again later.
+          </Paragraph>
+        </Box>
+      )}
       <ActionButton
         isLoading={isLoadingProject === projectId}
         onClick={onUpload}

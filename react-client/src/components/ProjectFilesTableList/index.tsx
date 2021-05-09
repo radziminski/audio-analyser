@@ -1,6 +1,5 @@
 import TableList, { ITableListColumn } from 'components/TableList';
 import { ROUTES } from 'constants/routes';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
 import { IFile } from 'global-state/project/types';
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -9,7 +8,7 @@ import ProjectTableListElement from './ProjectFilesTableListElement';
 const PROJECT_FILES_TABLE_COLUMNS: ITableListColumn[] = [
   {
     title: 'Name',
-    width: 2
+    width: 3
   },
   {
     title: 'Size',
@@ -26,29 +25,29 @@ const PROJECT_FILES_TABLE_COLUMNS: ITableListColumn[] = [
 
   {
     title: 'Actions',
-    width: 2,
+    width: 1,
     noArrow: true
   }
 ];
 
 interface Props {
   files: IFile[];
+  onDeleteFile: (id: number) => void;
+  error?: string;
 }
 
-export const ProjectFilesTableList: React.FC<Props> = ({ files }) => {
-  const { projects, fetchedAll, isLoading } = useStoreState(
-    (state) => state.project
-  );
-  const {
-    project: { fetchProjects, deleteProject },
-    ui: { openModal, modifyModalArgs, closeModal }
-  } = useStoreActions((state) => state);
+export const ProjectFilesTableList: React.FC<Props> = ({
+  files,
+  error,
+  onDeleteFile
+}) => {
   const history = useHistory();
 
   return (
     <TableList
       columns={PROJECT_FILES_TABLE_COLUMNS}
-      isEmpty={!files || !files.length}
+      showMessage={!files || !files.length || !!error}
+      errorMessage={error ?? 'There are no files in this project yet.'}
     >
       {files &&
         files.map((file, index) => (
@@ -61,9 +60,7 @@ export const ProjectFilesTableList: React.FC<Props> = ({ files }) => {
                 ROUTES.DASHBOARD_ANALYSER.replace(':id', id.toString())
               );
             }}
-            onDelete={(id: number) => {
-              //
-            }}
+            onDelete={() => onDeleteFile(file.id)}
           />
         ))}
     </TableList>

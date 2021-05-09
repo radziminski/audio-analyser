@@ -43,7 +43,6 @@ export const AnalyserView: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log(srcId);
     const setAudioLoadedFunction = () => setAudioLoaded(true);
 
     if (srcId && audioSources[srcId]) {

@@ -54,6 +54,15 @@ export class ProjectService {
 
     return response.data;
   }
+
+  async deleteProjectFile(id: number, fileId: number): Promise<void> {
+    await RequestService.client.delete(
+      API_ROUTES.PROJECT_FILE_SINGLE.replace(':id', id.toString()).replace(
+        ':fileId',
+        fileId.toString()
+      )
+    );
+  }
 }
 
 const userService = new ProjectService();

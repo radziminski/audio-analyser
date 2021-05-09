@@ -5,6 +5,7 @@ import { Paragraph } from 'components/Text';
 import TextInput from 'components/TextInput';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React, { useState } from 'react';
+import { COLORS, FONT_WEIGHTS } from 'styles/theme';
 import Modal from '../ModalWrapper';
 
 interface Props {
@@ -14,16 +15,22 @@ interface Props {
 export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const createProject = useStoreActions((state) => state.project.createProject);
   const { isLoadingProject } = useStoreState((state) => state.project);
 
   const onSubmit = async () => {
+    if (title.length < 3)
+      return setError('Title must be at least 3 characters long');
+
+    setError(null);
+
     try {
       await createProject({ title, description });
       onClose && onClose();
     } catch (e) {
-      /// TODO
+      setError('There was a problem creating the project. Try again later.');
     }
   };
 
@@ -54,6 +61,18 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
           />
         </Box>
 
+        {error && (
+          <Box marginBottom='1.5rem'>
+            <Paragraph
+              fontSize='0.8rem'
+              textAlign='center'
+              color={COLORS.danger100}
+              fontWeight={FONT_WEIGHTS.medium}
+            >
+              {error}
+            </Paragraph>
+          </Box>
+        )}
         <Box>
           <ActionButton isLoading={!!isLoadingProject}>Confirm</ActionButton>
         </Box>

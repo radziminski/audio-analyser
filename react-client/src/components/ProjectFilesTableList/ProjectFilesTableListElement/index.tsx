@@ -62,7 +62,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
         <Text fontSize='0.9rem'>{formatSize(file.size)}</Text>
       </Field>
       <Field differentColor={isEven}>
-        <Text fontSize='0.9rem'>{file.length ?? 'Length will be here'}</Text>
+        <Text fontSize='0.9rem'>{file.length ?? '[Length will be here]'}</Text>
       </Field>
       <Field differentColor={isEven}>
         <Text fontSize='0.9rem'>

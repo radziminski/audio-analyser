@@ -102,7 +102,6 @@ const FrequencyMeter: React.FC = () => {
               opacity={labelLocations[key] > 1 ? 1 : 0}
               height={40}
             >
-              {console.log(labelLocations[key])}
               <Box
                 width='1px'
                 height={6}

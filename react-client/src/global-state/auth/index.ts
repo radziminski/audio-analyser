@@ -32,6 +32,10 @@ const authState: IAuthState = {
     } catch (error) {
       if (error.response?.status === 401)
         actions.setError('Incorrect password or user does not exist.');
+      else
+        actions.setError(
+          'There was a problem with accessing the server. Try again later.'
+        );
     } finally {
       actions.setIsLoading(false);
     }
@@ -53,11 +57,16 @@ const authState: IAuthState = {
       actions.setIsAuthenticated(true);
       return true;
     } catch (error) {
-      error.response?.data?.message &&
+      if (error.response?.status === 400)
+        error.response?.data?.message &&
+          actions.setError(
+            Array.isArray(error.response.data.message)
+              ? error.response.data.message[0]
+              : error.response.data.message
+          );
+      else
         actions.setError(
-          Array.isArray(error.response.data.message)
-            ? error.response.data.message[0]
-            : error.response.data.message
+          'There was a problem with accessing the server. Try again later.'
         );
     } finally {
       actions.setIsLoading(false);

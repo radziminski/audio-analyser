@@ -185,6 +185,38 @@ const projectState: IProjectState = {
     } finally {
       actions.setIsLoadingProject(null);
     }
+  }),
+
+  deleteProjectFile: thunk(async (actions, payload, helpers) => {
+    const { id, fileId } = payload;
+    actions.setIsLoadingProject(id);
+
+    try {
+      await ProjectService.deleteProjectFile(id, fileId);
+
+      const oldProject = helpers
+        .getState()
+        ?.projects?.find((project) => project.id === id);
+
+      if (oldProject) {
+        const newProject = {
+          ...oldProject,
+          files: oldProject.files?.filter((file) => file.id !== fileId)
+        };
+
+        const restProjects = helpers
+          .getState()
+          ?.projects?.filter((project) => project.id !== id);
+
+        actions.setProjects([...(restProjects || []), newProject]);
+      }
+
+      // eslint-disable-next-line no-useless-catch
+    } catch (error) {
+      throw error;
+    } finally {
+      actions.setIsLoadingProject(null);
+    }
   })
 };
 

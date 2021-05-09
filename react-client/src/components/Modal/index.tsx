@@ -23,6 +23,7 @@ export const ModalsContainer: React.FC = () => {
             message={modalArgs.message}
             onDismiss={() => closeModal()}
             onConfirm={() => modalArgs.onConfirm && modalArgs.onConfirm()}
+            error={modalArgs.error}
           />
         );
       case ModalType.addNewFile:

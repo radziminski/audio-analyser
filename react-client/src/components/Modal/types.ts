@@ -9,6 +9,7 @@ export interface IModalArgs {
   message?: string;
   isActionLoading?: boolean;
   customArg?: string | number;
+  error?: string;
 
   onConfirm?: () => void;
   onDismiss?: () => void;

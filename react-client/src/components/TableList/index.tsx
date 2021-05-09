@@ -13,7 +13,7 @@ export interface ITableListColumn {
 
 interface Props {
   columns: ITableListColumn[];
-  isEmpty?: boolean;
+  showMessage?: boolean;
   errorMessage?: string;
   isLoading?: boolean;
 }
@@ -21,7 +21,7 @@ interface Props {
 export const TableList: React.FC<Props> = ({
   columns,
   children,
-  isEmpty,
+  showMessage,
   errorMessage,
   isLoading
 }) => {
@@ -48,7 +48,7 @@ export const TableList: React.FC<Props> = ({
       </>
     );
 
-  if (isEmpty) {
+  if (showMessage) {
     return (
       <>
         {getTableWithLabels()}

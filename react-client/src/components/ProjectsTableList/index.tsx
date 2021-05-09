@@ -2,7 +2,7 @@ import { ModalType } from 'components/Modal/types';
 import TableList, { ITableListColumn } from 'components/TableList';
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import ProjectTableListElement from './ProjectTableListElement';
 
@@ -27,6 +27,7 @@ const PROJECT_TABLE_COLUMNS: ITableListColumn[] = [
 ];
 
 export const ProjectsTableList: React.FC = () => {
+  const [error, setError] = useState<string | null>(null);
   const { projects, fetchedAll, isLoading } = useStoreState(
     (state) => state.project
   );
@@ -40,6 +41,17 @@ export const ProjectsTableList: React.FC = () => {
     history.push(ROUTES.DASHBOARD_PROJECT.replace(':id', id.toString()));
   }, []);
 
+  const getProjects = useCallback(async () => {
+    setError(null);
+    try {
+      await fetchProjects();
+    } catch (error) {
+      setError(
+        'There was a problem with fetching the projects. Reload the page to try again.'
+      );
+    }
+  }, []);
+
   const onDeleteProject = (id: number) => {
     openModal({
       modal: ModalType.confirmAction,
@@ -48,11 +60,15 @@ export const ProjectsTableList: React.FC = () => {
         message: 'This action cannot be undone.',
         onConfirm: async () => {
           try {
-            modifyModalArgs({ isActionLoading: true });
+            modifyModalArgs({ isActionLoading: true, error: undefined });
             await deleteProject(id);
             closeModal();
           } catch (err) {
-            // TODO err
+            modifyModalArgs({
+              error:
+                'There was a problem with deleting the project. Try again later.',
+              isActionLoading: false
+            });
           }
         }
       }
@@ -60,8 +76,7 @@ export const ProjectsTableList: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!projects || !fetchedAll) fetchProjects();
-    console.log(projects);
+    if (!projects || !fetchedAll) getProjects();
   }, [projects]);
 
   return (
@@ -69,7 +84,8 @@ export const ProjectsTableList: React.FC = () => {
       <TableList
         columns={PROJECT_TABLE_COLUMNS}
         isLoading={isLoading}
-        isEmpty={!projects || !projects.length}
+        showMessage={!projects || !projects.length || !!error}
+        errorMessage={error ?? 'No projects to show.'}
       >
         {projects &&
           projects.map((project, index) => (

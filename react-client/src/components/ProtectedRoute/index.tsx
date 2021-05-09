@@ -1,12 +1,13 @@
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router';
 import LoadingView from 'views/loading';
 
 type Props = RouteProps;
 
 export const ProtectedRoute: React.FC<Props> = (props) => {
+  const [error, setError] = useState<string | null>(null);
   const {
     auth: { isAuthenticated },
     user: { user }
@@ -33,7 +34,10 @@ export const ProtectedRoute: React.FC<Props> = (props) => {
       await fetchUser();
     } catch (error) {
       if (error.response?.status === 401) logoutAndRedirectToLogin();
-      // TODO: Error handling for different erorrs
+      else
+        setError(
+          'There was a problem with accessing the servers. Reload the page to try again.'
+        );
     }
   };
 
@@ -43,7 +47,7 @@ export const ProtectedRoute: React.FC<Props> = (props) => {
 
   if (isAuthenticated && user) return <Route {...props} />;
 
-  return <LoadingView />;
+  return <LoadingView error={error} />;
 };
 
 export default ProtectedRoute;

@@ -6,16 +6,17 @@ import { ModalType } from 'components/Modal/types';
 import ProjectFilesTableList from 'components/ProjectFilesTableList';
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 
 export const ProjectView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [error, setError] = useState<string | undefined>();
 
   const {
-    project: { fetchProject },
+    project: { fetchProject, deleteProjectFile },
     audio: { addAudioSources },
-    ui: { openModal }
+    ui: { openModal, modifyModalArgs, closeModal }
   } = useStoreActions((state) => state);
   const {
     project: { project: getProject }
@@ -25,14 +26,48 @@ export const ProjectView: React.FC = () => {
 
   const history = useHistory();
 
-  const getCurrProject = async () => {
+  const getCurrProject = useCallback(async () => {
     try {
       await fetchProject(Number(id));
     } catch (error) {
       if (error.response?.status === 400)
         history.push(ROUTES.DASHBOARD_PROJECTS);
+      else
+        setError(
+          'There was a problem with getting the project files. Try again by reloading the page.'
+        );
     }
-  };
+  }, []);
+
+  const onDeleteProjectFile = useCallback(async (fileId: number) => {
+    const projectId = Number(id);
+    await deleteProjectFile({ id: projectId, fileId });
+  }, []);
+
+  const showDeleteProjectFileModal = useCallback(async (id: number) => {
+    openModal({
+      modal: ModalType.confirmAction,
+      args: {
+        title: 'Are you sure about deleting this file?',
+        message: `The file will be deleted from this project. 
+        If the file was added only to this project, it will be deleted permanently from the server. 
+        This action cannot be undone.`,
+        onConfirm: async () => {
+          try {
+            modifyModalArgs({ isActionLoading: true, error: undefined });
+            await onDeleteProjectFile(id);
+            closeModal();
+          } catch (err) {
+            modifyModalArgs({
+              error:
+                'There was a problem with deleting the project. Try again later.',
+              isActionLoading: false
+            });
+          }
+        }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (!project) {
@@ -70,7 +105,11 @@ export const ProjectView: React.FC = () => {
         canGoBack
       >
         <Box height='2rem' />
-        <ProjectFilesTableList files={project.files} />
+        <ProjectFilesTableList
+          files={project.files}
+          error={error}
+          onDeleteFile={showDeleteProjectFileModal}
+        />
 
         <Box maxWidth='240px' margin='0 auto' marginTop='2rem'>
           <ActionButton
