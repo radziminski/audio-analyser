@@ -1,11 +1,8 @@
-import { Center } from 'components/Box';
-import Loader from 'components/Loader';
-import ConfirmActionModal from 'components/Modal/ConfirmActionModal';
 import { ModalType } from 'components/Modal/types';
 import TableList, { ITableListColumn } from 'components/TableList';
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import ProjectTableListElement from './ProjectTableListElement';
 
@@ -39,9 +36,9 @@ export const ProjectsTableList: React.FC = () => {
   } = useStoreActions((state) => state);
   const history = useHistory();
 
-  const onEnterProject = (id: number) => {
+  const onEnterProject = useCallback((id: number) => {
     history.push(ROUTES.DASHBOARD_PROJECT.replace(':id', id.toString()));
-  };
+  }, []);
 
   const onDeleteProject = (id: number) => {
     openModal({

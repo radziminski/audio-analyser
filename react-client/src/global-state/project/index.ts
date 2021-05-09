@@ -147,6 +147,44 @@ const projectState: IProjectState = {
     } finally {
       actions.setIsLoadingProject(null);
     }
+  }),
+
+  uploadProjectFile: thunk(async (actions, payload, helpers) => {
+    const { id, file } = payload;
+    actions.setIsLoadingProject(id);
+
+    try {
+      const projectDto = await ProjectService.uploadProjectFile(id, file);
+
+      const project: IProject = {
+        id: projectDto.id,
+        title: projectDto.title,
+        description: projectDto.description,
+        createdAt: projectDto.createdAt,
+        editedAt: projectDto.editedAt,
+        files: projectDto.files.map((file) => file.file),
+        users: projectDto.users.map((user) => ({
+          id: user.user?.id,
+          email: user.user?.email,
+          profileId: user.user?.profile?.id,
+          roles: user.user?.roles
+        }))
+      };
+
+      actions.setProjects([
+        ...(helpers
+          .getState()
+          .projects?.filter((project) => project.id !== id) ?? []),
+        project
+      ]);
+
+      return project;
+      // eslint-disable-next-line no-useless-catch
+    } catch (error) {
+      throw error;
+    } finally {
+      actions.setIsLoadingProject(null);
+    }
   })
 };
 

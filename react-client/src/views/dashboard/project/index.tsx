@@ -2,6 +2,7 @@ import ActionButton from 'components/ActionButton';
 import Box, { Center } from 'components/Box';
 import DashboardContent from 'components/DashboardContent';
 import Loader from 'components/Loader';
+import { ModalType } from 'components/Modal/types';
 import ProjectFilesTableList from 'components/ProjectFilesTableList';
 import { ROUTES } from 'constants/routes';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
@@ -13,11 +14,11 @@ export const ProjectView: React.FC = () => {
 
   const {
     project: { fetchProject },
-    audio: { addAudioSources }
+    audio: { addAudioSources },
+    ui: { openModal }
   } = useStoreActions((state) => state);
   const {
-    project: { project: getProject },
-    audio: { audioSources }
+    project: { project: getProject }
   } = useStoreState((state) => state);
 
   const project = getProject(Number(id));
@@ -75,7 +76,12 @@ export const ProjectView: React.FC = () => {
             padding='0.5rem 1rem'
             height='2.5rem'
             fontSize='0.8rem'
-            // onClick={() => openModal({ modal: ModalType.createProject })}
+            onClick={() =>
+              openModal({
+                modal: ModalType.addNewFile,
+                args: { customArg: id }
+              })
+            }
           >
             + Add new file
           </ActionButton>

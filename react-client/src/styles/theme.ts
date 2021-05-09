@@ -82,9 +82,9 @@ export interface CustomTheme {
 }
 
 export const COLORS = {
-  black: '#000',
+  black: '#000000',
   transparent: 'transparent',
-  white: '#fff',
+  white: '#ffffff',
   background20: '#202442',
   background50: '#25294A',
   background70: '#2A2F54',

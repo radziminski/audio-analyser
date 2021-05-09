@@ -1,14 +1,14 @@
 import ActionButton from 'components/ActionButton';
 import Box, { FlexBox } from 'components/Box';
 import Text from 'components/Text';
-import { ROUTES } from 'constants/routes';
 import { IFile } from 'global-state/project/types';
 import React from 'react';
-import { useHistory } from 'react-router';
 import { Field } from './parts';
 
 interface Props {
   file: IFile;
+  onAnalyze: (id: number) => void;
+  onDelete: (id: number) => void;
   isEven?: boolean;
 }
 
@@ -16,10 +16,10 @@ const formatDate = (date: string) => date?.replace('T', ' ').split('.')[0];
 
 export const ProjectFileTableListElement: React.FC<Props> = ({
   file,
-  isEven
+  isEven,
+  onAnalyze,
+  onDelete
 }) => {
-  const history = useHistory();
-
   return (
     <>
       <Field padding='1.5rem 1rem' differentColor={isEven}>
@@ -50,11 +50,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
               padding='0'
               fontSize='0.8rem'
               borderRadius='6px'
-              onClick={() => {
-                history.push(
-                  ROUTES.DASHBOARD_ANALYSER.replace(':id', file.id.toString())
-                );
-              }}
+              onClick={() => onAnalyze(file.id)}
             >
               Analyze!
             </ActionButton>
@@ -66,6 +62,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
               padding='0'
               fontSize='0.8rem'
               borderRadius='6px'
+              onClick={() => onDelete(file.id)}
             >
               Delete
             </ActionButton>

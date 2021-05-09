@@ -1,5 +1,6 @@
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React from 'react';
+import AddFileModal from './AddFileModal';
 import ConfirmActionModal from './ConfirmActionModal';
 import CreateProjectModal from './CreateProjectModal';
 import { ModalType } from './types';
@@ -9,6 +10,8 @@ export const ModalsContainer: React.FC = () => {
   const { closeModal } = useStoreActions((state) => state.ui);
 
   const getCurrModal = () => {
+    if (!openedModal && openedModal !== 0) return null;
+
     switch (openedModal) {
       case ModalType.createProject:
         return <CreateProjectModal onClose={() => closeModal()} />;
@@ -22,8 +25,15 @@ export const ModalsContainer: React.FC = () => {
             onConfirm={() => modalArgs.onConfirm && modalArgs.onConfirm()}
           />
         );
+      case ModalType.addNewFile:
+        return (
+          <AddFileModal
+            projectId={+(modalArgs.customArg ?? -1)}
+            onClose={() => closeModal()}
+          />
+        );
       default:
-        return null;
+        throw 'No such modal!';
     }
   };
 

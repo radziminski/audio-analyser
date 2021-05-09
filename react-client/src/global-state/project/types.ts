@@ -53,4 +53,5 @@ export interface IProjectState {
     IProject[]
   >;
   deleteProject: ProjectThunk<number>;
+  uploadProjectFile: ProjectThunk<{ id: number; file: File }, IProject[]>;
 }

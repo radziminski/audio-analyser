@@ -12,5 +12,6 @@ export const API_ROUTES = {
   PROJECT_USER: '/project/:id/user',
   PROJECT_USER_SINGLE: '/project/:id/user/:userId',
   PROJECT_FILE: '/project/:id/file',
-  PROJECT_FILE_SINGLE: '/project/:id/file/:fileId'
+  PROJECT_FILE_SINGLE: '/project/:id/file/:fileId',
+  PROJECT_UPLOAD_FILE: '/project/:id/files/upload'
 };

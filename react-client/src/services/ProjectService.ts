@@ -12,7 +12,7 @@ export class ProjectService {
 
   async fetchProject(id: number): Promise<ProjectWithUsersAndFilesDto> {
     const response = await RequestService.client.get(
-      `${API_ROUTES.PROJECT}/${id}`
+      API_ROUTES.PROJECT_SINGLE.replace(':id', id.toString())
     );
 
     return response.data;
@@ -30,7 +30,29 @@ export class ProjectService {
   }
 
   async deleteProject(id: number): Promise<void> {
-    await RequestService.client.delete(`${API_ROUTES.PROJECT}/${id}`);
+    await RequestService.client.delete(
+      API_ROUTES.PROJECT_SINGLE.replace(':id', id.toString())
+    );
+  }
+
+  async uploadProjectFile(
+    id: number,
+    file: File
+  ): Promise<ProjectWithUsersAndFilesDto> {
+    const data = new FormData();
+    data.append('audio', file);
+
+    const response = await RequestService.client.post(
+      API_ROUTES.PROJECT_UPLOAD_FILE.replace(':id', id.toString()),
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+
+    return response.data;
   }
 }
 
