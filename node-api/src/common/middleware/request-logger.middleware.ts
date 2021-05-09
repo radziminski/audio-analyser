@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NestMiddleware,
-} from '@nestjs/common';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { Logger } from 'winston';
 
@@ -32,9 +27,6 @@ export class RequestLoggerMiddleware implements NestMiddleware {
       '==================================================================================',
     );
 
-    // DELETE THIS!!! TODO:
-    //if (Math.random() > 0.8) throw new InternalServerErrorException();
-
-    setTimeout(() => next(), 1000);
+    next();
   }
 }

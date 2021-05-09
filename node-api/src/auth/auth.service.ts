@@ -15,7 +15,9 @@ export class AuthService {
 
   async validateUser(credentials: LoginCredentials) {
     const { email, password } = credentials;
-    const foundUser = await this.userService.findOneWithPwdByEmail(email);
+    const foundUser = await this.userService.findOneWithPwdByEmail(
+      email.toLowerCase(),
+    );
 
     if (
       !(
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   getToken(user: { email: string; id: number }) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email.toLowerCase(), sub: user.id };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -46,7 +48,7 @@ export class AuthService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userService.findOneByEmail(email);
+    const user = await this.userService.findOneByEmail(email.toLowerCase());
 
     if (!user)
       throw new UnauthorizedException({ message: 'User does not exist.' });
@@ -65,7 +67,7 @@ export class AuthService {
 
     const created = await this.userService.createWithProfile(
       {
-        email,
+        email: email.toLowerCase(),
         password: hashedPassword,
       },
       {

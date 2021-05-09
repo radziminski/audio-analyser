@@ -8,7 +8,7 @@ export const REQUESTS_PER_MINUTE_LIMIT = 300;
 export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 // AUTH
 export const { JWT_SECRET } = process.env;
-export const JWT_EXPIRATION_S = '1000s';
+export const JWT_EXPIRATION_S = `${60 * 60}s`;
 
 // AWS S3 - ASSETS
 export const { AWS_ACCESS_KEY_ID } = process.env;
