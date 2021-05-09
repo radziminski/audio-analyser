@@ -34,7 +34,10 @@ interface Props {
 
 export const ProjectFilesTableList: React.FC<Props> = ({ files }) => {
   return (
-    <TableList columns={PROJECT_FILES_TABLE_COLUMNS}>
+    <TableList
+      columns={PROJECT_FILES_TABLE_COLUMNS}
+      isEmpty={!files || !files.length}
+    >
       {files &&
         files.map((file, index) => (
           <ProjectTableListElement

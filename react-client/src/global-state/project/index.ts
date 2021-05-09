@@ -6,6 +6,7 @@ import { action, thunk, computed } from 'easy-peasy';
 const projectState: IProjectState = {
   projects: null,
   isLoading: false,
+  isLoadingProject: null,
   fetchedAll: false,
 
   project: computed((state) => (id: number) =>
@@ -14,6 +15,10 @@ const projectState: IProjectState = {
 
   setIsLoading: action((state, payload) => {
     state.isLoading = payload;
+  }),
+
+  setIsLoadingProject: action((state, payload) => {
+    state.isLoadingProject = payload;
   }),
 
   setProjects: action((state, payload) => {
@@ -63,7 +68,7 @@ const projectState: IProjectState = {
   }),
 
   fetchProject: thunk(async (actions, payload, helpers) => {
-    actions.setIsLoading(true);
+    actions.setIsLoadingProject(payload);
 
     try {
       const projectDto = await ProjectService.fetchProject(payload);
@@ -90,12 +95,12 @@ const projectState: IProjectState = {
     } catch (error) {
       throw error;
     } finally {
-      actions.setIsLoading(false);
+      actions.setIsLoadingProject(null);
     }
   }),
 
   createProject: thunk(async (actions, payload, helpers) => {
-    actions.setIsLoading(true);
+    actions.setIsLoadingProject(true);
 
     try {
       const createProjectDto: CreateProjectDto = { ...payload };
@@ -119,7 +124,28 @@ const projectState: IProjectState = {
     } catch (error) {
       throw error;
     } finally {
-      actions.setIsLoading(false);
+      actions.setIsLoadingProject(null);
+    }
+  }),
+
+  deleteProject: thunk(async (actions, payload, helpers) => {
+    actions.setIsLoadingProject(payload);
+    try {
+      const id = payload;
+
+      await ProjectService.deleteProject(id);
+
+      const newProjects = helpers
+        .getState()
+        ?.projects?.filter((project) => project.id !== id);
+
+      actions.setProjects(newProjects || []);
+
+      // eslint-disable-next-line no-useless-catch
+    } catch (error) {
+      throw error;
+    } finally {
+      actions.setIsLoadingProject(null);
     }
   })
 };

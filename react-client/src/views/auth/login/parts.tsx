@@ -53,6 +53,7 @@ export const LoginForm: React.FC = () => {
           placeholder='Your email'
           name='email'
           autoComplete='on'
+          required
         />
       </Box>
       <Box marginTop='2rem'>
@@ -64,6 +65,7 @@ export const LoginForm: React.FC = () => {
           placeholder='Your password'
           name='current-password'
           autoComplete='on'
+          required
         />
       </Box>
       <Box marginTop='4rem'>

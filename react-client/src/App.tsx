@@ -7,6 +7,7 @@ import { GlobalStyles } from 'styles/global';
 import { defaultTheme } from 'styles/theme';
 import AppRoutes from 'views';
 import { useStoreActions } from 'global-state/hooks';
+import ModalsContainer from 'components/Modal';
 
 const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -32,6 +33,7 @@ const App: React.FC = () => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
         <Router>{audioServiceReady && <AppRoutes />}</Router>
+        <ModalsContainer />
       </ThemeProvider>
       <audio ref={audioRef} crossOrigin='anonymous' />
     </div>

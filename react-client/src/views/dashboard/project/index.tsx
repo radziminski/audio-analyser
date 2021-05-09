@@ -1,3 +1,4 @@
+import ActionButton from 'components/ActionButton';
 import Box, { Center } from 'components/Box';
 import DashboardContent from 'components/DashboardContent';
 import Loader from 'components/Loader';
@@ -68,6 +69,17 @@ export const ProjectView: React.FC = () => {
       >
         <Box height='2rem' />
         <ProjectFilesTableList files={project.files} />
+
+        <Box maxWidth='240px' margin='0 auto' marginTop='2rem'>
+          <ActionButton
+            padding='0.5rem 1rem'
+            height='2.5rem'
+            fontSize='0.8rem'
+            // onClick={() => openModal({ modal: ModalType.createProject })}
+          >
+            + Add new file
+          </ActionButton>
+        </Box>
       </DashboardContent>
     </>
   );

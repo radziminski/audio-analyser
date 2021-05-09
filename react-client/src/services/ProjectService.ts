@@ -28,6 +28,10 @@ export class ProjectService {
 
     return response.data.project;
   }
+
+  async deleteProject(id: number): Promise<void> {
+    await RequestService.client.delete(`${API_ROUTES.PROJECT}/${id}`);
+  }
 }
 
 const userService = new ProjectService();

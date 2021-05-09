@@ -49,6 +49,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
               height='2rem'
               padding='0'
               fontSize='0.8rem'
+              borderRadius='6px'
               onClick={() => {
                 history.push(
                   ROUTES.DASHBOARD_ANALYSER.replace(':id', file.id.toString())
@@ -64,6 +65,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
               height='2rem'
               padding='0'
               fontSize='0.8rem'
+              borderRadius='6px'
             >
               Delete
             </ActionButton>

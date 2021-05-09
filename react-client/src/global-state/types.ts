@@ -1,3 +1,4 @@
+import { IUIState } from './ui/types';
 import { IUserState } from './user/types';
 import { IAuthState } from './auth/types';
 import { IAudioState } from './audio/types';
@@ -8,4 +9,5 @@ export interface IAppState {
   auth: IAuthState;
   user: IUserState;
   project: IProjectState;
+  ui: IUIState;
 }

@@ -1,12 +1,13 @@
 import ActionButton from 'components/ActionButton';
 import Box from 'components/Box';
 import DashboardContent from 'components/DashboardContent';
-import CreateProjectModal from 'components/Modal/CreateProjectModal';
+import { ModalType } from 'components/Modal/types';
 import ProjectsTableList from 'components/ProjectsTableList';
-import React, { useState } from 'react';
+import { useStoreActions } from 'global-state/hooks';
+import React from 'react';
 
 export const ProjectsView: React.FC = () => {
-  const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
+  const openModal = useStoreActions((state) => state.ui.openModal);
 
   return (
     <>
@@ -20,16 +21,12 @@ export const ProjectsView: React.FC = () => {
             padding='0.5rem 1rem'
             height='2.5rem'
             fontSize='0.8rem'
-            onClick={() => setShowCreateProjectModal(true)}
+            onClick={() => openModal({ modal: ModalType.createProject })}
           >
             + Add new project
           </ActionButton>
         </Box>
       </DashboardContent>
-
-      {showCreateProjectModal && (
-        <CreateProjectModal onClose={() => setShowCreateProjectModal(false)} />
-      )}
     </>
   );
 };

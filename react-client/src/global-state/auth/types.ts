@@ -1,8 +1,4 @@
 import { Thunk, Action } from 'easy-peasy';
-import {
-  ILoginCredentials,
-  IRegisterCredentials
-} from './../../services/AuthService';
 
 export type AuthAction<Payload = void> = Action<IAuthState, Payload>;
 
@@ -11,6 +7,18 @@ export type AuthThunk<Payload = void, Result = void> = Thunk<
   Payload,
   Result
 >;
+
+export interface ILoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface IRegisterCredentials {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 export interface IAuthState {
   isLoading: boolean;

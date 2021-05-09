@@ -1,49 +1,35 @@
-import Box from 'components/Box';
-import Icon from 'components/Icon';
-import { ModalOverlay } from 'components/ModalOverlay';
-import { Heading3 } from 'components/Text';
+import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React from 'react';
-import { COLORS, FONT_WEIGHTS } from 'styles/theme';
-import { Container } from './parts';
+import ConfirmActionModal from './ConfirmActionModal';
+import CreateProjectModal from './CreateProjectModal';
+import { ModalType } from './types';
 
-interface Props {
-  title?: string;
-  onClose?: () => void;
-  blockClose?: () => void;
-}
+export const ModalsContainer: React.FC = () => {
+  const { openedModal, modalArgs } = useStoreState((state) => state.ui);
+  const { closeModal } = useStoreActions((state) => state.ui);
 
-export const Modal: React.FC<Props> = ({
-  children,
-  title,
-  onClose,
-  blockClose
-}) => {
-  return (
-    <>
-      <Container>
-        {title && (
-          <Box marginBottom='1rem' textAlign='center'>
-            <Heading3 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-              {title}
-            </Heading3>
-          </Box>
-        )}
-        {children}
-        {!blockClose && (
-          <Box
-            position='absolute'
-            top='1.5rem'
-            right='1.5rem'
-            onClick={onClose}
-            cursor='pointer'
-          >
-            <Icon icon='close' />
-          </Box>
-        )}
-      </Container>
-      <ModalOverlay isVisible={true} onClick={onClose} />
-    </>
-  );
+  const getCurrModal = () => {
+    switch (openedModal) {
+      case ModalType.createProject:
+        return <CreateProjectModal onClose={() => closeModal()} />;
+      case ModalType.confirmAction:
+        return (
+          <ConfirmActionModal
+            title={modalArgs.title ?? 'Are you sure?'}
+            isActionLoading={modalArgs.isActionLoading}
+            message={modalArgs.message}
+            onDismiss={() => closeModal()}
+            onConfirm={() => modalArgs.onConfirm && modalArgs.onConfirm()}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  if (openedModal === null) return null;
+
+  return getCurrModal();
 };
 
-export default Modal;
+export default ModalsContainer;

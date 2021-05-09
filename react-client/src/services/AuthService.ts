@@ -1,30 +1,20 @@
+import { RegisterDto } from './../dtos/auth/register-dto';
 import { API_ROUTES } from './../constants/api-routes';
 import RequestService from './RequestService';
 import { UserWithTokensDto } from 'dtos/auth/user-with-tokens-dto';
+import { LoginDto } from 'dtos/auth/login-dto';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'token';
-
-export interface ILoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface IRegisterCredentials {
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-}
 
 export interface ITokens {
   accessToken: string | null;
 }
 
 export class AuthService {
-  async login(credentials: ILoginCredentials): Promise<string> {
+  async login(loginDto: LoginDto): Promise<string> {
     const response = await RequestService.client.post(
       API_ROUTES.LOGIN,
-      credentials
+      loginDto
     );
 
     const accessToken = response.data['access_token'];
@@ -34,12 +24,10 @@ export class AuthService {
     return accessToken;
   }
 
-  async register(
-    credentials: IRegisterCredentials
-  ): Promise<UserWithTokensDto> {
+  async register(registerDto: RegisterDto): Promise<UserWithTokensDto> {
     const response = await RequestService.client.post(
       API_ROUTES.REGISTER,
-      credentials
+      registerDto
     );
 
     const accessToken = response.data.tokens['access_token'];

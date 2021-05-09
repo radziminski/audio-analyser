@@ -1,14 +1,14 @@
 import ActionButton from 'components/ActionButton';
 import Box, { FlexBox } from 'components/Box';
 import Text from 'components/Text';
-import { ROUTES } from 'constants/routes';
 import { IProject } from 'global-state/project/types';
 import React from 'react';
-import { useHistory } from 'react-router';
 import { Field } from './parts';
 
 interface Props {
   project: IProject;
+  onEnter: (id: number) => void;
+  onDelete: (id: number) => void;
   isEven?: boolean;
 }
 
@@ -16,10 +16,10 @@ const formatDate = (date: string) => date?.replace('T', ' ').split('.')[0];
 
 export const ProjectTableListElement: React.FC<Props> = ({
   project,
-  isEven
+  isEven,
+  onEnter,
+  onDelete
 }) => {
-  const history = useHistory();
-
   return (
     <>
       <Field padding='1.5rem 1rem' differentColor={isEven}>
@@ -43,11 +43,8 @@ export const ProjectTableListElement: React.FC<Props> = ({
               height='2rem'
               padding='0'
               fontSize='0.8rem'
-              onClick={() =>
-                history.push(
-                  ROUTES.DASHBOARD_PROJECT.replace(':id', project.id.toString())
-                )
-              }
+              onClick={() => onEnter(project.id)}
+              borderRadius='6px'
             >
               Enter
             </ActionButton>
@@ -58,6 +55,8 @@ export const ProjectTableListElement: React.FC<Props> = ({
               height='2rem'
               padding='0'
               fontSize='0.8rem'
+              borderRadius='6px'
+              onClick={() => onDelete(project.id)}
             >
               Delete
             </ActionButton>

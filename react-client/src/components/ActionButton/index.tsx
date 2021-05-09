@@ -10,9 +10,10 @@ const Container = styled(Button)<{
   fontSize?: string;
   height?: string;
   btnType?: ButtonType;
+  borderRadius?: string;
 }>`
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: ${({ borderRadius }) => borderRadius ?? '0.5rem'};
   background-color: ${({ theme, btnType }) =>
     btnType === 'danger' ? theme.colors.danger100 : theme.colors.primary100};
   color: ${({ theme }) => theme.colors.white};
@@ -34,6 +35,7 @@ interface Props {
   height?: string;
   onClick?: () => void;
   type?: ButtonType;
+  borderRadius?: string;
 }
 
 export const ActionButton: React.FC<Props> = ({
@@ -43,6 +45,7 @@ export const ActionButton: React.FC<Props> = ({
   isLoading,
   height,
   onClick,
+  borderRadius,
   type
 }) => {
   return (
@@ -53,6 +56,7 @@ export const ActionButton: React.FC<Props> = ({
       onClick={onClick}
       type={type === 'submit' ? type : undefined}
       btnType={type}
+      borderRadius={borderRadius}
     >
       {isLoading ? <Loader size={20} strokeSize={3} /> : children}
     </Container>

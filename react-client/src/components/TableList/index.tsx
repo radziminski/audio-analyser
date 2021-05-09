@@ -1,5 +1,8 @@
-import Box from 'components/Box';
+import { Center } from 'components/Box';
+import Loader from 'components/Loader';
+import { Heading4 } from 'components/Text';
 import React from 'react';
+import { COLORS, FONT_WEIGHTS } from 'styles/theme';
 import { Container, Label } from './parts';
 
 export interface ITableListColumn {
@@ -10,28 +13,59 @@ export interface ITableListColumn {
 
 interface Props {
   columns: ITableListColumn[];
-  maxHeight?: string;
+  isEmpty?: boolean;
+  errorMessage?: string;
+  isLoading?: boolean;
 }
 
 export const TableList: React.FC<Props> = ({
   columns,
   children,
-  maxHeight
+  isEmpty,
+  errorMessage,
+  isLoading
 }) => {
-  return (
-    <>
-      <Container columnsWidths={columns.map((column) => column.width)}>
-        {columns.map((column) => (
-          <Label
-            text={column.title}
-            key={column.title}
-            noArrow={column.noArrow}
-          />
-        ))}
-        {children}
-      </Container>
-    </>
+  const getTableWithLabels = (content: React.ReactNode | null = null) => (
+    <Container columnsWidths={columns.map((column) => column.width)}>
+      {columns.map((column) => (
+        <Label
+          text={column.title}
+          key={column.title}
+          noArrow={column.noArrow}
+        />
+      ))}
+      {content}
+    </Container>
   );
+
+  if (isLoading)
+    return (
+      <>
+        {getTableWithLabels()}
+        <Center marginY='4rem'>
+          <Loader />
+        </Center>
+      </>
+    );
+
+  if (isEmpty) {
+    return (
+      <>
+        {getTableWithLabels()}
+        <Center marginY='4rem'>
+          <Heading4
+            color='rgba(255,255,255, 0.7)'
+            fontWeight={FONT_WEIGHTS.light}
+            fontSize='1rem'
+          >
+            {errorMessage ?? 'Nothing to show here'}
+          </Heading4>
+        </Center>
+      </>
+    );
+  }
+
+  return <>{getTableWithLabels(children)}</>;
 };
 
 export default TableList;

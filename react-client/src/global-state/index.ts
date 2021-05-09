@@ -4,12 +4,14 @@ import audioState from './audio';
 import authState from './auth';
 import userState from './user';
 import projectState from './project';
+import uiState from './ui';
 
 export const storeModel: IAppState = {
   audio: audioState,
   auth: authState,
   user: userState,
-  project: projectState
+  project: projectState,
+  ui: uiState
 };
 
 const initStore = () => createStore(storeModel);

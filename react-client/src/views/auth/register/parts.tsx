@@ -68,6 +68,7 @@ export const RegisterForm: React.FC = () => {
           placeholder='Ex. john@gmail.com'
           name='email'
           autoComplete='on'
+          required
         />
       </Box>
       <FlexBox marginTop='2rem' justifyContent='space-between'>
@@ -80,6 +81,7 @@ export const RegisterForm: React.FC = () => {
             placeholder='Strong Password'
             name='new-password'
             autoComplete='on'
+            required
           />
         </Box>
         <Box width='48%'>
@@ -91,6 +93,7 @@ export const RegisterForm: React.FC = () => {
             placeholder='Repeat password'
             name='new-password'
             autoComplete='on'
+            required
           />
         </Box>
       </FlexBox>

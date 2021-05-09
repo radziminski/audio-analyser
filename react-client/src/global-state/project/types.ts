@@ -36,11 +36,13 @@ export interface IFile {
 
 export interface IProjectState {
   isLoading: boolean;
+  isLoadingProject: number | null | true;
   projects: IProject[] | null;
   project: ProjectComputed<(id: number) => IProject | undefined>;
   fetchedAll: boolean;
 
   setIsLoading: ProjectAction<boolean>;
+  setIsLoadingProject: ProjectAction<number | true | null>;
   setFetchedAll: ProjectAction<boolean>;
   setProjects: ProjectAction<IProject[]>;
   clearProjects: ProjectAction;
@@ -50,4 +52,5 @@ export interface IProjectState {
     { title: string; description: string },
     IProject[]
   >;
+  deleteProject: ProjectThunk<number>;
 }

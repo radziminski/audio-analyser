@@ -25,7 +25,7 @@ const authState: IAuthState = {
     actions.setError(null);
 
     try {
-      await AuthService.login(payload);
+      await AuthService.login({ ...payload });
 
       actions.setIsAuthenticated(true);
       return true;
@@ -43,7 +43,12 @@ const authState: IAuthState = {
     actions.setIsLoading(true);
     actions.setError(null);
     try {
-      await AuthService.register(payload);
+      await AuthService.register({
+        email: payload.email,
+        password: payload.password,
+        first_name: payload.firstName,
+        last_name: payload.lastName
+      });
 
       actions.setIsAuthenticated(true);
       return true;

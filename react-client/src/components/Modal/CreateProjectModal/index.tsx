@@ -5,7 +5,7 @@ import { Paragraph } from 'components/Text';
 import TextInput from 'components/TextInput';
 import { useStoreActions, useStoreState } from 'global-state/hooks';
 import React, { useState } from 'react';
-import Modal from '..';
+import Modal from '../ModalWrapper';
 
 interface Props {
   onClose?: () => void;
@@ -16,7 +16,7 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
   const [description, setDescription] = useState('');
 
   const createProject = useStoreActions((state) => state.project.createProject);
-  const { isLoading } = useStoreState((state) => state.project);
+  const { isLoadingProject } = useStoreState((state) => state.project);
 
   const onSubmit = async () => {
     try {
@@ -55,7 +55,7 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
         </Box>
 
         <Box>
-          <ActionButton isLoading={isLoading}>Confirm</ActionButton>
+          <ActionButton isLoading={!!isLoadingProject}>Confirm</ActionButton>
         </Box>
       </Form>
     </Modal>
