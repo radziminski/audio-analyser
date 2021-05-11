@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
-import { API_PORT } from './constants';
+import { PORT } from './constants';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
@@ -14,8 +14,8 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors();
 
-  await app.listen(API_PORT);
-  console.log(`Listening on port ${API_PORT}...`);
+  await app.listen(PORT);
+  console.log(`Listening on port ${PORT}...`);
 }
 
 void bootstrap();

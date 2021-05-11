@@ -23,7 +23,7 @@ export const { PG_HOST } = process.env;
 export const { PG_DATABASE } = process.env;
 export const { PG_PASSWORD } = process.env;
 export const { PG_PORT } = process.env;
-export const { API_PORT } = process.env;
+export const { PORT } = process.env;
 
 // DB
 export const DB_CONFIG: ConnectionOptions = {

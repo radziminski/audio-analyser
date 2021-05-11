@@ -16,7 +16,13 @@ ENV NODE_ENV=production
 
 RUN npm run build
 
-COPY 'package.json' '/app/dist'
-COPY 'package-lock.json' '/app/dist'
+RUN mkdir '/app/deploy'
+RUN mkdir '/app/deploy/dist'
+
+COPY 'package.json' '/app/deploy'
+COPY 'package-lock.json' '/app/deploy'
+RUN cp -r '/app/dist' '/app/deploy/dist'
+RUN ls '/app/deploy'
+RUN ls '/app/deploy/dist'
 
 CMD npm run serve
