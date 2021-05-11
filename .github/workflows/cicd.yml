@@ -21,12 +21,13 @@ jobs:
           cd node-api
           docker build -t audio-analyser:$GITHUB_SHA .
           docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
-          docker cp builder:/app/dist ./dist
+          docker cp builder:/app/deploy ./deploy
+          ls -alt ./deploy
 
       - name: Generate deployment package
         run: |
           cd node-api
-          cd dist
+          cd deploy
           zip -r deploy.zip . -x '*.git*'
 
       - name: Deploy to EB
