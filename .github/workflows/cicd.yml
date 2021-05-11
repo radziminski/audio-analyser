@@ -37,6 +37,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: audio-analyser
           environment_name: Audioanalyser-env
-          version_label: $GITHUB_SHA
+          version_label: ${{ GITHUB_SHA }}
           region: eu-central-1
           deployment_package: node-api/dist/deploy.zip
