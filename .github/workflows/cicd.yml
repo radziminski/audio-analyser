@@ -2,10 +2,9 @@ name: Deploy the backend
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
 
 jobs:
   # This workflow contains a single job called "build"
@@ -14,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout source
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
       - name: Build the optimized build
