@@ -1,0 +1,25 @@
+name: Deploy the backend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Build the optimized build
+        run: |
+          cd node-api
+          docker build -t audio-analyser:$GITHUB_SHA .
+          docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
+          docker cp builder:/app/dist ./dist
