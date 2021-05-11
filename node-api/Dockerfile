@@ -15,6 +15,7 @@ COPY '.' '/app'
 ENV NODE_ENV=production
 
 RUN npm run build
-COPY 'package*.json' './dist'
+COPY 'package.json' 'app/dist'
+COPY 'package-lock.json' 'app/dist'
 
 CMD npm run serve
