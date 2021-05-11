@@ -28,3 +28,14 @@ jobs:
           cd node-api
           cd dist
           zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: audio-analyser
+          environment_name: Audioanalyser-env
+          version_label: 6
+          region: eu-central-1
+          deployment_package: node-api/dist/deploy.zip
