@@ -39,4 +39,4 @@ jobs:
           environment_name: Audioanalyser-env
           version_label: 8
           region: eu-central-1
-          deployment_package: node-api/dist/deploy.zip
+          deployment_package: node-api/deploy/deploy.zip
