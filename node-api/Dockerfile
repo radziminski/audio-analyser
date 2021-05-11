@@ -6,6 +6,7 @@ RUN chmod 755 /usr/local/bin/*
 WORKDIR '/app'
 
 COPY 'package.json' '/app'
+COPY 'package-lock.json' '/app'
 
 RUN npm ci
 
