@@ -15,7 +15,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      # Runs a set of commands using the runners shell
+      # Build the production optimized build of backend api
       - name: Build the optimized build
         run: |
           cd node-api
@@ -23,17 +23,23 @@ jobs:
           docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
           docker cp builder:/app/deploy ./deploy
 
+      # Copies necessary nginx config
       - name: Copy aws nginx config
+        if: github.ref == 'refs/heads/main'
         run: |
           cd node-api/config
           cp -r . ../deploy
 
+      # Zips the deploy package
       - name: Generate deployment package
+        if: github.ref == 'refs/heads/main'
         run: |
           cd node-api/deploy
           zip -r deploy.zip . -x '*.git*'
 
+      # Deploys the package to AWS EB
       - name: Deploy to EB
+        if: github.ref == 'refs/heads/main'
         uses: einaregilsson/beanstalk-deploy@v16
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}

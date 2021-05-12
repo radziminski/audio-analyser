@@ -5,4 +5,4 @@ export const ENV =
   process.env.NODE_ENV === 'production' ? PRODUCTION_ENV : DEVELOPMENT_ENV;
 
 export const APP_TITLE = 'Audio Analyser';
-export const API_BASE_URL = 'http://localhost:8080';
+export const API_BASE_URL = 'http://audioanalyser-env.eba-7yyyqsrr.eu-central-1.elasticbeanstalk.com';
