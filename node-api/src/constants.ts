@@ -17,7 +17,7 @@ export const { AWS_S3_BUCKET_NAME } = process.env;
 export const MAX_FILE_SIZE = Math.pow(1024, 2) * 70; // 70 MiB
 export const MAX_TOTAL_FILES_SIZE = Math.pow(1024, 3) * 10; // 10 GiB
 
-// ENV
+// LOCAL ENV
 export const { PG_USER } = process.env;
 export const { PG_HOST } = process.env;
 export const { PG_DATABASE } = process.env;
@@ -25,14 +25,21 @@ export const { PG_PASSWORD } = process.env;
 export const { PG_PORT } = process.env;
 export const { PORT } = process.env;
 
+// AWS RDS ENV
+export const { RDS_USERNAME } = process.env;
+export const { RDS_HOSTNAME } = process.env;
+export const { RDS_DB_NAME } = process.env;
+export const { RDS_PASSWORD } = process.env;
+export const { RDS_PORT } = process.env;
+
 // DB
 export const DB_CONFIG: ConnectionOptions = {
   type: 'postgres',
-  host: PG_HOST,
-  port: Number(PG_PORT),
-  username: PG_USER,
-  password: PG_PASSWORD,
-  database: PG_DATABASE,
+  host: RDS_HOSTNAME ?? PG_HOST,
+  port: Number(RDS_PORT ?? PG_PORT),
+  username: RDS_USERNAME ?? PG_USER,
+  password: RDS_PASSWORD ?? PG_PASSWORD,
+  database: RDS_DB_NAME ?? PG_DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,
 };
