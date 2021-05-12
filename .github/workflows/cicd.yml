@@ -23,6 +23,11 @@ jobs:
           docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
           docker cp builder:/app/deploy ./deploy
 
+      - name: Copy aws nginx config
+        run: |
+          cd node-api/config
+          cp -r . ../deploy
+
       - name: Generate deployment package
         run: |
           cd node-api/deploy
