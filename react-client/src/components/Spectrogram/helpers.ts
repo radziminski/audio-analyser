@@ -76,8 +76,6 @@ export const getLabelsLocations = (
     });
   }
 
-  console.log(labelsValues);
-
   return labelsValues;
 };
 

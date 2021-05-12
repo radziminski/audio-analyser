@@ -10,9 +10,12 @@ import {
   RiVolumeDownFill,
   RiVolumeMuteFill,
   RiRewindFill,
-  RiSpeedFill
+  RiSpeedFill,
+  RiCloseFill,
+  RiLogoutBoxLine
 } from 'react-icons/ri';
-import { TiArrowSortedDown } from 'react-icons/ti';
+import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
+import { MdKeyboardBackspace } from 'react-icons/md';
 // import { AiFillHome } from 'react-icons/ai';
 // import { IoIosCreate } from 'react-icons/io';
 // import { GiSoundWaves } from 'react-icons/gi';
@@ -23,6 +26,7 @@ export type SupportedIcon =
   | 'pause-circle'
   | 'user-fill'
   | 'arrow-down-fill'
+  | 'arrow-up-fill'
   | 'home-fill'
   | 'projects-fill'
   | 'audio'
@@ -30,7 +34,10 @@ export type SupportedIcon =
   | 'volume-up-fill'
   | 'volume-down-fill'
   | 'skip-forward-fill'
-  | 'skip-backward-fill';
+  | 'skip-backward-fill'
+  | 'back'
+  | 'logout'
+  | 'close';
 
 export interface Props {
   icon: SupportedIcon;
@@ -49,6 +56,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiUser3Fill />;
       case 'arrow-down-fill':
         return <TiArrowSortedDown />;
+      case 'arrow-up-fill':
+        return <TiArrowSortedUp />;
       case 'home-fill':
         return <RiHome5Fill />;
       case 'projects-fill':
@@ -65,6 +74,12 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiRewindFill />;
       case 'skip-forward-fill':
         return <RiSpeedFill />;
+      case 'close':
+        return <RiCloseFill />;
+      case 'logout':
+        return <RiLogoutBoxLine />;
+      case 'back':
+        return <MdKeyboardBackspace />;
     }
   };
   return (

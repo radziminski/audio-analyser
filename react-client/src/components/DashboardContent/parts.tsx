@@ -20,7 +20,7 @@ export const ScrollContainer = styled.div`
 
 export const Title = styled.div`
   font-size: 20px;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   font-weight: 400;
   opacity: 0.85;
   margin-bottom: 10px;
@@ -28,7 +28,7 @@ export const Title = styled.div`
 
 export const SubTitle = styled.div`
   font-size: 14px;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   font-weight: 300;
   opacity: 0.5;
   margin-bottom: 20px;
@@ -42,7 +42,7 @@ export const SubTitle = styled.div`
       display: block;
       width: 4px;
       height: 4px;
-      background: white;
+      background: ${({ theme }) => theme.colors.white};
       opacity: 0.5;
       border-radius: 50%;
     }

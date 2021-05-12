@@ -1,4 +1,4 @@
-import AudioService from 'global-state/audio/audioController';
+import AudioService from 'services/AudioControllerService';
 import React, { useEffect, useRef } from 'react';
 import Box, { FlexBox } from 'components/Box';
 import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
@@ -102,7 +102,6 @@ const FrequencyMeter: React.FC = () => {
               opacity={labelLocations[key] > 1 ? 1 : 0}
               height={40}
             >
-              {console.log(labelLocations[key])}
               <Box
                 width='1px'
                 height={6}

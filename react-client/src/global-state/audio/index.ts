@@ -1,31 +1,8 @@
-import { action, thunk, Action, Thunk, computed, Computed } from 'easy-peasy';
-import AudioService from './audioController';
+import { IAudioState } from './types';
+import { action, thunk, computed } from 'easy-peasy';
+import AudioService from '../../services/AudioControllerService';
 
-export type AudioAction<Payload = void> = Action<AudioState, Payload>;
-export type AudioThunk<Payload = void> = Thunk<AudioState, Payload>;
-export type AudioComputed<Result = void> = Computed<AudioState, Result>;
-
-export interface AudioState {
-  currTime: AudioComputed<number>;
-  duration: AudioComputed<number>;
-  isPlaying: boolean;
-  isLoadingAudioBuffer: boolean;
-  didLoadAudioBuffer: boolean;
-  currSource: string | null;
-  audioSources: Record<string, string>;
-
-  setIsLoadingAudioBuffer: AudioAction<boolean>;
-  loadAudioBuffer: AudioThunk;
-  play: AudioAction;
-  pause: AudioAction;
-  stop: AudioAction;
-  setCurrTime: AudioAction<number>;
-  setCurrSource: AudioAction<string | null>;
-  loadAudio: AudioAction<string>;
-  addAudioSources: AudioAction<Record<string, string>>;
-}
-
-const audioState: AudioState = {
+const audioState: IAudioState = {
   isPlaying: false,
   isLoadingAudioBuffer: false,
   didLoadAudioBuffer: false,

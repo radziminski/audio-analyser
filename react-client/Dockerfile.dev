@@ -5,7 +5,8 @@ FROM node:alpine
 WORKDIR '/app'
 
 # Copying dependency files
-COPY ./package.json .
+COPY './package.json' '.'
+COPY './package-lock.json' '.'
 
 # Installing dependencies
 RUN npm install

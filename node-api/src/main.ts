@@ -1,10 +1,21 @@
-import { API_PORT } from './constants';
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+
+import { PORT } from './constants';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(API_PORT);
-  console.log(`Listening on port ${API_PORT}...`);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  app.useStaticAssets(join(__dirname, '..', 'files/audio'));
+  app.use(helmet());
+  app.enableCors();
+
+  await app.listen(PORT);
+  console.log(`Listening on port ${PORT}...`);
 }
-bootstrap();
+
+void bootstrap();

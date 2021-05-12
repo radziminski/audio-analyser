@@ -1,0 +1,51 @@
+name: Deploy the backend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      # Build the production optimized build of backend api
+      - name: Build the optimized build
+        run: |
+          cd node-api
+          docker build -t audio-analyser:$GITHUB_SHA .
+          docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
+          docker cp builder:/app/deploy ./deploy
+
+      # Copies necessary nginx config
+      - name: Copy aws nginx config
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd node-api/config
+          cp -r . ../deploy
+
+      # Zips the deploy package
+      - name: Generate deployment package
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd node-api/deploy
+          zip -r deploy.zip . -x '*.git*'
+
+      # Deploys the package to AWS EB
+      - name: Deploy to EB
+        if: github.ref == 'refs/heads/main'
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: audio-analyser
+          environment_name: Audioanalyser-env
+          version_label: ${{ github.run_id }}
+          region: eu-central-1
+          deployment_package: node-api/deploy/deploy.zip

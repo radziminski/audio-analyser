@@ -9,7 +9,7 @@ import { useAnimationFrameLoop } from './../../hooks/useAnimationFrameLoop/index
 import audioService, {
   LEFT_CHANNEL,
   RIGHT_CHANNEL
-} from 'global-state/audio/audioController';
+} from 'services/AudioControllerService';
 import { useEffect, useState, useRef, MutableRefObject } from 'react';
 
 export const useInitAnalysers = () => {

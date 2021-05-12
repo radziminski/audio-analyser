@@ -1,14 +1,13 @@
-# USED FOR DEVELOPMENT 
+# --- Running Development Server
+
 FROM node:alpine
 
 WORKDIR '/app'
 
-COPY ./package.json .
+COPY ./package*.json .
 
 RUN npm install
 
-# Not needed since volumes are set in docker compose,
-# but may be useful in the future for referance
-COPY . .
+# Volumes set in docker-compose
 
 CMD ["npm", "run", "start:dev"]

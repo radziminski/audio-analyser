@@ -7,6 +7,7 @@ export const Container = styled.div`
   cursor: pointer;
   opacity: 0.82;
   transition: opacity 0.15s;
+  position: relative;
 
   &:hover {
     opacity: 1;
@@ -31,6 +32,7 @@ export const TextContainer = styled.div`
   margin-left: 30px;
   color: white;
   padding: 2px;
+  min-width: 160px;
 `;
 
 export const UpperTextContainer = styled.div`
@@ -49,4 +51,36 @@ export const IconContainer = styled.div`
   color: white;
   opacity: 0.45;
   margin-left: 26px;
+`;
+
+export const Tooltip = styled.ul`
+  position: absolute;
+  z-index: ${({ theme }) => theme.zIndex.stickedFront};
+  width: 300px;
+  background-color: ${({ theme }) => theme.colors.background50};
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  top: -3rem;
+  right: 1rem;
+  overflow: hidden;
+
+  animation: slide-in-bottom 0.2s;
+`;
+
+export const TooltipItem = styled.button`
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.background50};
+  padding: 1rem 2rem;
+  transition: all 0.3s;
+  color: ${({ theme }) => theme.colors.white};
+  font-size: 1rem;
+  text-align: left;
+  font-weight: ${({ theme }) => theme.fontWeights.light};
+  opacity: 0.8;
+  display: flex;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background70};
+    opacity: 1;
+  }
 `;
