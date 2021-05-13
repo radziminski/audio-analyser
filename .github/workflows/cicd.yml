@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  deploy-backend:
+  test-and-deploy-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +49,7 @@ jobs:
           region: eu-central-1
           deployment_package: node-api/deploy/deploy.zip
 
-  deploy-frontend:
+  test-and-deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -69,4 +69,4 @@ jobs:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: ${{ secrets.AWS_CLIENT_BUCKET }}
-          source_dir: './build'
+          source_dir: 'react-client/build'
