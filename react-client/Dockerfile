@@ -15,6 +15,7 @@ RUN npm install
 COPY '.' '/app'
 
 ENV NODE_ENV=production
+ENV ENV_FILE=prod
 
 # Building optimized build
 RUN npm run build
