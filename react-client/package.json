@@ -88,8 +88,8 @@
     "webpack-merge": "^5.7.3"
   },
   "lint-staged": {
-    "*.ts?(x)": "eslint --fix && prettier --write",
-    "*.js?(x)": "eslint --fix && prettier --write"
+    "*.ts?(x)": "eslint --fix",
+    "*.js?(x)": "eslint --fix"
   },
   "husky": {
     "hooks": {

@@ -6,7 +6,6 @@ const SOURCE_DIRECTORY = path.resolve(__dirname, '..', 'src');
 const BUILD_DIRECTORY = path.resolve(__dirname, '..', 'build');
 const PUBLIC_DIRECTORY = path.resolve(__dirname, '..', 'public');
 
-console.log(path.resolve(__dirname, '..', '~/'));
 module.exports.default = {
   entry: [`${SOURCE_DIRECTORY}/index.tsx`],
   output: {
@@ -22,7 +21,7 @@ module.exports.default = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|jpe?g|gif|eot|woff|ttf|ico)$/i,
+        test: /\.(png|jpe?g|gif|eot|woff|ttf|ico|mp3|wav)$/i,
         use: ['file-loader?&name=[hash].[ext]']
       },
       {
@@ -47,7 +46,7 @@ module.exports.default = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: `${PUBLIC_DIRECTORY}/index.html`
+      template: `${SOURCE_DIRECTORY}/index.html`
     }),
     new CopyWebpackPlugin({
       patterns: [

@@ -2,7 +2,7 @@ import React from 'react';
 import { ROUTES } from '~/constants/routes';
 import NavPanel from '~/components/NavPanel';
 import { Redirect, Route, Switch } from 'react-router';
-import DashboardHomeView from './dashboard-home';
+import DashboardHomeView from './home';
 import AnalyserView from './analyser';
 import ProjectsView from './projects';
 import ProjectView from './project';
