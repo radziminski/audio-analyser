@@ -73,4 +73,4 @@ jobs:
       - name: Upload build to S3
         run: |
           aws s3 cp ./react-client/build s3://${{secrets.AWS_CLIENT_BUCKET}}/ --recursive
-          aws cloudfront create-invalidation --distribution-id ${{env.AWS_DISTRIBUTION_ID}} --paths /index.html
+          aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths /index.html
