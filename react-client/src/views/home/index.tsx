@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexBox } from 'components/Box';
+import { FlexBox } from '~/components/Box';
 
 const HomeView: React.FC = () => {
   return <FlexBox justifyContent='center'>Hello here hi</FlexBox>;

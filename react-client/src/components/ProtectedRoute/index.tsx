@@ -1,8 +1,8 @@
-import { ROUTES } from 'constants/routes';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router';
-import LoadingView from 'views/loading';
+import LoadingView from '~/views/loading';
 
 type Props = RouteProps;
 

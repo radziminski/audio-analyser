@@ -1,7 +1,7 @@
-import { Heading5 } from 'components/Text';
+import { Heading5 } from '~/components/Text';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { FONT_WEIGHTS } from 'styles/theme';
+import { FONT_WEIGHTS } from '~/styles/theme';
 import { Container } from './parts';
 
 interface Props {

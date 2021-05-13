@@ -1,9 +1,9 @@
-import ActionButton from 'components/ActionButton';
-import Box from 'components/Box';
-import DashboardContent from 'components/DashboardContent';
-import { ModalType } from 'components/Modal/types';
-import ProjectsTableList from 'components/ProjectsTableList';
-import { useStoreActions } from 'global-state/hooks';
+import ActionButton from '~/components/ActionButton';
+import Box from '~/components/Box';
+import DashboardContent from '~/components/DashboardContent';
+import { ModalType } from '~/components/Modal/types';
+import ProjectsTableList from '~/components/ProjectsTableList';
+import { useStoreActions } from '~/global-state/hooks';
 import React from 'react';
 
 export const ProjectsView: React.FC = () => {

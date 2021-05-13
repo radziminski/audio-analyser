@@ -1,11 +1,11 @@
-import ProtectedRoute from 'components/ProtectedRoute';
-import { ROUTES } from 'constants/routes';
+import ProtectedRoute from '~/components/ProtectedRoute';
+import { ROUTES } from '~/constants/routes';
 import React, { useCallback, useEffect } from 'react';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
 import AuthView from './auth';
 import DashboardView from './dashboard';
-import RequestService from 'services/RequestService';
-import { useStoreActions } from 'global-state/hooks';
+import RequestService from '~/services/RequestService';
+import { useStoreActions } from '~/global-state/hooks';
 import NotFoundView from './not-found';
 
 export const AppRoutes: React.FC = () => {

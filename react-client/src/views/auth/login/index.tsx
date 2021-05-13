@@ -1,9 +1,9 @@
-import Anchor from 'components/Anchor';
-import Box, { FlexBox } from 'components/Box';
-import { Heading2, Heading3, Paragraph } from 'components/Text';
-import { ROUTES } from 'constants/routes';
+import Anchor from '~/components/Anchor';
+import Box, { FlexBox } from '~/components/Box';
+import { Heading2, Heading3, Paragraph } from '~/components/Text';
+import { ROUTES } from '~/constants/routes';
 import React from 'react';
-import { FONT_WEIGHTS } from 'styles/theme';
+import { FONT_WEIGHTS } from '~/styles/theme';
 import LoginForm from './parts';
 
 const LoginView: React.FC = () => {

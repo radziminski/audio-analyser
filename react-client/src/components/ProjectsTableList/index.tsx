@@ -1,7 +1,7 @@
-import { ModalType } from 'components/Modal/types';
-import TableList, { ITableListColumn } from 'components/TableList';
-import { ROUTES } from 'constants/routes';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import { ModalType } from '~/components/Modal/types';
+import TableList, { ITableListColumn } from '~/components/TableList';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import ProjectTableListElement from './ProjectTableListElement';

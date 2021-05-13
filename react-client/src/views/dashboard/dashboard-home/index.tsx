@@ -1,12 +1,12 @@
-import Box, { FlexBox } from 'components/Box';
+import Box, { FlexBox } from '~/components/Box';
 import React from 'react';
-import DashboardContent from 'components/DashboardContent';
+import DashboardContent from '~/components/DashboardContent';
 import { useHistory } from 'react-router';
-import { ROUTES } from 'constants/routes';
-import { useStoreActions } from 'global-state/hooks';
-import { COLORS } from 'styles/theme';
-import Anchor from 'components/Anchor';
-import { Heading4 } from 'components/Text';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions } from '~/global-state/hooks';
+import { COLORS } from '~/styles/theme';
+import Anchor from '~/components/Anchor';
+import { Heading4 } from '~/components/Text';
 
 const MOCK_FILES = [
   {

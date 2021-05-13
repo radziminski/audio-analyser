@@ -1,4 +1,4 @@
-import { useElementDimensions } from 'hooks/useElementDimensions';
+import { useElementDimensions } from '~/hooks/useElementDimensions';
 import p5 from 'p5';
 import { useEffect, useState, useCallback } from 'react';
 

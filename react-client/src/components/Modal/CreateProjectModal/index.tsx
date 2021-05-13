@@ -1,11 +1,11 @@
-import ActionButton from 'components/ActionButton';
-import Box from 'components/Box';
-import Form from 'components/Form';
-import { Paragraph } from 'components/Text';
-import TextInput from 'components/TextInput';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import ActionButton from '~/components/ActionButton';
+import Box from '~/components/Box';
+import Form from '~/components/Form';
+import { Paragraph } from '~/components/Text';
+import TextInput from '~/components/TextInput';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useState } from 'react';
-import { COLORS, FONT_WEIGHTS } from 'styles/theme';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import Modal from '../ModalWrapper';
 
 interface Props {

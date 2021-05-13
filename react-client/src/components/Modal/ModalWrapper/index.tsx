@@ -1,9 +1,9 @@
-import Box from 'components/Box';
-import Icon from 'components/Icon';
-import { ModalOverlay } from 'components/ModalOverlay';
-import { Heading3 } from 'components/Text';
+import Box from '~/components/Box';
+import Icon from '~/components/Icon';
+import { ModalOverlay } from '~/components/ModalOverlay';
+import { Heading3 } from '~/components/Text';
 import React from 'react';
-import { COLORS, FONT_WEIGHTS } from 'styles/theme';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import { Container } from '../parts';
 
 interface Props {

@@ -1,11 +1,11 @@
-import ActionButton from 'components/ActionButton';
-import Box, { Center } from 'components/Box';
-import DashboardContent from 'components/DashboardContent';
-import Loader from 'components/Loader';
-import { ModalType } from 'components/Modal/types';
-import ProjectFilesTableList from 'components/ProjectFilesTableList';
-import { ROUTES } from 'constants/routes';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import ActionButton from '~/components/ActionButton';
+import Box, { Center } from '~/components/Box';
+import DashboardContent from '~/components/DashboardContent';
+import Loader from '~/components/Loader';
+import { ModalType } from '~/components/Modal/types';
+import ProjectFilesTableList from '~/components/ProjectFilesTableList';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 

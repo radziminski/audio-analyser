@@ -1,8 +1,8 @@
 import { useAnimationFrameLoop } from '../../hooks/useAnimationFrameLoop/index';
 import { COLORS } from '../../styles/theme';
-import { useCanvasDrawer } from 'hooks/useCanvasDrawer';
+import { useCanvasDrawer } from '~/hooks/useCanvasDrawer';
 import { useEffect, useState, useCallback } from 'react';
-import { useElementDimensions } from 'hooks/useElementDimensions';
+import { useElementDimensions } from '~/hooks/useElementDimensions';
 
 export const useCalculatePeaks = <T extends HTMLElement | null>(
   audioBuffer: AudioBuffer | null | undefined,

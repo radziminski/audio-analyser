@@ -7,10 +7,10 @@ import {
   ScrollContainer
 } from './parts';
 import AudioControlBar from '../AudioControlBar';
-import Box, { FlexBox } from 'components/Box';
-import ActionButton from 'components/ActionButton';
+import Box, { FlexBox } from '~/components/Box';
+import ActionButton from '~/components/ActionButton';
 import { useHistory } from 'react-router';
-import Icon from 'components/Icon';
+import Icon from '~/components/Icon';
 
 interface Props {
   title?: string;

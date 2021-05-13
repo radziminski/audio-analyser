@@ -1,9 +1,9 @@
-export {};
-// import Box from 'components/Box';
-// import Waveform from 'components/Waveform';
-// import { useStoreActions, useStoreState } from 'global-state/hooks';
+export { };
+// import Box from '~/components/Box';
+// import Waveform from '~/components/Waveform';
+// import { useStoreActions, useStoreState } from '~/global-state/hooks';
 // import React, { useEffect, useRef, useState } from 'react';
-// import { getWavBytes } from 'utils/audio-convertion';
+// import { getWavBytes } from '~/utils/audio-convertion';
 // import WaveSurfer from 'wavesurfer.js';
 
 // import { Container } from './parts';
@@ -91,7 +91,7 @@ export {};
 //           <div id='wave-timeline' />
 //         </Box>
 //       </Box> */}
-//       <audio src={require('assets/sample.wav')} ref={audioRef} />
+//       <audio src={require('~/assets/sample.wav')} ref={audioRef} />
 //       {/* <Waveform
 //         buffer={(controller as any)?.backend?.buffer ?? []}
 //         barMinHeight={1}

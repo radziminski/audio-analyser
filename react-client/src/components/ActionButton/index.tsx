@@ -1,11 +1,11 @@
-import Button from 'components/Button';
+import Button from '~/components/Button';
 import styled from 'styled-components';
 import React from 'react';
-import Loader from 'components/Loader';
+import Loader from '~/components/Loader';
 
 export type ButtonType = 'danger' | 'submit' | 'normal' | 'text';
 
-const Container = styled(Button)<{
+const Container = styled(Button) <{
   padding?: string;
   fontSize?: string;
   height?: string;
@@ -18,8 +18,8 @@ const Container = styled(Button)<{
     btnType === 'danger'
       ? theme.colors.danger100
       : btnType === 'text'
-      ? 'transparent'
-      : theme.colors.primary100};
+        ? 'transparent'
+        : theme.colors.primary100};
   color: ${({ theme, btnType }) =>
     btnType === 'text' ? theme.colors.white : theme.colors.white};
   padding: ${({ padding }) => padding ?? '1rem 2rem'};
@@ -32,11 +32,11 @@ const Container = styled(Button)<{
   &:hover {
     &:not(:disabled) {
       background-color: ${({ theme, btnType }) =>
-        btnType === 'danger'
-          ? theme.colors.danger70
-          : btnType === 'text'
-          ? 'transparent'
-          : theme.colors.primary80};
+    btnType === 'danger'
+      ? theme.colors.danger70
+      : btnType === 'text'
+        ? 'transparent'
+        : theme.colors.primary80};
       color: ${({ theme }) => theme.colors.white};
       opacity: 1;
     }

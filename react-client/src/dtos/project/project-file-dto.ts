@@ -1,4 +1,4 @@
-import { FileDto } from 'dtos/file/file-dto';
+import { FileDto } from '~/dtos/file/file-dto';
 
 export interface ProjectFileDto {
   id: number;

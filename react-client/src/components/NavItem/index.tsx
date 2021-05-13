@@ -1,7 +1,7 @@
 import React from 'react';
-import Icon, { SupportedIcon } from 'components/Icon';
+import Icon, { SupportedIcon } from '~/components/Icon';
 import { Container } from './parts';
-import Box from 'components/Box';
+import Box from '~/components/Box';
 import { Link } from 'react-router-dom';
 
 interface Props {

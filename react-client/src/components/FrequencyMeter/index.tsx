@@ -1,11 +1,11 @@
-import AudioService from 'services/AudioControllerService';
+import AudioService from '~/services/AudioControllerService';
 import React, { useEffect, useRef } from 'react';
-import Box, { FlexBox } from 'components/Box';
-import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
-import { COLORS } from 'styles/theme';
+import Box, { FlexBox } from '~/components/Box';
+import { useCanvasDrawer, useAnimationFrameLoop } from '~/hooks';
+import { COLORS } from '~/styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
-import Text from 'components/Text';
-// import audioService from 'global-state/audio/audioController';
+import Text from '~/components/Text';
+// import audioService from '~/global-state/audio/audioController';
 
 const barWidth = 1;
 const minDecibels = 21;

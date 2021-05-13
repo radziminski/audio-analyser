@@ -1,4 +1,4 @@
-import { ModalType, IModalArgs } from 'components/Modal/types';
+import { ModalType, IModalArgs } from '~/components/Modal/types';
 import { Action, Thunk } from 'easy-peasy';
 
 export type UIAction<Payload = void> = Action<IUIState, Payload>;
