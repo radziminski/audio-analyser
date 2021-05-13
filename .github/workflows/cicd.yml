@@ -1,4 +1,4 @@
-name: Deploy the backend
+name: Test and deploy the application
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  deploy-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +18,8 @@ jobs:
       - name: Build the optimized build
         run: |
           cd node-api
-          docker build -t audio-analyser:$GITHUB_SHA .
-          docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
+          docker build -t audio-analyser-api:$GITHUB_SHA .
+          docker run --name builder audio-analyser-api:$GITHUB_SHA echo 'Server built.'
           docker cp builder:/app/deploy ./deploy
 
       # Copies necessary nginx config
@@ -49,3 +48,25 @@ jobs:
           version_label: ${{ github.run_id }}
           region: eu-central-1
           deployment_package: node-api/deploy/deploy.zip
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      # Build the production optimized build of backend api
+      - name: Build the optimized build
+        run: |
+          cd react-client
+          docker build -t audio-analyser-client:$GITHUB_SHA .
+          docker run --name builder audio-analyser-client:$GITHUB_SHA echo 'Frontend built.'
+          docker cp builder:/app/build ./build
+
+      - uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_CLIENT_BUCKET }}
+          source_dir: './build'
