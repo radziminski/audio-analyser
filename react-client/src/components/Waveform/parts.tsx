@@ -1,8 +1,8 @@
-import Box, { FlexBox } from 'components/Box';
-import { useElementDimensions } from 'hooks';
+import Box, { FlexBox } from '~/components/Box';
+import { useElementDimensions } from '~/hooks';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { formatTime } from 'utils/time';
+import { formatTime } from '~/utils/time';
 
 export const Container = styled.div`
   display: flex;
@@ -107,16 +107,16 @@ export const Timeline: React.FC<TimelineProps> = ({
             </TickTimestamp>
           </Box>
         ) : (
-          <Box
-            key={i}
-            height={`${tickSpacing * subTickHeightMultiplier}px`}
-            background={tickColor}
-            opacity={tickOpacity}
-            width={`${tickWidth - subTickWidthDifference}px`}
-            marginRight={`${tickSpacing + subTickWidthDifference}px`}
-            style={{ ...tickStyle }}
-          />
-        )
+            <Box
+              key={i}
+              height={`${tickSpacing * subTickHeightMultiplier}px`}
+              background={tickColor}
+              opacity={tickOpacity}
+              width={`${tickWidth - subTickWidthDifference}px`}
+              marginRight={`${tickSpacing + subTickWidthDifference}px`}
+              style={{ ...tickStyle }}
+            />
+          )
       )}
     </FlexBox>
   );

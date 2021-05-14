@@ -1,4 +1,4 @@
-import { sampleToDecibel } from 'utils/audio';
+import { sampleToDecibel } from '~/utils/audio';
 export const getFrequencyLabels = () => {
   const points = Array.from(Array(10).keys()).slice(1);
   const labels: number[] = [];

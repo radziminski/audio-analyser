@@ -1,7 +1,7 @@
-import ActionButton from 'components/ActionButton';
-import Box, { FlexBox } from 'components/Box';
-import Text from 'components/Text';
-import { IProject } from 'global-state/project/types';
+import ActionButton from '~/components/ActionButton';
+import Box, { FlexBox } from '~/components/Box';
+import Text from '~/components/Text';
+import { IProject } from '~/global-state/project/types';
 import React from 'react';
 import { Field } from './parts';
 

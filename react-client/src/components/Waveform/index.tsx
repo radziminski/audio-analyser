@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import Box, { FlexBox } from 'components/Box';
-import { useElementDimensions } from 'hooks';
+import Box, { FlexBox } from '~/components/Box';
+import { useElementDimensions } from '~/hooks';
 import { useCalculatePeaks, useCursorDrawer } from './hooks';
 import { Container, Timeline, WaveformContainer } from './parts';
 

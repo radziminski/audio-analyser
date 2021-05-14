@@ -1,13 +1,13 @@
-import { ActionButton } from 'components/ActionButton';
-import Box, { FlexBox } from 'components/Box';
-import Form from 'components/Form';
-import TextInput from 'components/TextInput';
+import { ActionButton } from '~/components/ActionButton';
+import Box, { FlexBox } from '~/components/Box';
+import Form from '~/components/Form';
+import TextInput from '~/components/TextInput';
 import React, { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import { useHistory } from 'react-router';
-import { ROUTES } from 'constants/routes';
-import { Heading3 } from 'components/Text';
-import { FONT_WEIGHTS } from 'styles/theme';
+import { ROUTES } from '~/constants/routes';
+import { Heading3 } from '~/components/Text';
+import { FONT_WEIGHTS } from '~/styles/theme';
 
 export const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');

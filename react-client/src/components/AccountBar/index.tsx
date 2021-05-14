@@ -1,8 +1,8 @@
-import Box, { Center } from 'components/Box';
-import Icon from 'components/Icon';
-import { ROUTES } from 'constants/routes';
-import { useStoreActions, useStoreState } from 'global-state/hooks';
-import { useOutsideClick } from 'hooks/useOutsideClick';
+import Box, { Center } from '~/components/Box';
+import Icon from '~/components/Icon';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import {

@@ -1,4 +1,4 @@
-import { UserDto } from 'dtos/user/user-dto';
+import { UserDto } from '~/dtos/user/user-dto';
 
 export interface ProjectUserDto {
   id: number;

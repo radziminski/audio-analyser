@@ -1,4 +1,4 @@
-name: Deploy the backend
+name: Test and deploy the application
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  build-and-deploy-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +18,8 @@ jobs:
       - name: Build the optimized build
         run: |
           cd node-api
-          docker build -t audio-analyser:$GITHUB_SHA .
-          docker run --name builder audio-analyser:$GITHUB_SHA echo 'Server build.'
+          docker build -t audio-analyser-api:$GITHUB_SHA .
+          docker run --name builder audio-analyser-api:$GITHUB_SHA echo 'Server built.'
           docker cp builder:/app/deploy ./deploy
 
       # Copies necessary nginx config
@@ -47,5 +46,33 @@ jobs:
           application_name: audio-analyser
           environment_name: Audioanalyser-env
           version_label: ${{ github.run_id }}
-          region: eu-central-1
+          region: ${{ secrets.AWS_REGION }}
           deployment_package: node-api/deploy/deploy.zip
+
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      # Build the production optimized build of frontend client
+      - name: Build the optimized build
+        run: |
+          cd react-client
+          docker build -t audio-analyser-client:$GITHUB_SHA .
+          docker run --name builder audio-analyser-client:$GITHUB_SHA echo 'Frontend built.'
+          docker cp builder:/app/build ./build
+
+      - name: Set the stage for deployment
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+
+      - name: Upload build to S3
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws s3 cp ./react-client/build s3://${{secrets.AWS_CLIENT_BUCKET}}/ --recursive
+          aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths /index.html

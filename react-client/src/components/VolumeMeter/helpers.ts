@@ -1,4 +1,4 @@
-import { getVolumeRelativeToContainer } from 'utils/audio';
+import { getVolumeRelativeToContainer } from '~/utils/audio';
 import p5 from 'p5';
 
 const INST_NORMALIZING_OFFSET = 2.5;
@@ -249,8 +249,8 @@ const getHeightForValue = (
     val < 0 || !val
       ? containerHeight
       : val > containerHeight - bottomBorderRadius
-      ? containerHeight
-      : val;
+        ? containerHeight
+        : val;
 
   return { currSample, actualValueDb };
 };

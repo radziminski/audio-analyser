@@ -13,6 +13,7 @@ RUN npm install
 
 # Copy source code
 COPY '.' '/app'
+COPY './.env.prod' '/app/.env'
 
 ENV NODE_ENV=production
 

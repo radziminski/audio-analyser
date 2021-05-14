@@ -1,9 +1,9 @@
-import Anchor from 'components/Anchor';
-import Box, { Center } from 'components/Box';
-import { Heading2 } from 'components/Text';
-import { ROUTES } from 'constants/routes';
+import Anchor from '~/components/Anchor';
+import Box, { Center } from '~/components/Box';
+import { Heading2 } from '~/components/Text';
+import { ROUTES } from '~/constants/routes';
 import React from 'react';
-import { COLORS } from 'styles/theme';
+import { COLORS } from '~/styles/theme';
 
 interface Props {
   light?: boolean;

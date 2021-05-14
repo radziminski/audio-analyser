@@ -1,5 +1,5 @@
 import { StoreProvider } from 'easy-peasy';
-import initStore from 'global-state';
+import initStore from '~/global-state';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

@@ -1,9 +1,9 @@
 import React from 'react';
-import Box from 'components/Box';
-import NavItem from 'components/NavItem';
+import Box from '~/components/Box';
+import NavItem from '~/components/NavItem';
 import { NavSelector, Container } from './parts';
-import { SupportedIcon } from 'components/Icon';
-import { ROUTES } from 'constants/routes';
+import { SupportedIcon } from '~/components/Icon';
+import { ROUTES } from '~/constants/routes';
 import { useLocation } from 'react-router';
 
 interface NavLink {

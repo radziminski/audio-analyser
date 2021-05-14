@@ -1,13 +1,13 @@
-import audioService from 'services/AudioControllerService';
+import audioService from '~/services/AudioControllerService';
 import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AuthService from 'services/AuthService';
+import AuthService from '~/services/AuthService';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyles } from 'styles/global';
-import { defaultTheme } from 'styles/theme';
-import AppRoutes from 'views';
-import { useStoreActions } from 'global-state/hooks';
-import ModalsContainer from 'components/Modal';
+import { GlobalStyles } from '~/styles/global';
+import { defaultTheme } from '~/styles/theme';
+import AppRoutes from '~/views';
+import { useStoreActions } from '~/global-state/hooks';
+import ModalsContainer from '~/components/Modal';
 
 const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);

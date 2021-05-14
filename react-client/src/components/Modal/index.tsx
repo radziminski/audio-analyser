@@ -1,4 +1,4 @@
-import { useStoreActions, useStoreState } from 'global-state/hooks';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React from 'react';
 import AddFileModal from './AddFileModal';
 import ConfirmActionModal from './ConfirmActionModal';

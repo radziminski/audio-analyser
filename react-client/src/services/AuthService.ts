@@ -1,8 +1,8 @@
 import { RegisterDto } from './../dtos/auth/register-dto';
 import { API_ROUTES } from './../constants/api-routes';
 import RequestService from './RequestService';
-import { UserWithTokensDto } from 'dtos/auth/user-with-tokens-dto';
-import { LoginDto } from 'dtos/auth/login-dto';
+import { UserWithTokensDto } from '~/dtos/auth/user-with-tokens-dto';
+import { LoginDto } from '~/dtos/auth/login-dto';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'token';
 

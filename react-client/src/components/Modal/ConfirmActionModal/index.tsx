@@ -1,8 +1,8 @@
-import ActionButton from 'components/ActionButton';
-import Box, { FlexBox } from 'components/Box';
-import { Paragraph } from 'components/Text';
+import ActionButton from '~/components/ActionButton';
+import Box, { FlexBox } from '~/components/Box';
+import { Paragraph } from '~/components/Text';
 import React from 'react';
-import { COLORS, FONT_WEIGHTS } from 'styles/theme';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import Modal from '../ModalWrapper';
 
 interface Props {

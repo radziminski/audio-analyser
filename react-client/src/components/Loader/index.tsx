@@ -1,4 +1,4 @@
-import { Container } from 'components/Loader/parts';
+import { Container } from '~/components/Loader/parts';
 import React from 'react';
 
 interface Props {

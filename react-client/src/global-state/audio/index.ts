@@ -7,17 +7,7 @@ const audioState: IAudioState = {
   isLoadingAudioBuffer: false,
   didLoadAudioBuffer: false,
   currSource: null,
-  audioSources: {
-    song: require('assets/song.mp3'),
-    guitar: require('assets/guitar.wav'),
-    volumes: require('assets/volumes.wav'),
-    max: require('assets/max.wav'),
-    change: require('assets/change.wav'),
-    noise: require('assets/noise.wav'),
-    freqs: require('assets/freqs.wav'),
-    mp3: require('assets/sampleMp3.mp3'),
-    mp3Long: require('assets/sampleLong.mp3')
-  },
+  audioSources: {},
 
   loadAudioBuffer: thunk(async (actions) => {
     actions.setIsLoadingAudioBuffer(true);

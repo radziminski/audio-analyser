@@ -1,10 +1,10 @@
-// import AudioService from 'global-state/audio/audioController';
+// import AudioService from '~/global-state/audio/audioController';
 import React, { useRef } from 'react';
-import { FlexBox } from 'components/Box';
-// import { useCanvasDrawer, useAnimationFrameLoop } from 'hooks';
-import { COLORS } from 'styles/theme';
+import { FlexBox } from '~/components/Box';
+// import { useCanvasDrawer, useAnimationFrameLoop } from '~/hooks';
+import { COLORS } from '~/styles/theme';
 // import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
-// import Text from 'components/Text';
+// import Text from '~/components/Text';
 
 // const barWidth = 1;
 // const minDecibels = 22.5;
