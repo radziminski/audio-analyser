@@ -1,4 +1,4 @@
-import { AudioContext } from './../../services/AudioControllerService';
+import { AudioContext } from '../../services/AudioService';
 import { useRef } from 'react';
 
 export const useAudioContext = () => {

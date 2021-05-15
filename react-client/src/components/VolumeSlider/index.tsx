@@ -2,7 +2,7 @@ import Box, { FlexBox } from '~/components/Box';
 import SliderPrimary from '~/components/SliderPrimary';
 import Icon, { SupportedIcon } from '~/components/Icon';
 import React, { useCallback, useMemo, useState } from 'react';
-import audioService from '~/services/AudioControllerService';
+import audioService from '~/services/AudioService';
 
 export const VolumeSlider: React.FC = () => {
   const [gainValue, setGainValue] = useState(1);

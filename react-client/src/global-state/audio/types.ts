@@ -22,4 +22,5 @@ export interface IAudioState {
   setCurrSource: AudioAction<string | null>;
   loadAudio: AudioAction<string>;
   addAudioSources: AudioAction<Record<string, string>>;
+  clear: AudioAction;
 }
