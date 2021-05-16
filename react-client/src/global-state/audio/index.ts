@@ -68,6 +68,7 @@ const audioState: IAudioState = {
     state.didLoadAudioBuffer = false;
     state.currSource = null;
     state.audioSources = {};
+    AudioService.clear();
   })
 };
 
