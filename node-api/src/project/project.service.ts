@@ -96,6 +96,25 @@ export class ProjectService {
     };
   }
 
+  async createDemoProject(project: {
+    description: string;
+    email: string;
+    title: string;
+  }) {
+    const user = await this.userService.findOneByEmail(project.email);
+
+    const createdProject = await this.projectRepository.save({
+      title: 'Demo Project',
+      description: 'Initial project with a few demo audio files.',
+      createdAt: new Date().toISOString(),
+      users: [{ user }],
+    });
+
+    return {
+      project: createdProject,
+    };
+  }
+
   update(id: number, updateProjectDto: UpdateProjectDto) {
     return this.projectRepository.update(id, {
       ...updateProjectDto,
@@ -140,6 +159,7 @@ export class ProjectService {
 
     return this.projectRepository.save({
       ...project,
+      editedAt: new Date().toISOString(),
       users: [...project.users, newProjectUser],
     });
   }
@@ -158,9 +178,14 @@ export class ProjectService {
         message: "You can't leave since you are the only user in this project.",
       });
 
-    return this.projectUserRepository.delete({
+    await this.projectUserRepository.delete({
       projectId: id,
       userId: toBeRemovedUserId,
+    });
+
+    return this.projectRepository.save({
+      ...project,
+      editedAt: new Date().toISOString(),
     });
   }
 
@@ -203,6 +228,7 @@ export class ProjectService {
 
     return this.projectRepository.save({
       ...project,
+      editedAt: new Date().toISOString(),
       files: [...project.files, newProjectFile],
     });
   }
@@ -212,7 +238,14 @@ export class ProjectService {
       await this.fileService.remove(fileId);
     }
 
+    const project = await this.findOne(id);
+
     await this.projectFileRepository.delete({ projectId: id, fileId });
+
+    return this.projectRepository.save({
+      ...project,
+      editedAt: new Date().toISOString(),
+    });
   }
 
   async saveFileData(file: Express.MulterS3.File) {
