@@ -64,7 +64,9 @@ export class FileController {
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
   )
-  async uploadFile(@UploadedFile() file: Express.MulterS3.File) {
+  async uploadFile(
+    @UploadedFile() file: Express.MulterS3.File | Express.Multer.File,
+  ) {
     if (!file) {
       throw new BadRequestException({
         message: 'You need to provide a valid file.',

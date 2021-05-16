@@ -10,4 +10,11 @@ RUN npm install
 
 # Volumes set in docker-compose
 
+ENV NODE_ENV='development'
+
+# Making folder for local files
+RUN mkdir '/app/files'
+RUN mkdir '/app/files/audio'
+RUN ls -alt /app > tst
+
 CMD ["npm", "run", "start:dev"]
