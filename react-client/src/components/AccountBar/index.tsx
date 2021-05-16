@@ -23,9 +23,11 @@ export const AccountBar: React.FC = () => {
   const tooltipRef = useRef(null);
   const { user } = useStoreState((state) => state.user);
   const {
+    ui: { closeModal },
     auth: { logout },
-    user: { clear },
-    project: { clearProjects }
+    project: { clearProjects },
+    user: { clear: clearUser },
+    audio: { clear: clearAudio }
   } = useStoreActions((state) => state);
   const history = useHistory();
 
@@ -33,8 +35,10 @@ export const AccountBar: React.FC = () => {
 
   const onLogout = () => {
     logout();
-    clear();
+    clearUser();
     clearProjects();
+    closeModal();
+    clearAudio();
     history.push(ROUTES.AUTH_LOGIN);
   };
 

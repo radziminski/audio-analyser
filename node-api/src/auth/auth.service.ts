@@ -1,9 +1,11 @@
+import { UserRole } from './roles/user-role.enum';
 import { EncryptionService } from './../encryption/encryption.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
 import { LoginCredentials } from './types';
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from '../constants';
 
 @Injectable()
 export class AuthService {
@@ -73,6 +75,28 @@ export class AuthService {
       {
         firstName,
         lastName,
+      },
+    );
+
+    return {
+      ...created,
+      password: undefined,
+    };
+  }
+
+  async createAdminUser() {
+    const email = ADMIN_EMAIL;
+    const hashedPassword = await this.encryptionService.hash(ADMIN_PASSWORD);
+
+    const created = await this.userService.createWithProfile(
+      {
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        roles: [UserRole.User, UserRole.Admin, UserRole.Editor],
+      },
+      {
+        firstName: 'Admin',
+        lastName: 'User',
       },
     );
 

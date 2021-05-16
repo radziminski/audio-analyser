@@ -3,43 +3,58 @@ import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router';
 import LoadingView from '~/views/loading';
+import RequestService from '~/services/RequestService';
 
 type Props = RouteProps;
 
 export const ProtectedRoute: React.FC<Props> = (props) => {
-  const [error, setError] = useState<string | null>(null);
+  const history = useHistory();
+
+  const {
+    ui: { closeModal },
+    auth: { logout: stateLogout },
+    project: { clearProjects },
+    user: { clear: clearUser, fetchUser },
+    audio: { clear: clearAudio }
+  } = useStoreActions((store) => store);
+
   const {
     auth: { isAuthenticated },
     user: { user }
   } = useStoreState((store) => store);
 
-  const history = useHistory();
-
-  const {
-    user: { fetchUser },
-    auth: { logout }
-  } = useStoreActions((store) => store);
-
-  const logoutAndRedirectToLogin = useCallback(() => {
-    logout();
+  const onLogout = useCallback(() => {
+    closeModal();
+    clearProjects();
+    clearUser();
+    clearAudio();
+    clearProjects();
+    stateLogout();
     history.push(ROUTES.AUTH_LOGIN);
-  }, [logout, history]);
+  }, [closeModal, clearProjects, clearProjects, clearUser, clearAudio, stateLogout, history]);
 
   useEffect(() => {
-    if (!isAuthenticated) logoutAndRedirectToLogin();
-  }, [isAuthenticated, logoutAndRedirectToLogin]);
+    RequestService.setLogoutOnUnauthorizedInterceptor(onLogout);
+  }, [onLogout]);
+
+
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) onLogout();
+  }, [isAuthenticated, onLogout]);
 
   const getMe = useCallback(async () => {
     try {
       await fetchUser();
     } catch (error) {
-      if (error.response?.status === 401) logoutAndRedirectToLogin();
+      if (error.response?.status === 401) onLogout();
       else
         setError(
           'There was a problem with accessing the servers. Reload the page to try again.'
         );
     }
-  }, [fetchUser, logoutAndRedirectToLogin, setError]);
+  }, [fetchUser, onLogout, setError]);
 
   useEffect(() => {
     if (!user) getMe();

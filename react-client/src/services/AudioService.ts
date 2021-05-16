@@ -63,9 +63,8 @@ export class AudioService implements AudioService {
     audioService.audioElement = element;
     audioService.isPlaying = !element.paused;
 
-    audioService.sourceNode = audioService.context.createMediaElementSource(
-      element
-    );
+    audioService.sourceNode =
+      audioService.context.createMediaElementSource(element);
 
     audioService.mixGainNode = audioService.context.createGain();
     audioService.masterGainNode = audioService.context.createGain();
@@ -160,6 +159,12 @@ export class AudioService implements AudioService {
     this.mixGainNode.disconnect(this.splitterNode);
     this.mixGainNode.disconnect(this.masterGainNode);
     this.masterGainNode.disconnect(this.context.destination);
+  }
+
+  clear() {
+    this.stop();
+    this.remove();
+    this.reloadAudio('');
   }
 }
 

@@ -1,4 +1,4 @@
-import audioService from '~/services/AudioControllerService';
+import audioService from '~/services/AudioService';
 import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AuthService from '~/services/AuthService';

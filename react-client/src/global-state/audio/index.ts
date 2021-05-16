@@ -1,6 +1,6 @@
 import { IAudioState } from './types';
 import { action, thunk, computed } from 'easy-peasy';
-import AudioService from '../../services/AudioControllerService';
+import AudioService from '../../services/AudioService';
 
 const audioState: IAudioState = {
   isPlaying: false,
@@ -60,6 +60,15 @@ const audioState: IAudioState = {
       ...state.audioSources,
       ...sources
     };
+  }),
+
+  clear: action((state) => {
+    state.isPlaying = false;
+    state.isLoadingAudioBuffer = false;
+    state.didLoadAudioBuffer = false;
+    state.currSource = null;
+    state.audioSources = {};
+    AudioService.clear();
   })
 };
 

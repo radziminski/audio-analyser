@@ -4,6 +4,9 @@ import {
   AWS_S3_BUCKET_NAME,
   MAX_FILE_SIZE,
   MAX_TOTAL_FILES_SIZE,
+  ENV,
+  ASSETS_STORAGE,
+  ASSETS_BASE_URL,
 } from './../constants';
 import { Repository } from 'typeorm/repository/Repository';
 import { File } from './entities/file.entity';
@@ -20,11 +23,14 @@ import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { getRepository } from 'typeorm';
+import { diskStorage } from 'multer';
 
-AWS.config.update({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-});
+if (ENV === 'prod')
+  AWS.config.update({
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  });
+
 const s3 = new AWS.S3();
 
 @Injectable()
@@ -42,16 +48,38 @@ export class FileService {
     return this.fileRepository.findOne(id);
   }
 
-  async saveFileData(file: Express.MulterS3.File): Promise<File> {
-    const fileData = {
-      url: file.location,
-      key: file.key,
-      acl: file.acl,
-      originalName: file.originalname,
-      name: file.originalname,
-      size: file.size,
-      mimeType: file.mimetype,
-    };
+  isMulterS3File(
+    file: Express.MulterS3.File | Express.Multer.File,
+  ): file is Express.MulterS3.File {
+    return !!(file as Express.MulterS3.File).acl;
+  }
+
+  async saveFileData(
+    file: Express.MulterS3.File | Express.Multer.File,
+  ): Promise<File> {
+    let fileData = {};
+
+    if (this.isMulterS3File(file)) {
+      fileData = {
+        url: file.location,
+        key: file.key,
+        acl: file.acl,
+        originalName: file.originalname,
+        name: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      };
+    } else {
+      fileData = {
+        url: `${ASSETS_BASE_URL}/${file.filename}`,
+        key: file.filename,
+        acl: '',
+        originalName: file.originalname,
+        name: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      };
+    }
 
     const savedFile = await this.fileRepository.save({
       ...fileData,
@@ -82,7 +110,7 @@ export class FileService {
       throw new BadRequestException({ message: 'Given file does not exist.' });
 
     // TODO: error handling?
-    if (file.key)
+    if (ASSETS_STORAGE === 'external' && file.key)
       s3.deleteObject(
         { Bucket: 'audio-analyser-radziminski', Key: file.key },
         (err) => {
@@ -128,15 +156,26 @@ export class FileService {
     );
   }
 
-  static multerS3Storage = multerS3({
-    s3: s3,
-    bucket: AWS_S3_BUCKET_NAME,
-    acl: 'public-read',
-    metadata: function (_, file, cb) {
-      cb(null, { fieldName: file.fieldname });
+  static multerS3Storage =
+    ASSETS_STORAGE === 'external'
+      ? multerS3({
+          s3: s3,
+          bucket: AWS_S3_BUCKET_NAME,
+          acl: 'public-read',
+          metadata: function (_, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+          },
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          key: FileService.getMulterFilename,
+        })
+      : null;
+
+  static multerLocalStorage = diskStorage({
+    destination: function (_, __, cb) {
+      cb(null, 'files/audio');
     },
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    key: FileService.getMulterFilename,
+    filename: FileService.getMulterFilename,
   });
 
   static audioFileInterceptorOptions: MulterOptions = {
@@ -144,6 +183,9 @@ export class FileService {
       files: 1,
       fileSize: MAX_FILE_SIZE,
     },
-    storage: FileService.multerS3Storage,
+    storage:
+      ASSETS_STORAGE === 'local'
+        ? FileService.multerLocalStorage
+        : FileService.multerS3Storage,
   };
 }
