@@ -1,9 +1,11 @@
-import ActionButton from '~/components/ActionButton';
-import Box, { FlexBox } from '~/components/Box';
+import Box, { Center, FlexBox } from '~/components/Box';
 import Text from '~/components/Text';
 import { IFile } from '~/global-state/project/types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Field } from './parts';
+import { TableListButton } from '~/components/TableList/parts';
+import Icon from '~/components/Icon';
+import RequestService from '~/services/RequestService';
 
 interface Props {
   file: IFile;
@@ -32,6 +34,10 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
   onAnalyze,
   onDelete
 }) => {
+  const onDownloadFile = useCallback(() => {
+    RequestService.downloadFile(file.url, file.name);
+  }, []);
+
   return (
     <>
       <Field padding='1.5rem 1rem' differentColor={isEven}>
@@ -72,29 +78,18 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
 
       <Field differentColor={isEven}>
         <FlexBox>
-          <Box width='90px' marginRight='1rem'>
-            <ActionButton
-              height='2rem'
-              padding='0'
-              fontSize='0.8rem'
-              borderRadius='6px'
-              onClick={() => onAnalyze(file.id)}
-            >
-              Analyze!
-            </ActionButton>
-          </Box>
-          <Box width='90px' marginRight='1rem'>
-            <ActionButton
-              type='danger'
-              height='2rem'
-              padding='0'
-              fontSize='0.8rem'
-              borderRadius='6px'
-              onClick={() => onDelete(file.id)}
-            >
-              Delete
-            </ActionButton>
-          </Box>
+          <TableListButton onClick={() => onAnalyze(file.id)}>
+            Analyze!
+          </TableListButton>
+
+          <TableListButton onClick={onDownloadFile} width='2.5rem'>
+            <Center>
+              <Icon icon='download' size={16} />
+            </Center>
+          </TableListButton>
+          <TableListButton type='danger' onClick={() => onDelete(file.id)}>
+            Delete
+          </TableListButton>
         </FlexBox>
       </Field>
     </>
