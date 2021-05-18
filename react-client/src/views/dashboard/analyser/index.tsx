@@ -3,7 +3,6 @@ import VolumeMeter from '~/components/VolumeMeter';
 import Waveform from '~/components/Waveform';
 import FrequencyMeter from '~/components/FrequencyMeter';
 import { useStoreState, useStoreActions } from '~/global-state/hooks';
-import { usePlayOnSpace } from '~/hooks/usePlayOnSpace';
 import DashboardContent from '~/components/DashboardContent';
 import AudioService from '~/services/AudioService';
 import { useParams } from 'react-router';
@@ -31,7 +30,6 @@ export const AnalyserView: React.FC = () => {
     audio: {
       isLoadingAudioBuffer,
       didLoadAudioBuffer,
-      isPlaying,
       currSource,
       audioSources
     },
@@ -44,18 +42,8 @@ export const AnalyserView: React.FC = () => {
     .flat()
     .find((file) => file?.id === +srcId);
 
-  const {
-    loadAudioBuffer,
-    play,
-    pause,
-    loadAudio,
-    setCurrSource
-  } = useStoreActions((actions) => actions.audio);
-
-  usePlayOnSpace(
-    () => play(),
-    () => pause(),
-    isPlaying
+  const { loadAudioBuffer, loadAudio, setCurrSource } = useStoreActions(
+    (actions) => actions.audio
   );
 
   useEffect(() => {

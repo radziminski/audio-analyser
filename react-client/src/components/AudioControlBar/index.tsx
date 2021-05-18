@@ -6,6 +6,7 @@ import Box, { FlexBox } from '~/components/Box';
 import AudioTimer from '~/components/AudioTimer';
 import VolumeSlider from '~/components/VolumeSlider';
 import audioService from '~/services/AudioService';
+import { usePlayOnSpace } from '~/hooks';
 
 const ICON_SIZE_SMALL = 24;
 const ICON_SIZE_BIG = 34;
@@ -20,6 +21,12 @@ export const AudioControlBar: React.FC = () => {
 
   const { play, pause, setCurrTime } = useStoreActions(
     (actions) => actions.audio
+  );
+
+  usePlayOnSpace(
+    () => play(),
+    () => pause(),
+    isPlaying
   );
 
   useEffect(() => {
@@ -67,12 +74,12 @@ export const AudioControlBar: React.FC = () => {
               onClick={() => pause()}
             />
           ) : (
-              <Icon
-                size={ICON_SIZE_BIG}
-                icon={'play-circle'}
-                onClick={() => play()}
-              />
-            )}
+            <Icon
+              size={ICON_SIZE_BIG}
+              icon={'play-circle'}
+              onClick={() => play()}
+            />
+          )}
         </Box>
         <IconContainer>
           <Icon
