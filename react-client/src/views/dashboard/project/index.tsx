@@ -1,5 +1,5 @@
 import ActionButton from '~/components/ActionButton';
-import Box, { Center } from '~/components/Box';
+import Box, { Center, FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
 import Loader from '~/components/Loader';
 import { ModalType } from '~/components/Modal/types';
@@ -117,21 +117,38 @@ export const ProjectView: React.FC = () => {
           onDeleteFile={showDeleteProjectFileModal}
         />
 
-        <Box maxWidth='240px' margin='0 auto' marginTop='2rem'>
-          <ActionButton
-            padding='0.5rem 1rem'
-            height='2.5rem'
-            fontSize='0.8rem'
-            onClick={() =>
-              openModal({
-                modal: ModalType.addNewFile,
-                args: { customArg: id }
-              })
-            }
-          >
-            + Add new file
-          </ActionButton>
-        </Box>
+        <FlexBox justifyContent='center' marginTop='2rem'>
+          <Box maxWidth='240px' marginRight='2rem'>
+            <ActionButton
+              padding='0.5rem 1rem'
+              height='2.5rem'
+              fontSize='0.8rem'
+              onClick={() =>
+                openModal({
+                  modal: ModalType.addNewFile,
+                  args: { customArg: id }
+                })
+              }
+            >
+              + Add new file
+            </ActionButton>
+          </Box>
+          <Box maxWidth='240px'>
+            <ActionButton
+              padding='0.5rem 1rem'
+              height='2.5rem'
+              fontSize='0.8rem'
+              onClick={() =>
+                openModal({
+                  modal: ModalType.recordNewFile,
+                  args: { customArg: id }
+                })
+              }
+            >
+              + Record new sample
+            </ActionButton>
+          </Box>
+        </FlexBox>
       </DashboardContent>
     </>
   );

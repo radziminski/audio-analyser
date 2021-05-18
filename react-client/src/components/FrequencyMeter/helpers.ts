@@ -14,7 +14,7 @@ export const getFrequencyLabels = () => {
   return labels;
 };
 
-export const toLog = function (value, min, max) {
+export const toLog = function (value: number, min: number, max: number) {
   const exp = (value - min) / (max - min);
   return min * Math.pow(max / min, exp);
 };
