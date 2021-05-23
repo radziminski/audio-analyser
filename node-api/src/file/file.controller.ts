@@ -59,7 +59,7 @@ export class FileController {
 
   @UseGuards(ThrottlerGuard, JwtAuthGuard)
   @Roles(UserRole.Admin, UserRole.Editor)
-  @Throttle(1, 30)
+  @Throttle(5, 60 * 10)
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
