@@ -12,7 +12,9 @@
     "format:write": "prettier --write ./src/**/*.{ts,tsx}"
   },
   "dependencies": {
+    "@types/dom-mediacapture-record": "^1.0.7",
     "@types/wavesurfer.js": "^5.0.1",
+    "audio-recorder-polyfill": "^0.4.1",
     "axios": "^0.21.1",
     "axios-logger": "^2.5.0",
     "axios-retry": "^3.1.9",

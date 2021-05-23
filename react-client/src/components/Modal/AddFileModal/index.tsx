@@ -26,6 +26,7 @@ export const AddFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const onUpload = async () => {
     if (!file) return;
     setError(false);
+    console.log(file);
     try {
       await uploadProjectFile({ id: projectId, file });
 
