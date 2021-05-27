@@ -1,3 +1,4 @@
+// import { ProjectService } from './../project/project.service';
 import { Repository } from 'typeorm/repository/Repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -11,7 +12,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>, // private readonly projectService: ProjectService,
   ) {}
 
   async create(user: { email: string; password: string; roles?: string[] }) {
@@ -36,11 +37,15 @@ export class UserService {
     userProfile.firstName = profile.firstName;
     userProfile.lastName = profile.lastName;
 
-    return this.userRepository.save({
+    const createdUser = await this.userRepository.save({
       ...user,
       roles: user.roles ?? [UserRole.User],
       profile: userProfile,
     });
+
+    // await this.projectService.createDemoProject(createdUser.email);
+
+    return createdUser;
   }
 
   async findOne(id: number) {

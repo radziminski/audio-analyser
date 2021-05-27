@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import * as AxiosLogger from 'axios-logger';
 import axiosRetry from 'axios-retry';
 import AuthService from './AuthService';
+import fileDownload from 'js-file-download';
 
 export class RequestService {
   client: AxiosInstance;
@@ -58,6 +59,11 @@ export class RequestService {
         return Promise.reject(error);
       }
     );
+  }
+
+  async downloadFile(url: string, fileName: string) {
+    const response = await this.client.get(url, { responseType: 'blob' });
+    fileDownload(response.data, fileName);
   }
 }
 

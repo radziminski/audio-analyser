@@ -51,11 +51,23 @@ const FrequencyMeter: React.FC = () => {
       const currHeight = point;
       canvasDrawer.stroke(COLORS.accentPrimary100);
 
+      const power = 2;
+
+      const stretchedHeight =
+        currHeight -
+        (Math.pow(height - currHeight, power) * 200) /
+          Math.pow(currHeight, power);
+
       // TODO: fix this, hack for line at the begining
       if (currHeight < 50)
-        canvasDrawer.rect(sampleNum, currHeight, barWidth, 0);
+        canvasDrawer.rect(sampleNum, stretchedHeight, barWidth, 0);
       else
-        canvasDrawer.rect(sampleNum, currHeight, barWidth, height - currHeight);
+        canvasDrawer.rect(
+          sampleNum,
+          stretchedHeight,
+          barWidth,
+          height - stretchedHeight
+        );
     });
   };
 

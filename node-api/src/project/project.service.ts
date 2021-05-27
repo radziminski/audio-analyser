@@ -1,3 +1,4 @@
+import { DEMO_FILES_IDS } from './../constants';
 import { FileService } from './../file/file.service';
 import { UserService } from './../user/user.service';
 import { Repository } from 'typeorm/repository/Repository';
@@ -96,12 +97,8 @@ export class ProjectService {
     };
   }
 
-  async createDemoProject(project: {
-    description: string;
-    email: string;
-    title: string;
-  }) {
-    const user = await this.userService.findOneByEmail(project.email);
+  async createDemoProject(email: string) {
+    const user = await this.userService.findOneByEmail(email);
 
     const createdProject = await this.projectRepository.save({
       title: 'Demo Project',
@@ -109,6 +106,10 @@ export class ProjectService {
       createdAt: new Date().toISOString(),
       users: [{ user }],
     });
+
+    for (const fileId of DEMO_FILES_IDS) {
+      await this.addProjectFile(createdProject.id, fileId);
+    }
 
     return {
       project: createdProject,
@@ -200,7 +201,7 @@ export class ProjectService {
   async addProjectFile(id: number, file: File | number) {
     if (!file)
       throw new BadRequestException({
-        message: 'Such File does not exist',
+        message: 'File does not exist',
       });
 
     const project = await this.findOne(id);

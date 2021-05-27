@@ -18,32 +18,32 @@ module.exports = merge(WEBPACK_BASE, {
         use: [
           'babel-loader',
           {
-            loader: "ts-loader",
+            loader: 'ts-loader',
             options: {
-              transpileOnly: true,
+              transpileOnly: true
             }
           }
         ],
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   devServer: {
     hot: true,
-    port: process.env.port ?? 3000,
+    port: process.env.port || 3000,
     contentBase: require('./webpack.base').BUILD_DIR,
     historyApiFallback: true,
     publicPath: '/',
-    open: true,
+    open: true
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin(),
     new ESLintWebpackPlugin({
-      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      extensions: ['js', 'jsx', 'ts', 'tsx']
     }),
     new Dotenv({
       systemvars: true,
-      path: ENV_FILE ?`./.env.${ENV_FILE}` : './env'
+      path: ENV_FILE ? `./.env.${ENV_FILE}` : './env'
     })
   ]
 });

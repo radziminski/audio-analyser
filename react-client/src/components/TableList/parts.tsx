@@ -5,6 +5,28 @@ import Box, { FlexBox } from '~/components/Box';
 import Icon from '~/components/Icon';
 import Text from '~/components/Text';
 import { COLORS } from '~/styles/theme';
+import ActionButton, { ButtonType } from '../ActionButton';
+
+export const TableListButton: React.FC<{
+  onClick: () => void;
+  type?: ButtonType;
+  width?: string;
+}> = ({ children, onClick, type, width }) => {
+  return (
+    <Box width={width ?? '90px'} marginRight='1rem'>
+      <ActionButton
+        type={type}
+        height='2rem'
+        padding='0'
+        fontSize='0.8rem'
+        borderRadius='6px'
+        onClick={() => onClick()}
+      >
+        {children}
+      </ActionButton>
+    </Box>
+  );
+};
 
 export const Container = styled.div<{
   columnsWidths: number[];
@@ -34,5 +56,3 @@ export const Label: React.FC<{ text: string; noArrow?: boolean }> = ({
     </FlexBox>
   );
 };
-
-export default Label;

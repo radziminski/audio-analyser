@@ -4,6 +4,7 @@ import AddFileModal from './AddFileModal';
 import ConfirmActionModal from './ConfirmActionModal';
 import CreateProjectModal from './CreateProjectModal';
 import { ModalType } from './types';
+import RecordFileModal from './RecordFileModal';
 
 export const ModalsContainer: React.FC = () => {
   const { openedModal, modalArgs } = useStoreState((state) => state.ui);
@@ -29,6 +30,13 @@ export const ModalsContainer: React.FC = () => {
       case ModalType.addNewFile:
         return (
           <AddFileModal
+            projectId={+(modalArgs.customArg ?? -1)}
+            onClose={() => closeModal()}
+          />
+        );
+      case ModalType.recordNewFile:
+        return (
+          <RecordFileModal
             projectId={+(modalArgs.customArg ?? -1)}
             onClose={() => closeModal()}
           />

@@ -1,9 +1,9 @@
-import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
 import Text from '~/components/Text';
 import { IProject } from '~/global-state/project/types';
 import React from 'react';
 import { Field } from './parts';
+import { TableListButton } from '~/components/TableList/parts';
 
 interface Props {
   project: IProject;
@@ -38,29 +38,17 @@ export const ProjectTableListElement: React.FC<Props> = ({
       </Field>
       <Field differentColor={isEven}>
         <FlexBox>
-          <Box width='90px' marginRight='1rem'>
-            <ActionButton
-              height='2rem'
-              padding='0'
-              fontSize='0.8rem'
-              onClick={() => onEnter(project.id)}
-              borderRadius='6px'
-            >
-              Enter
-            </ActionButton>
-          </Box>
-          <Box width='90px' marginRight='1rem'>
-            <ActionButton
-              type='danger'
-              height='2rem'
-              padding='0'
-              fontSize='0.8rem'
-              borderRadius='6px'
-              onClick={() => onDelete(project.id)}
-            >
-              Delete
-            </ActionButton>
-          </Box>
+          <TableListButton
+            onClick={() => onEnter(project.id)}
+          >
+            Enter
+            </TableListButton>
+          <TableListButton
+            type='danger'
+            onClick={() => onDelete(project.id)}
+          >
+            Delete
+            </TableListButton>
         </FlexBox>
       </Field>
     </>

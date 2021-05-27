@@ -24,7 +24,7 @@ export const { AWS_S3_BUCKET_NAME } = process.env;
 export const MAX_FILE_SIZE = Math.pow(1024, 2) * 70; // 70 MiB
 export const MAX_TOTAL_FILES_SIZE = Math.pow(1024, 3) * 10; // 10 GiB
 
-export const DEMO_FILES_URLS = [];
+export const DEMO_FILES_IDS = [4, 5, 6];
 
 // LOCAL ENV
 export const { PG_USER } = process.env;
@@ -79,4 +79,4 @@ export const WINSTON_FILE_LOGGERS: winston.transports.FileTransportOptions[] = [
 ];
 
 // Audio
-export const supportedMimes = ['audio/mpeg', 'audio/wave'];
+export const supportedMimes = ['audio/mpeg', 'audio/wave', 'audio/wav'];

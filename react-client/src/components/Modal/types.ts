@@ -1,7 +1,8 @@
 export enum ModalType {
   createProject,
   confirmAction,
-  addNewFile
+  addNewFile,
+  recordNewFile,
 }
 
 export interface IModalArgs {

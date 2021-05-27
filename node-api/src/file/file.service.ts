@@ -147,6 +147,7 @@ export class FileService {
 
     if (file.mimetype === 'audio/mpeg') return cb(null, id + '.mp3');
     if (file.mimetype === 'audio/wave') return cb(null, id + '.wav');
+    if (file.mimetype === 'audio/wav') return cb(null, id + '.wav');
 
     cb(
       new BadRequestException({

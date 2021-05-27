@@ -12,7 +12,9 @@ import {
   RiRewindFill,
   RiSpeedFill,
   RiCloseFill,
-  RiLogoutBoxLine
+  RiLogoutBoxLine,
+  RiDownload2Line,
+  RiRecordCircleLine
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 import { MdKeyboardBackspace } from 'react-icons/md';
@@ -37,7 +39,9 @@ export type SupportedIcon =
   | 'skip-backward-fill'
   | 'back'
   | 'logout'
-  | 'close';
+  | 'close'
+  | 'download'
+  | 'record';
 
 export interface Props {
   icon: SupportedIcon;
@@ -78,8 +82,12 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <RiCloseFill />;
       case 'logout':
         return <RiLogoutBoxLine />;
+      case 'download':
+        return <RiDownload2Line />;
       case 'back':
         return <MdKeyboardBackspace />;
+      case 'record':
+        return <RiRecordCircleLine />;
     }
   };
   return (
