@@ -5,6 +5,7 @@ export interface AudioService {
   isLoadingBuffer: boolean;
   bufferError: string;
   isPlaying: boolean;
+  connected: boolean;
 
   sourceNode: MediaElementAudioSourceNode;
   mixGainNode: GainNode;
@@ -39,6 +40,7 @@ export class AudioService implements AudioService {
 
     this.isPlaying = false;
     this.currAnalyserId = 0;
+    this.connected = false;
   }
 
   init(element: HTMLAudioElement) {
@@ -56,6 +58,8 @@ export class AudioService implements AudioService {
     this.mixGainNode.connect(this.splitterNode);
     this.mixGainNode.connect(this.masterGainNode);
     this.masterGainNode.connect(this.context.destination);
+
+    this.connected = true;
   }
 
   static fromAudioElement(element: HTMLAudioElement): AudioService {
@@ -153,17 +157,18 @@ export class AudioService implements AudioService {
   }
 
   remove() {
-    this.analysers.forEach((analyser) => this.removeAnalyser(analyser.id));
+    if (this.connected) {
+      this.analysers.forEach((analyser) => this.removeAnalyser(analyser.id));
 
-    this.sourceNode.disconnect(this.mixGainNode);
-    this.mixGainNode.disconnect(this.splitterNode);
-    this.mixGainNode.disconnect(this.masterGainNode);
-    this.masterGainNode.disconnect(this.context.destination);
+      this.sourceNode.disconnect(this.mixGainNode);
+      this.mixGainNode.disconnect(this.splitterNode);
+      this.mixGainNode.disconnect(this.masterGainNode);
+      this.masterGainNode.disconnect(this.context.destination);
+    }
   }
 
   clear() {
     this.stop();
-    this.remove();
     this.reloadAudio('');
   }
 }

@@ -62,7 +62,9 @@ export class RequestService {
   }
 
   async downloadFile(url: string, fileName: string) {
-    const response = await this.client.get(url, { responseType: 'blob' });
+    const response = await axios.create().get(url, {
+      responseType: 'blob'
+    });
     fileDownload(response.data, fileName);
   }
 }

@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react';
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
-import { Heading5, Paragraph } from '~/components/Text';
+import { Paragraph } from '~/components/Text';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import ModalWrapper from '../ModalWrapper';
 import Icon from '~/components/Icon';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import { AudioPlayer } from './parts';
 import DotLoader from '~/components/DotLoader';
 
@@ -16,13 +15,10 @@ interface Props {
   projectId: number;
 }
 
-const blobToFile = (blob: Blob, fileName: string): File => {
-  const currBlob: any = blob as File;
-  currBlob.lastModified = new Date();
-  currBlob.name = fileName;
-
-  return currBlob as File;
-};
+const blobToFile = (blobs: Blob[], fileName: string): File =>
+  new File(blobs, fileName, {
+    type: 'audio/wave'
+  });
 
 const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const [isRecording, setIsRecording] = useState<boolean>();
@@ -56,11 +52,11 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
       audioChunksRef.current.push(e.data);
     });
 
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+    mediaRecorder.addEventListener('stop', (e) => {
+      const blob = new Blob(audioChunksRef.current, { type: 'audio/wave' });
       const audioURL = window.URL.createObjectURL(blob);
       if (audioElementRef.current) audioElementRef.current.src = audioURL;
-    };
+    });
   };
 
   const onStopRecord = () => {
@@ -73,8 +69,8 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const onSave = async () => {
     if (audioChunksRef.current[0]) {
       const file: File = blobToFile(
-        audioChunksRef.current[0],
-        'New_Recording_' + new Date().toISOString()
+        audioChunksRef.current,
+        'New Recording: ' + new Date().toISOString()
       );
       console.log(file);
       try {

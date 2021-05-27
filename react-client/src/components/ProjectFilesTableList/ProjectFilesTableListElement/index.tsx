@@ -1,11 +1,12 @@
 import Box, { Center, FlexBox } from '~/components/Box';
 import Text from '~/components/Text';
 import { IFile } from '~/global-state/project/types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Field } from './parts';
 import { TableListButton } from '~/components/TableList/parts';
 import Icon from '~/components/Icon';
 import RequestService from '~/services/RequestService';
+import Loader from '~/components/Loader';
 
 interface Props {
   file: IFile;
@@ -28,14 +29,34 @@ const formatSize = (size: number) => {
     return Math.round((size / (1024 * 1024)) * 10) / 10 + ' MB';
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getFileExtension = (mimeType: string) => {
+  switch (mimeType) {
+    case 'audio/wav':
+    case 'audio/wave':
+      return '.wav';
+    case 'audio/mpeg':
+      return '.mp3';
+  }
+  return '.wav';
+};
+
 export const ProjectFileTableListElement: React.FC<Props> = ({
   file,
   isEven,
   onAnalyze,
   onDelete
 }) => {
-  const onDownloadFile = useCallback(() => {
-    RequestService.downloadFile(file.url, file.name);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const onDownloadFile = useCallback(async () => {
+    setIsDownloading(true);
+    try {
+      await RequestService.downloadFile(file.url, file.name);
+    } catch (_) {
+      // TODO: error handling
+    } finally {
+      setIsDownloading(false);
+    }
   }, []);
 
   return (
@@ -84,7 +105,11 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
 
           <TableListButton onClick={onDownloadFile} width='2.5rem'>
             <Center>
-              <Icon icon='download' size={16} />
+              {isDownloading ? (
+                <Loader size={14} strokeSize={1} />
+              ) : (
+                <Icon icon='download' size={16} />
+              )}
             </Center>
           </TableListButton>
           <TableListButton type='danger' onClick={() => onDelete(file.id)}>
