@@ -169,7 +169,6 @@ export class AudioService implements AudioService {
 
   clear() {
     this.stop();
-    this.analysers.forEach((analyser) => this.removeAnalyser(analyser.id));
     this.reloadAudio('');
   }
 }

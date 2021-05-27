@@ -15,15 +15,10 @@ interface Props {
   projectId: number;
 }
 
-const blobToFile = (blob: Blob, fileName: string): File => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const currBlob: any = blob as File;
-  currBlob.lastModified = new Date();
-  currBlob.name = fileName;
-  currBlob.originalname = fileName;
-
-  return currBlob as File;
-};
+const blobToFile = (blobs: Blob[], fileName: string): File =>
+  new File(blobs, fileName, {
+    type: 'audio/wave'
+  });
 
 const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const [isRecording, setIsRecording] = useState<boolean>();
@@ -72,11 +67,10 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   };
 
   const onSave = async () => {
-    const blob = new Blob(audioChunksRef.current, { type: 'audio/wave' });
     if (audioChunksRef.current[0]) {
       const file: File = blobToFile(
-        blob,
-        'New_Recording_' + new Date().toISOString()
+        audioChunksRef.current,
+        'New Recording: ' + new Date().toISOString()
       );
       console.log(file);
       try {
