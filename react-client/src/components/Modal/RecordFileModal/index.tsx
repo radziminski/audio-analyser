@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react';
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
-import { Heading5, Paragraph } from '~/components/Text';
+import { Paragraph } from '~/components/Text';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import ModalWrapper from '../ModalWrapper';
 import Icon from '~/components/Icon';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import { AudioPlayer } from './parts';
 import DotLoader from '~/components/DotLoader';
 
@@ -17,9 +16,11 @@ interface Props {
 }
 
 const blobToFile = (blob: Blob, fileName: string): File => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currBlob: any = blob as File;
   currBlob.lastModified = new Date();
   currBlob.name = fileName;
+  currBlob.originalname = fileName;
 
   return currBlob as File;
 };
@@ -56,11 +57,11 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
       audioChunksRef.current.push(e.data);
     });
 
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+    mediaRecorder.addEventListener('stop', (e) => {
+      const blob = new Blob(audioChunksRef.current, { type: 'audio/wave' });
       const audioURL = window.URL.createObjectURL(blob);
       if (audioElementRef.current) audioElementRef.current.src = audioURL;
-    };
+    });
   };
 
   const onStopRecord = () => {
@@ -71,9 +72,10 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   };
 
   const onSave = async () => {
+    const blob = new Blob(audioChunksRef.current, { type: 'audio/wave' });
     if (audioChunksRef.current[0]) {
       const file: File = blobToFile(
-        audioChunksRef.current[0],
+        blob,
         'New_Recording_' + new Date().toISOString()
       );
       console.log(file);
