@@ -30,6 +30,9 @@ export class File {
   @Column({ nullable: true })
   size: number;
 
+  @Column({ nullable: true })
+  bitRate: number;
+
   @Column({ name: 'mime_type' })
   mimeType: string;
 

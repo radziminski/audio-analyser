@@ -70,7 +70,7 @@ const sortProjectsByLabel = (
 export const ProjectsTableList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<ProjectTableListLabel>(
-    ProjectTableListLabel.Title
+    ProjectTableListLabel.Created
   );
   const [sortDescending, setSortDescending] = useState<boolean>(false);
 

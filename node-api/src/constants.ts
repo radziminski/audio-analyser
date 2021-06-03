@@ -20,7 +20,7 @@ export const { ASSETS_BASE_URL } = process.env;
 
 export const { AWS_ACCESS_KEY_ID } = process.env;
 export const { AWS_SECRET_ACCESS_KEY } = process.env;
-export const { AWS_S3_BUCKET_NAME } = process.env;
+export const { AWS_ASSETS_BUCKET_NAME } = process.env;
 export const MAX_FILE_SIZE = Math.pow(1024, 2) * 70; // 70 MiB
 export const MAX_TOTAL_FILES_SIZE = Math.pow(1024, 3) * 10; // 10 GiB
 

@@ -1,3 +1,4 @@
+import { UploadProjectFileDto } from './dto/upload-project-file.dto';
 import { RolesGuard } from './../auth/guards/user-roles.guard';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { FileService } from './../file/file.service';
@@ -122,7 +123,7 @@ export class ProjectController {
   //////////////////////////////////////
 
   @UseGuards(ThrottlerGuard, JwtAuthGuard, ProjectUserGuard)
-  @Throttle(10, 60 * 10)
+  @Throttle(15, 60 * 10)
   @Post(':id/files/upload')
   @UseInterceptors(
     FileInterceptor('audio', FileService.audioFileInterceptorOptions),
@@ -130,14 +131,17 @@ export class ProjectController {
   async uploadFile(
     @UploadedFile() file: Express.MulterS3.File,
     @Param('id') id: string,
+    @Body() body: UploadProjectFileDto,
   ) {
+    const name = body['name'];
+
     if (!file) {
       throw new BadRequestException({
         message: 'You need to provide a valid file.',
       });
     }
 
-    const savedFileData = await this.projectService.saveFileData(file);
+    const savedFileData = await this.projectService.saveFileData(file, name);
 
     return this.projectService.addProjectFile(+id, savedFileData);
   }

@@ -24,6 +24,7 @@ const Spectrogram: React.FC = () => {
         colors: function (steps) {
           const colorScale = scale([
             COLORS.background20,
+            COLORS.background50,
             COLORS.accentPrimary100,
             COLORS.accentSecondary100
           ]);

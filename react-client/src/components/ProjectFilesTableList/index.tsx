@@ -94,7 +94,7 @@ export const ProjectFilesTableList: React.FC<Props> = ({
 }) => {
   const history = useHistory();
   const [selectedLabel, setSelectedLabel] = useState<ProjectFileTableListLabel>(
-    ProjectFileTableListLabel.Name
+    ProjectFileTableListLabel.Created
   );
   const [sortDescending, setSortDescending] = useState<boolean>(false);
 

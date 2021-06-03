@@ -44,6 +44,14 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     });
 
     const mediaRecorder = new AudioRecorder(stream);
+    console.log(mediaRecorder);
+
+    mediaRecorder.setAudioEncodingBitRate &&
+      mediaRecorder.setAudioEncodingBitRate(16);
+
+    mediaRecorder.setAudioSamplingRate &&
+      mediaRecorder.setAudioSamplingRate(44100);
+
     audioChunksRef.current = [];
 
     mediaRecorderRef.current = mediaRecorder;
