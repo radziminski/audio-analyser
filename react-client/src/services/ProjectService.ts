@@ -37,10 +37,13 @@ export class ProjectService {
 
   async uploadProjectFile(
     id: number,
-    file: File
+    file: File,
+    name?: string
   ): Promise<ProjectWithUsersAndFilesDto> {
     const data = new FormData();
     data.append('audio', file);
+
+    if (name) data.append('name', name);
 
     const response = await RequestService.client.post(
       API_ROUTES.PROJECT_UPLOAD_FILE.replace(':id', id.toString()),

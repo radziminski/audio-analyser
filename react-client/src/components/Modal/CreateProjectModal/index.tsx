@@ -5,8 +5,8 @@ import { Paragraph } from '~/components/Text';
 import TextInput from '~/components/TextInput';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useState } from 'react';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import Modal from '../ModalWrapper';
+import { ModalErrorMessage } from '../parts';
 
 interface Props {
   onClose?: () => void;
@@ -61,18 +61,8 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
           />
         </Box>
 
-        {error && (
-          <Box marginBottom='1.5rem'>
-            <Paragraph
-              fontSize='0.8rem'
-              textAlign='center'
-              color={COLORS.danger100}
-              fontWeight={FONT_WEIGHTS.medium}
-            >
-              {error}
-            </Paragraph>
-          </Box>
-        )}
+        <ModalErrorMessage error={error} />
+
         <Box>
           <ActionButton isLoading={!!isLoadingProject}>Confirm</ActionButton>
         </Box>

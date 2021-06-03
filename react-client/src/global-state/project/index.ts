@@ -9,8 +9,8 @@ const projectState: IProjectState = {
   isLoadingProject: null,
   fetchedAll: false,
 
-  project: computed((state) => (id: number) =>
-    state.projects?.find((p) => p.id === id)
+  project: computed(
+    (state) => (id: number) => state.projects?.find((p) => p.id === id)
   ),
 
   setIsLoading: action((state, payload) => {
@@ -150,11 +150,11 @@ const projectState: IProjectState = {
   }),
 
   uploadProjectFile: thunk(async (actions, payload, helpers) => {
-    const { id, file } = payload;
+    const { id, file, name } = payload;
     actions.setIsLoadingProject(id);
 
     try {
-      const projectDto = await ProjectService.uploadProjectFile(id, file);
+      const projectDto = await ProjectService.uploadProjectFile(id, file, name);
 
       const project: IProject = {
         id: projectDto.id,

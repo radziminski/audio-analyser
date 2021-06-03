@@ -9,6 +9,8 @@ import { AudioPlayer } from './parts';
 import DotLoader from '~/components/DotLoader';
 
 import AudioRecorder from 'audio-recorder-polyfill';
+import TextInput from '~/components/TextInput';
+import { ModalErrorMessage } from '../parts';
 
 interface Props {
   onClose: () => void;
@@ -23,8 +25,9 @@ const blobToFile = (blobs: Blob[], fileName: string): File =>
 const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const [isRecording, setIsRecording] = useState<boolean>();
   const [audioRecorded, setAudioRecorded] = useState<boolean>();
+  const [fileName, setFileName] = useState('');
 
-  const [error, setError] = useState<boolean>();
+  const [error, setError] = useState<string>();
 
   const { uploadProjectFile } = useStoreActions((state) => state.project);
   const { isLoadingProject } = useStoreState((state) => state.project);
@@ -52,7 +55,7 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
       audioChunksRef.current.push(e.data);
     });
 
-    mediaRecorder.addEventListener('stop', (e) => {
+    mediaRecorder.addEventListener('stop', () => {
       const blob = new Blob(audioChunksRef.current, { type: 'audio/wave' });
       const audioURL = window.URL.createObjectURL(blob);
       if (audioElementRef.current) audioElementRef.current.src = audioURL;
@@ -72,12 +75,15 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
         audioChunksRef.current,
         'New Recording: ' + new Date().toISOString()
       );
-      console.log(file);
       try {
-        await uploadProjectFile({ id: projectId, file });
+        await uploadProjectFile({
+          id: projectId,
+          file,
+          name: fileName || undefined
+        });
         onClose();
       } catch (err) {
-        //
+        setError('There was a problem uploading the file. Try again later.');
       }
     }
   };
@@ -101,24 +107,43 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
             padding='0.5rem 1.5rem'
             height='2.5rem'
           >
-            {!isRecording ? 'Start' : 'Finish'} Recording
+            {!isRecording
+              ? !audioRecorded
+                ? 'Start Recording'
+                : 'Record again (this will override current recorded file!)'
+              : 'Finish Recording'}
           </ActionButton>
         </Box>
       </FlexBox>
-      <Box
+      <FlexBox
         margin='2rem auto'
-        height='2.5rem'
-        opacity={isRecording ? 0.2 : 1}
-        pointerEvents={isRecording ? 'none' : undefined}
+        height='9rem'
+        opacity={isRecording || !audioRecorded ? 0.2 : 1}
+        flexDirection='column'
+        justifyContent='center'
+        cursor={isRecording || !audioRecorded ? 'not-allowed' : 'auto'}
       >
-        {!audioRecorded ? (
-          <Paragraph fontSize='0.8rem' textAlign='center'>
-            None audio recorded
-          </Paragraph>
-        ) : (
+        <Box
+          flexShrink={0}
+          pointerEvents={isRecording || !audioRecorded ? 'none' : undefined}
+        >
           <AudioPlayer controls ref={audioElementRef} />
-        )}
-      </Box>
+        </Box>
+        <Box
+          margin='1rem 0'
+          flexShrink={0}
+          pointerEvents={isRecording || !audioRecorded ? 'none' : undefined}
+        >
+          <TextInput
+            label='Custom file name'
+            placeholder='Ex. New Recording'
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
+          />
+        </Box>
+      </FlexBox>
+
+      <ModalErrorMessage error={error} />
 
       <ActionButton
         isLoading={isLoadingProject === projectId}

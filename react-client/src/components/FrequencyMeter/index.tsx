@@ -10,7 +10,7 @@ import Text from '~/components/Text';
 const barWidth = 1;
 const minDecibels = 21;
 const height = 220;
-const width = 512;
+const width = 800;
 
 const fftSize = 1024 * 8;
 
