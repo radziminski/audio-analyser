@@ -5,6 +5,7 @@ import { NavSelector, Container } from './parts';
 import { SupportedIcon } from '~/components/Icon';
 import { ROUTES } from '~/constants/routes';
 import { useLocation } from 'react-router';
+import { useStoreState } from '~/global-state/hooks';
 
 interface NavLink {
   name: string;
@@ -52,6 +53,8 @@ export const Nav: React.FC = () => {
   const { pathname } = useLocation();
   const currRoute = getCurrDashboardPathIndex(pathname);
 
+  const { currSource } = useStoreState((state) => state.audio);
+
   return (
     <>
       <Container>
@@ -60,7 +63,11 @@ export const Nav: React.FC = () => {
             <NavItem
               selected={currRoute === index}
               name={link.name}
-              linkTo={link.linkTo}
+              linkTo={
+                link.name === 'Analyze' && currSource
+                  ? link.linkTo.replace(':id', currSource)
+                  : link.linkTo
+              }
               icon={link.icon}
             />
           </li>

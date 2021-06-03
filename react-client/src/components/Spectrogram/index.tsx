@@ -9,7 +9,6 @@ import { COLORS } from '~/styles/theme';
 // const barWidth = 1;
 // const minDecibels = 22.5;
 const height = 220;
-const width = 512;
 
 // const fftSize = 1024 * 8;
 
@@ -48,7 +47,7 @@ const Spectrogram: React.FC = () => {
       {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <FlexBox
-          width={width}
+          width='100%'
           height={height}
           ref={container}
           borderRadius={14}

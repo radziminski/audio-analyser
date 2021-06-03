@@ -49,9 +49,10 @@ export const AnalyserView: React.FC = () => {
   useEffect(() => {
     const setAudioLoadedFunction = () => setAudioLoaded(true);
 
-    if (srcId && audioSources[srcId]) {
+    if (srcId && srcId !== currSource && audioSources[srcId]) {
       const src = audioSources[srcId];
       setCurrSource(srcId);
+      console.log(srcId);
       loadAudio(src);
       AudioService.audioElement.addEventListener(
         'canplay',
@@ -64,7 +65,7 @@ export const AnalyserView: React.FC = () => {
         'canplay',
         setAudioLoadedFunction
       );
-  }, [srcId, audioSources, loadAudio, setCurrSource]);
+  }, [srcId, audioSources, loadAudio, currSource, setCurrSource]);
 
   const srcExists = currSource || (srcId && audioSources[srcId]);
 
@@ -104,15 +105,22 @@ export const AnalyserView: React.FC = () => {
           barMinHeight={1}
           barWidth={4}
           barSpacing={1}
-          height={150}
+          height={140}
           barBorderRadius={8}
           audioElement={AudioService.audioElement}
         />
-        <FlexBox justifyContent='space-between'>
+        <FlexBox justifyContent='space-between' marginTop='1rem'>
           <VolumeMeter />
-          <FlexBox flexDirection='column' justifyContent='space-between'>
+          <FlexBox
+            flexDirection='column'
+            justifyContent='space-between'
+            flex={1}
+            paddingLeft='3rem'
+          >
             <FrequencyMeter />
-            <Spectrogram />
+            <Box marginTop='2rem'>
+              <Spectrogram />
+            </Box>
           </FlexBox>
         </FlexBox>
       </>

@@ -1,7 +1,11 @@
 import AudioService from '~/services/AudioService';
 import React, { useEffect, useRef } from 'react';
 import Box, { FlexBox } from '~/components/Box';
-import { useCanvasDrawer, useAnimationFrameLoop } from '~/hooks';
+import {
+  useCanvasDrawer,
+  useAnimationFrameLoop,
+  useElementDimensions
+} from '~/hooks';
 import { COLORS } from '~/styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from '~/components/Text';
@@ -9,8 +13,7 @@ import Text from '~/components/Text';
 
 const barWidth = 1;
 const minDecibels = 21;
-const height = 220;
-const width = 800;
+const CONTAINER_HEIGHT = 320;
 
 const fftSize = 1024 * 8;
 
@@ -18,7 +21,13 @@ const FrequencyMeter: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
   const { canvasDrawer, ready } = useCanvasDrawer(container);
+  const { height: containerHeight, width: containerWidth } =
+    useElementDimensions(container);
+  const height = containerHeight ?? 0;
+  const width = containerWidth ?? 0;
   const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
+
+  console.log(containerHeight, containerWidth);
 
   const sampleRate = AudioService.buffer?.sampleRate;
 
@@ -55,7 +64,7 @@ const FrequencyMeter: React.FC = () => {
 
       const stretchedHeight =
         currHeight -
-        (Math.pow(height - currHeight, power) * 200) /
+        (Math.pow(height - currHeight, power) * 300) /
           Math.pow(currHeight, power);
 
       // TODO: fix this, hack for line at the begining
@@ -94,8 +103,8 @@ const FrequencyMeter: React.FC = () => {
       </button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <Box
-          width={width}
-          height={height}
+          width='100%'
+          height={CONTAINER_HEIGHT}
           ref={container}
           borderRadius={14}
           background={COLORS.background20}

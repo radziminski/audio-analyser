@@ -51,8 +51,6 @@ const audioState: IAudioState = {
     AudioService.stop();
     state.isPlaying = false;
     AudioService.reloadAudio(src);
-
-    state.currSource = src;
   }),
 
   addAudioSources: action((state, sources) => {
