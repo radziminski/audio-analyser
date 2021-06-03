@@ -24,7 +24,7 @@ export const LoginForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) history.push(ROUTES.DASHBOARD);
+    if (isAuthenticated) history.push(ROUTES.DASHBOARD_PROJECTS);
   }, [isAuthenticated, history]);
 
   useEffect(() => {
