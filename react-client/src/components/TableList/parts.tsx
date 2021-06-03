@@ -39,20 +39,37 @@ export const Container = styled.div<{
   max-height: ${({ maxHeight }) => maxHeight};
 `;
 
-export const Label: React.FC<{ text: string; noArrow?: boolean }> = ({
+interface LabelProps {
+  text: string;
+  noArrow?: boolean;
+  onClick?: () => void;
+  selected?: boolean;
+  arrowReversed?: boolean;
+}
+
+export const Label: React.FC<LabelProps> = ({
   text,
-  noArrow
+  noArrow,
+  onClick,
+  selected,
+  arrowReversed
 }) => {
   return (
     <FlexBox
       alignItems='center'
       cursor={noArrow ? 'auto' : 'pointer'}
       paddingBottom='1rem'
+      onClick={onClick}
+      opacity={selected ? 1 : 0.7}
     >
       <Box marginRight='1rem'>
         <Text color={COLORS.white}>{text}</Text>
       </Box>
-      {!noArrow && <Icon icon='arrow-down-fill' size={14} />}
+      {!noArrow && (
+        <Box transform={arrowReversed ? 'rotate(180deg)' : undefined}>
+          <Icon icon='arrow-down-fill' size={14} />
+        </Box>
+      )}
     </FlexBox>
   );
 };

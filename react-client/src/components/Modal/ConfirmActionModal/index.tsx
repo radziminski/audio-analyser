@@ -2,8 +2,8 @@ import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
 import { Paragraph } from '~/components/Text';
 import React from 'react';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import Modal from '../ModalWrapper';
+import { ModalErrorMessage } from '../parts';
 
 interface Props {
   title: string;
@@ -29,18 +29,8 @@ export const ConfirmActionModal: React.FC<Props> = ({
           <Paragraph>{message}</Paragraph>
         </Box>
       )}
-      {error && (
-        <Box marginBottom='1.5rem' marginTop='4rem'>
-          <Paragraph
-            fontSize='0.8rem'
-            textAlign='center'
-            color={COLORS.danger100}
-            fontWeight={FONT_WEIGHTS.medium}
-          >
-            {error}
-          </Paragraph>
-        </Box>
-      )}
+      <ModalErrorMessage error={error} />
+
       <FlexBox
         width='100%'
         marginTop={error ? '0' : '4rem'}

@@ -1,54 +1,52 @@
-// import AudioService from '~/global-state/audio/audioController';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { FlexBox } from '~/components/Box';
-// import { useCanvasDrawer, useAnimationFrameLoop } from '~/hooks';
 import { COLORS } from '~/styles/theme';
-// import { getLabelsLocations, getLogValue, printLabel, toLog } from './helpers';
-// import Text from '~/components/Text';
+import Spectro from 'spectrogram';
+import AudioService from '~/services/AudioService';
+import { scale } from 'chroma-js';
 
-// const barWidth = 1;
-// const minDecibels = 22.5;
 const height = 220;
-const width = 512;
-
-// const fftSize = 1024 * 8;
 
 const Spectrogram: React.FC = () => {
-  // const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
-  // const { canvasDrawer, ready } = useCanvasDrawer(container);
-  // const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
+  const canvas = useRef<HTMLCanvasElement | null>(null);
 
-  // const sampleRate = AudioService.buffer?.sampleRate;
+  useEffect(() => {
+    if (canvas.current) {
+      const analyser = AudioService.createAnalyser();
+      analyser.analyserNode.smoothingTimeConstant = 0;
+      analyser.analyserNode.fftSize = 1024;
 
-  // const getFreq = () => {
-  //   if (!canvasDrawer) return;
-  //   if (!analyser.current) return;
-  //   canvasDrawer.clear();
+      const spectrogram = Spectro(canvas.current, {
+        audio: {
+          enable: false
+        },
+        colors: function (steps) {
+          const colorScale = scale([
+            COLORS.background20,
+            COLORS.background50,
+            COLORS.accentPrimary100,
+            COLORS.accentSecondary100
+          ]);
 
-  //   const currAnalyser = analyser.current;
-  //   const buffer = new Float32Array(currAnalyser.fftSize);
-  //   currAnalyser.getFloatFrequencyData(buffer);
-  // };
+          return colorScale.colors(steps, 'hex');
+        }
+      });
+      spectrogram.connectSource(analyser.analyserNode, AudioService.context);
+      spectrogram.start();
 
-  // useAnimationFrameLoop(
-  //   getFreq,
-  //   ready && !!analyser.current && !!container.current
-  // );
-
-  // useEffect(() => {
-  //   const currAnalyser = AudioService.createAnalyser();
-  //   currAnalyser.analyserNode.fftSize = fftSize;
-  //   analyser.current = currAnalyser.analyserNode;
-  //   analyser.current.smoothingTimeConstant = 0.9;
-  // }, []);
+      return () => {
+        spectrogram.stop();
+      };
+    }
+  }, []);
 
   return (
     <>
       {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <FlexBox
-          width={width}
+          width='100%'
           height={height}
           ref={container}
           borderRadius={14}
@@ -58,7 +56,7 @@ const Spectrogram: React.FC = () => {
           alignItems='center'
           color='red'
         >
-          SPECTROGRAM WILL BE HERE
+          <canvas ref={canvas} style={{ height: '100%', width: '100%' }} />
         </FlexBox>
       </FlexBox>
     </>
@@ -117,13 +115,13 @@ export default Spectrogram;
 // }
 
 // //Given a range, transforms a value from linear scale to log scale.
-// var toLog = function (value, min, max) {
-//   var exp = (value - min) / (max - min);
+// const toLog = function (value, min, max) {
+//   const exp = (value - min) / (max - min);
 //   return min * Math.pow(max / min, exp);
 // };
 
 // //In this case i'm using a range from 1 to 20, you would use the size of your array. I'm incrementing 'i' by one each time, but you could also change that
-// for (var i = 1; i < 20; i += 1) {
+// for (const i = 1; i < 20; i += 1) {
 //   //I'm starting at 1 because 0 and logarithms dont get along
 //   var logindex = toLog(i, 1, 19); //the index we want to sample
 

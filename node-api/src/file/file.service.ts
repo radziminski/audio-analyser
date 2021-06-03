@@ -1,7 +1,7 @@
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
-  AWS_S3_BUCKET_NAME,
+  AWS_ASSETS_BUCKET_NAME,
   MAX_FILE_SIZE,
   MAX_TOTAL_FILES_SIZE,
   ENV,
@@ -24,6 +24,7 @@ import * as multerS3 from 'multer-s3';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { getRepository } from 'typeorm';
 import { diskStorage } from 'multer';
+import { IAudioMetadata, parseBuffer } from 'music-metadata';
 
 if (ENV === 'prod')
   AWS.config.update({
@@ -54,10 +55,27 @@ export class FileService {
     return !!(file as Express.MulterS3.File).acl;
   }
 
+  async getFileMetadata(
+    file: Express.MulterS3.File | Express.Multer.File,
+  ): Promise<IAudioMetadata | undefined> {
+    if (!file.buffer) return undefined;
+    try {
+      const fileMetadata = await parseBuffer(file.buffer, file.mimetype);
+
+      return fileMetadata;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
   async saveFileData(
     file: Express.MulterS3.File | Express.Multer.File,
+    name?: string,
   ): Promise<File> {
-    let fileData = {};
+    let fileData: Partial<File> = {};
+
+    const fileMetadata = await this.getFileMetadata(file);
 
     if (this.isMulterS3File(file)) {
       fileData = {
@@ -65,9 +83,11 @@ export class FileService {
         key: file.key,
         acl: file.acl,
         originalName: file.originalname,
-        name: file.originalname,
+        name: name ?? file.originalname,
         size: file.size,
         mimeType: file.mimetype,
+        length: fileMetadata?.format.duration,
+        bitRate: fileMetadata?.format.bitrate,
       };
     } else {
       fileData = {
@@ -75,9 +95,11 @@ export class FileService {
         key: file.filename,
         acl: '',
         originalName: file.originalname,
-        name: file.originalname,
+        name: name ?? file.originalname,
         size: file.size,
         mimeType: file.mimetype,
+        length: fileMetadata?.format.duration,
+        bitRate: fileMetadata?.format.bitrate,
       };
     }
 
@@ -112,7 +134,7 @@ export class FileService {
     // TODO: error handling?
     if (ASSETS_STORAGE === 'external' && file.key)
       s3.deleteObject(
-        { Bucket: 'audio-analyser-radziminski', Key: file.key },
+        { Bucket: AWS_ASSETS_BUCKET_NAME, Key: file.key },
         (err) => {
           if (err) console.log(err);
         },
@@ -161,7 +183,7 @@ export class FileService {
     ASSETS_STORAGE === 'external'
       ? multerS3({
           s3: s3,
-          bucket: AWS_S3_BUCKET_NAME,
+          bucket: AWS_ASSETS_BUCKET_NAME,
           acl: 'public-read',
           metadata: function (_, file, cb) {
             cb(null, { fieldName: file.fieldname });
@@ -175,6 +197,7 @@ export class FileService {
     destination: function (_, __, cb) {
       cb(null, 'files/audio');
     },
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     filename: FileService.getMulterFilename,
   });

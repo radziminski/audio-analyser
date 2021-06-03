@@ -249,8 +249,8 @@ export class ProjectService {
     });
   }
 
-  async saveFileData(file: Express.MulterS3.File) {
-    return this.fileService.saveFileData(file);
+  async saveFileData(file: Express.MulterS3.File, name?: string) {
+    return this.fileService.saveFileData(file, name);
   }
 
   findAllProjectFiles() {
