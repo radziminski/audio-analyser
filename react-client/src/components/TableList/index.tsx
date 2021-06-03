@@ -5,8 +5,8 @@ import React from 'react';
 import { FONT_WEIGHTS } from '~/styles/theme';
 import { Container, Label } from './parts';
 
-export interface ITableListColumn {
-  title: string;
+export interface ITableListColumn<T = string> {
+  title: T;
   width: number;
   noArrow?: boolean;
 }
@@ -16,6 +16,9 @@ interface Props {
   showMessage?: boolean;
   errorMessage?: string;
   isLoading?: boolean;
+  onLabelClick?: (label: string) => void;
+  selectedLabel?: string;
+  selectedLabelArrowReversed?: boolean;
 }
 
 export const TableList: React.FC<Props> = ({
@@ -23,7 +26,10 @@ export const TableList: React.FC<Props> = ({
   children,
   showMessage,
   errorMessage,
-  isLoading
+  isLoading,
+  onLabelClick,
+  selectedLabel,
+  selectedLabelArrowReversed
 }) => {
   const getTableWithLabels = (content: React.ReactNode | null = null) => (
     <Container columnsWidths={columns.map((column) => column.width)}>
@@ -32,6 +38,11 @@ export const TableList: React.FC<Props> = ({
           text={column.title}
           key={column.title}
           noArrow={column.noArrow}
+          selected={selectedLabel === column.title}
+          arrowReversed={
+            selectedLabel === column.title && selectedLabelArrowReversed
+          }
+          onClick={() => onLabelClick && onLabelClick(column.title)}
         />
       ))}
       {content}

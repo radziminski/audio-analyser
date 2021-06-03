@@ -5,29 +5,75 @@ import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import ProjectTableListElement from './ProjectTableListElement';
+import { IProject } from '~/global-state/project/types';
 
-const PROJECT_TABLE_COLUMNS: ITableListColumn[] = [
+export enum ProjectTableListLabel {
+  Title = 'Title',
+  Created = 'Created At',
+  Edited = 'Edited At',
+  Actions = 'Actions'
+}
+const PROJECT_TABLE_COLUMNS: ITableListColumn<ProjectTableListLabel>[] = [
   {
-    title: 'Title',
+    title: ProjectTableListLabel.Title,
     width: 4
   },
   {
-    title: 'Created At',
+    title: ProjectTableListLabel.Created,
     width: 3
   },
   {
-    title: 'Edited At',
+    title: ProjectTableListLabel.Edited,
     width: 3
   },
   {
-    title: 'Actions',
+    title: ProjectTableListLabel.Actions,
     width: 2,
     noArrow: true
   }
 ];
 
+const isProjectTableListLabel = (
+  label: string
+): label is ProjectTableListLabel =>
+  Object.values(ProjectTableListLabel).includes(label as ProjectTableListLabel);
+
+const sortProjectsByLabel = (
+  projects: IProject[],
+  label: ProjectTableListLabel,
+  reversed: boolean
+) => {
+  let sortedProjects = projects;
+  if (label === ProjectTableListLabel.Title) {
+    sortedProjects = projects.sort((projectA, projectB) =>
+      projectA.title.localeCompare(projectB.title)
+    );
+  }
+
+  if (label === ProjectTableListLabel.Created) {
+    sortedProjects = projects.sort((projectA, projectB) =>
+      projectA.createdAt.localeCompare(projectB.createdAt)
+    );
+  }
+
+  if (label === ProjectTableListLabel.Edited) {
+    sortedProjects = projects.sort((projectA, projectB) =>
+      (projectA.editedAt || '').localeCompare(projectB?.editedAt ?? '')
+    );
+  }
+
+  if (reversed) return sortedProjects.reverse();
+
+  return sortedProjects;
+};
+
 export const ProjectsTableList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
+  const [selectedLabel, setSelectedLabel] = useState<ProjectTableListLabel>(
+    ProjectTableListLabel.Title
+  );
+  const [sortDescending, setSortDescending] = useState<boolean>(false);
+
   const { projects, fetchedAll, isLoading } = useStoreState(
     (state) => state.project
   );
@@ -89,17 +135,33 @@ export const ProjectsTableList: React.FC = () => {
         isLoading={isLoading}
         showMessage={!projects || !projects.length || !!error}
         errorMessage={error ?? 'No projects to show.'}
+        onLabelClick={(label) => {
+          if (label === ProjectTableListLabel.Actions) return;
+          if (label === selectedLabel) {
+            setSortDescending(!sortDescending);
+            return;
+          }
+
+          setSortDescending(false);
+          setSelectedLabel(
+            isProjectTableListLabel(label) ? label : ProjectTableListLabel.Title
+          );
+        }}
+        selectedLabelArrowReversed={!sortDescending}
+        selectedLabel={selectedLabel}
       >
         {projects &&
-          projects.map((project, index) => (
-            <ProjectTableListElement
-              project={project}
-              key={project.id}
-              isEven={index % 2 === 0}
-              onEnter={onEnterProject}
-              onDelete={onDeleteProject}
-            />
-          ))}
+          sortProjectsByLabel(projects, selectedLabel, sortDescending).map(
+            (project, index) => (
+              <ProjectTableListElement
+                project={project}
+                key={project.id}
+                isEven={index % 2 === 0}
+                onEnter={onEnterProject}
+                onDelete={onDeleteProject}
+              />
+            )
+          )}
       </TableList>
     </>
   );
