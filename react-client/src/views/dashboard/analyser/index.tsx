@@ -13,6 +13,7 @@ import { COLORS } from '~/styles/theme';
 import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
+import ActionButton from '~/components/ActionButton';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -23,8 +24,13 @@ const getFileDateTime = (datetime: string) => {
   };
 };
 
+const WIDGETS = ['waveform', 'volume', 'freq', 'spectro'];
+
+const initWidgets = { waveform: true, volume: true, freq: true, spectro: true };
+
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
+  const [shownWidgets, setShownWidgets] = useState(initWidgets);
 
   const {
     audio: {
@@ -52,7 +58,6 @@ export const AnalyserView: React.FC = () => {
     if (srcId && srcId !== currSource && audioSources[srcId]) {
       const src = audioSources[srcId];
       setCurrSource(srcId);
-      console.log(srcId);
       loadAudio(src);
       AudioService.audioElement.addEventListener(
         'canplay',
@@ -98,34 +103,54 @@ export const AnalyserView: React.FC = () => {
 
     return (
       <>
-        <Waveform
-          audioBuffer={AudioService?.buffer}
-          isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
-          didLoadAudioBuffer={didLoadAudioBuffer ?? false}
-          barMinHeight={1}
-          barWidth={4}
-          barSpacing={1}
-          height={140}
-          barBorderRadius={8}
-          audioElement={AudioService.audioElement}
-        />
+        <FlexBox>
+          {WIDGETS.map((widget) => (
+            <Box marginRight='2rem' key={widget}>
+              <ActionButton
+                onClick={() => {
+                  setShownWidgets({
+                    ...shownWidgets,
+                    [widget]: !shownWidgets[widget]
+                  });
+                }}
+              >
+                {widget}
+              </ActionButton>
+            </Box>
+          ))}
+        </FlexBox>
+        {shownWidgets.waveform && (
+          <Waveform
+            audioBuffer={AudioService?.buffer}
+            isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
+            didLoadAudioBuffer={didLoadAudioBuffer ?? false}
+            barMinHeight={1}
+            barWidth={4}
+            barSpacing={1}
+            height={140}
+            barBorderRadius={8}
+            audioElement={AudioService.audioElement}
+          />
+        )}
         <FlexBox justifyContent='space-between' marginTop='1rem'>
-          <VolumeMeter />
+          {shownWidgets.volume && <VolumeMeter />}
           <FlexBox
             flexDirection='column'
             justifyContent='space-between'
             flex={1}
-            paddingLeft='3rem'
+            paddingLeft={shownWidgets.volume ? '3rem' : 0}
           >
-            <FrequencyMeter />
-            <Box marginTop='2rem'>
-              <Spectrogram />
-            </Box>
+            {shownWidgets.freq && <FrequencyMeter />}
+            {shownWidgets.spectro && (
+              <Box marginTop='2rem'>
+                <Spectrogram />
+              </Box>
+            )}
           </FlexBox>
         </FlexBox>
       </>
     );
-  }, [isLoadingAudioBuffer, didLoadAudioBuffer, audioLoaded]);
+  }, [isLoadingAudioBuffer, didLoadAudioBuffer, audioLoaded, shownWidgets]);
 
   if (!srcExists) {
     return (

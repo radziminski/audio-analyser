@@ -29,10 +29,6 @@ const formatSize = (size: number) => {
     return Math.round((size / (1024 * 1024)) * 10) / 10 + ' MB';
 };
 
-const formatLength = (length: number) => {
-  return new Date(length * 1000).toISOString().substr(11, 8);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getFileExtension = (mimeType: string) => {
   switch (mimeType) {
@@ -92,11 +88,7 @@ export const ProjectFileTableListElement: React.FC<Props> = ({
       <Field differentColor={isEven}>
         <Text fontSize='0.9rem'>{formatSize(file.size)}</Text>
       </Field>
-      <Field differentColor={isEven}>
-        <Text fontSize='0.9rem'>
-          {(file.length && formatLength(file.length)) ?? 'Unknown'}
-        </Text>
-      </Field>
+
       <Field differentColor={isEven}>
         <Text fontSize='0.9rem'>
           {file.createdAt ? formatDate(file.createdAt) : 'Unknown'}

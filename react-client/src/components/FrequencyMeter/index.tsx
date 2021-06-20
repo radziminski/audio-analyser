@@ -1,5 +1,5 @@
 import AudioService from '~/services/AudioService';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Box, { FlexBox } from '~/components/Box';
 import {
   useCanvasDrawer,
@@ -9,13 +9,12 @@ import {
 import { COLORS } from '~/styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from '~/components/Text';
-// import audioService from '~/global-state/audio/audioController';
 
-const barWidth = 1;
-const minDecibels = 21;
+const MIN_DECIBELS = 21;
 const CONTAINER_HEIGHT = 320;
 
-const fftSize = 1024 * 8;
+const FFT_SIZE = 1024 * 4;
+const HALF_FFT_SIZE = FFT_SIZE / 2;
 
 const FrequencyMeter: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
@@ -41,25 +40,21 @@ const FrequencyMeter: React.FC = () => {
     currAnalyser.getFloatFrequencyData(buffer);
 
     const samplesInLog: number[] = [];
+    canvasDrawer.stroke(COLORS.accentPrimary100);
 
-    for (let sampleNum = 1; sampleNum < valuableSamplesNumber; sampleNum++) {
-      samplesInLog.push(
-        getLogValue(
-          sampleNum,
-          buffer,
-          valuableSamplesNumber,
-          width,
-          height,
-          minDecibels,
-          fftSize / 2
-        )
+    for (let sampleNum = 1; sampleNum < width - 2; sampleNum++) {
+      const logValue = getLogValue(
+        sampleNum,
+        buffer,
+        valuableSamplesNumber,
+        width,
+        height,
+        MIN_DECIBELS,
+        HALF_FFT_SIZE
       );
-    }
+      samplesInLog.push(logValue);
 
-    samplesInLog.slice(0, width - 2).forEach((point, sampleNum) => {
-      const currHeight = point;
-      canvasDrawer.stroke(COLORS.accentPrimary100);
-
+      const currHeight = logValue;
       const power = 2;
 
       const stretchedHeight =
@@ -67,17 +62,9 @@ const FrequencyMeter: React.FC = () => {
         (Math.pow(height - currHeight, power) * 300) /
           Math.pow(currHeight, power);
 
-      // TODO: fix this, hack for line at the begining
-      if (currHeight < 50)
-        canvasDrawer.rect(sampleNum, stretchedHeight, barWidth, 0);
-      else
-        canvasDrawer.rect(
-          sampleNum,
-          stretchedHeight,
-          barWidth,
-          height - stretchedHeight
-        );
-    });
+      if (currHeight >= 50)
+        canvasDrawer.line(sampleNum, stretchedHeight, sampleNum, height);
+    }
   };
 
   useAnimationFrameLoop(
@@ -87,20 +74,18 @@ const FrequencyMeter: React.FC = () => {
 
   useEffect(() => {
     const currAnalyser = AudioService.createAnalyser();
-    currAnalyser.analyserNode.fftSize = fftSize;
+    currAnalyser.analyserNode.fftSize = FFT_SIZE;
     analyser.current = currAnalyser.analyserNode;
     analyser.current.smoothingTimeConstant = 0.9;
   }, []);
 
-  const labelLocations = getLabelsLocations(width, sampleRate || 0);
+  const labelLocations = useMemo(
+    () => getLabelsLocations(width, sampleRate || 0),
+    [width, sampleRate]
+  );
 
   return (
     <>
-      {/* <button
-        onClick={() => console.log(AudioService.audioElement.currentTime)}
-      >
-        GET FREQ
-      </button> */}
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <Box
           width='100%'

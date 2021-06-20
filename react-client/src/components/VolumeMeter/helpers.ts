@@ -249,8 +249,8 @@ const getHeightForValue = (
     val < 0 || !val
       ? containerHeight
       : val > containerHeight - bottomBorderRadius
-        ? containerHeight
-        : val;
+      ? containerHeight
+      : val;
 
   return { currSample, actualValueDb };
 };

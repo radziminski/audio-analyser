@@ -17,6 +17,8 @@ interface Props {
   projectId: number;
 }
 
+const RECORDING_FILETYPE = '.wav';
+
 const blobToFile = (blobs: Blob[], fileName: string): File =>
   new File(blobs, fileName, {
     type: 'audio/wave'
@@ -81,13 +83,13 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     if (audioChunksRef.current[0]) {
       const file: File = blobToFile(
         audioChunksRef.current,
-        'New Recording: ' + new Date().toISOString()
+        'New Recording: ' + new Date().toISOString() + RECORDING_FILETYPE
       );
       try {
         await uploadProjectFile({
           id: projectId,
           file,
-          name: fileName || undefined
+          name: fileName ? fileName + RECORDING_FILETYPE : undefined
         });
         onClose();
       } catch (err) {

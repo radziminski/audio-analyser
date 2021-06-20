@@ -17,7 +17,7 @@ export const Input = styled.input`
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.8);
   padding: 1rem;
-  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.03);
 
   &::placeholder {
     color: rgba(0, 0, 0, 0.4);
