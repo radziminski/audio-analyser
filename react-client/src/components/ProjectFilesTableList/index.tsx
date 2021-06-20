@@ -8,7 +8,6 @@ import ProjectTableListElement from './ProjectFilesTableListElement';
 export enum ProjectFileTableListLabel {
   Name = 'Name',
   Size = 'Size',
-  Length = 'Length',
   Created = 'Created At',
   Actions = 'Actions'
 }
@@ -21,10 +20,6 @@ const PROJECT_FILES_TABLE_COLUMNS: ITableListColumn<ProjectFileTableListLabel>[]
     },
     {
       title: ProjectFileTableListLabel.Size,
-      width: 1
-    },
-    {
-      title: ProjectFileTableListLabel.Length,
       width: 1
     },
     {
@@ -60,12 +55,6 @@ const sortFilesByLabel = (
   if (label === ProjectFileTableListLabel.Created) {
     sortedProjects = projects.sort((projectA, projectB) =>
       (projectA.createdAt || '').localeCompare(projectB?.createdAt ?? '')
-    );
-  }
-
-  if (label === ProjectFileTableListLabel.Length) {
-    sortedProjects = projects.sort(
-      (projectA, projectB) => (projectA.length || 0) - (projectB.length || 0)
     );
   }
 

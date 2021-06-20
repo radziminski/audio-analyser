@@ -1,3 +1,5 @@
+import { MeydaAnalyzer, createMeydaAnalyzer, MeydaAudioFeature } from 'meyda';
+
 export interface AudioService {
   context: AudioContext;
   audioElement: HTMLAudioElement;
@@ -13,6 +15,8 @@ export interface AudioService {
   splitterNode: ChannelSplitterNode;
   analysers: Analyser[];
   currAnalyserId: number;
+
+  meydaAnalyzers: Record<number, MeydaAnalyserWithFeatures>;
 }
 
 export const LEFT_CHANNEL = 0;
@@ -24,6 +28,11 @@ export interface Analyser {
   analyserNode: AnalyserNode;
   channel: AudioChannel;
   id: number;
+}
+
+export interface MeydaAnalyserWithFeatures {
+  analyzer: MeydaAnalyzer;
+  features: MeydaAudioFeature[];
 }
 
 export const AudioContext =
@@ -41,6 +50,7 @@ export class AudioService implements AudioService {
     this.isPlaying = false;
     this.currAnalyserId = 0;
     this.connected = false;
+    this.meydaAnalyzers = {};
   }
 
   init(element: HTMLAudioElement) {
@@ -131,6 +141,99 @@ export class AudioService implements AudioService {
     this.buffer = buffer;
   }
 
+  areFeaturesIncluded(
+    features: MeydaAudioFeature[],
+    allFeatures: MeydaAudioFeature[]
+  ) {
+    return features.every((feature) => allFeatures.includes(feature));
+  }
+
+  getDefaultMeydaFeatures(bufferSize = 2048) {
+    const num = 0;
+    const floatArr = new Float32Array(bufferSize).fill(num);
+    const numArr = new Array(bufferSize).fill(num);
+
+    return {
+      amplitudeSpectrum: floatArr,
+      buffer: numArr,
+      chroma: numArr,
+      complexSpectrum: {
+        real: numArr,
+        imag: numArr
+      },
+      energy: numArr,
+      loudness: {
+        specific: floatArr,
+        total: numArr
+      },
+      mfcc: numArr,
+      perceptualSharpness: numArr,
+      perceptualSpread: numArr,
+      powerSpectrum: floatArr,
+      rms: numArr,
+      spectralCentroid: numArr,
+      spectralFlatness: numArr,
+      spectralKurtosis: numArr,
+      spectralRolloff: numArr,
+      spectralSkewness: numArr,
+      spectralSlope: numArr,
+      spectralSpread: numArr,
+      zcr: numArr
+    };
+  }
+
+  getMeydaFeatures(bufferSize = 2048, feature: MeydaAudioFeature) {
+    const defaultFeatures = this.getDefaultMeydaFeatures(bufferSize);
+    let neededFeatures = new Set<MeydaAudioFeature>([feature]);
+    if (this.meydaAnalyzers[bufferSize]) {
+      if (
+        this.areFeaturesIncluded(
+          [feature],
+          this.meydaAnalyzers[bufferSize].features
+        )
+      ) {
+        const values = this.meydaAnalyzers[bufferSize].analyzer.get();
+        console.log(values ? values[feature] : defaultFeatures[feature]);
+        return values ? values[feature] : defaultFeatures[feature];
+      }
+
+      neededFeatures = new Set([
+        feature,
+        ...this.meydaAnalyzers[bufferSize].features
+      ]);
+
+      this.meydaAnalyzers[bufferSize].analyzer.stop();
+      delete this.meydaAnalyzers[bufferSize];
+    }
+
+    const neededFeaturesArr = Array.from(neededFeatures);
+    const analyzer = createMeydaAnalyzer({
+      audioContext: this.context,
+      source: this.mixGainNode,
+      bufferSize,
+      featureExtractors: neededFeaturesArr
+    });
+
+    this.meydaAnalyzers[bufferSize] = {
+      analyzer,
+      features: neededFeaturesArr
+    };
+
+    this.meydaAnalyzers[bufferSize].analyzer.start();
+
+    const values = this.meydaAnalyzers[bufferSize].analyzer.get();
+
+    return values ? values[feature] : defaultFeatures[feature];
+  }
+
+  clearMeydaAnalyzers() {
+    Object.values(this.meydaAnalyzers).forEach((analyzer) =>
+      analyzer.analyzer.stop()
+    );
+
+    this.meydaAnalyzers = {};
+  }
+
   play() {
     this.audioElement.play();
     this.isPlaying = true;
@@ -168,6 +271,7 @@ export class AudioService implements AudioService {
   }
 
   clear() {
+    this.clearMeydaAnalyzers();
     this.stop();
     this.reloadAudio('');
   }

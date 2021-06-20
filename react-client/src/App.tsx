@@ -35,6 +35,7 @@ const App: React.FC = () => {
         <Router>{audioServiceReady && <AppRoutes />}</Router>
         <ModalsContainer />
       </ThemeProvider>
+
       <audio ref={audioRef} crossOrigin='anonymous' />
     </div>
   );

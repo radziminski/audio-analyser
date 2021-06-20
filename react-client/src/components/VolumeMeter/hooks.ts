@@ -13,8 +13,8 @@ import audioService, {
 import { useEffect, useState, useRef, MutableRefObject } from 'react';
 
 export const useInitAnalysers = () => {
-  const [analysersIds, setAnalysersIds] = useState<number[]>([]);
-  const [analysersReady, setAnalysersReady] = useState<boolean>(false);
+  const [analyzersIds, setAnalyzersIds] = useState<number[]>([]);
+  const [analyzersReady, setAnalyzersReady] = useState<boolean>(false);
 
   const analyserInstRightNodeRef = useRef<AnalyserNode>();
   const analyserInstLeftNodeRef = useRef<AnalyserNode>();
@@ -22,7 +22,7 @@ export const useInitAnalysers = () => {
   const analyserAvgLeftNodeRef = useRef<AnalyserNode>();
 
   useEffect(() => {
-    if (analysersReady) return;
+    if (analyzersReady) return;
 
     const analyserRight = audioService.createAnalyser(LEFT_CHANNEL);
     const analyserLeft = audioService.createAnalyser(RIGHT_CHANNEL);
@@ -30,7 +30,7 @@ export const useInitAnalysers = () => {
     const analyserMaxRight = audioService.createAnalyser(LEFT_CHANNEL);
     const analyserMaxLeft = audioService.createAnalyser(RIGHT_CHANNEL);
 
-    setAnalysersIds((prevIds) => [
+    setAnalyzersIds((prevIds) => [
       ...prevIds,
       analyserRight.id,
       analyserLeft.id,
@@ -45,25 +45,25 @@ export const useInitAnalysers = () => {
     analyserAvgLeftNodeRef.current = analyserMaxLeft.analyserNode;
 
     const instFFTSize = 1024 * 4;
-    const avgFFTSize = 1024 * 32;
+    const avgFFTSize = 1024 * 16;
     analyserInstRightNodeRef.current.fftSize = instFFTSize;
     analyserInstLeftNodeRef.current.fftSize = instFFTSize;
     analyserAvgRightNodeRef.current.fftSize = avgFFTSize;
     analyserAvgLeftNodeRef.current.fftSize = avgFFTSize;
 
-    setAnalysersReady(true);
+    setAnalyzersReady(true);
 
     return () => {
-      analysersIds.forEach((id) => {
+      analyzersIds.forEach((id) => {
         audioService.removeAnalyser(id);
       });
-      setAnalysersIds([]);
+      setAnalyzersIds([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
-    analysersReady,
+    analyzersReady,
     analyserInstRight: analyserInstRightNodeRef.current,
     analyserInstLeft: analyserInstLeftNodeRef.current,
     analyserAvgRight: analyserAvgRightNodeRef.current,
@@ -76,7 +76,7 @@ interface InitMeterProps {
   analyserInstLeft?: AnalyserNode;
   analyserAvgRight?: AnalyserNode;
   analyserAvgLeft?: AnalyserNode;
-  analysersReady: boolean;
+  analyzersReady: boolean;
   containerRef: MutableRefObject<HTMLElement | null>;
 }
 
@@ -85,7 +85,7 @@ export const useInitMeter = ({
   analyserInstLeft,
   analyserAvgRight,
   analyserAvgLeft,
-  analysersReady,
+  analyzersReady,
   containerRef
 }: InitMeterProps) => {
   const { ready, canvasDrawer } = useCanvasDrawer(containerRef);
@@ -109,8 +109,11 @@ export const useInitMeter = ({
     // Compute average power over the interval.
     const instantaneousAverageLeft = calculateBufferAverage(sampleBufferLeft);
     const instantaneousAverageRight = calculateBufferAverage(sampleBufferRight);
+    // const start = performance.now();
+
     const maxAverageLeft = calculateBufferMaxAverage(sampleBufferInstLeft);
     const maxAverageRight = calculateBufferMaxAverage(sampleBufferInstRight);
+    // console.log(performance.now() - start);
 
     // Display values
     drawInstantaneousVolume(
@@ -131,7 +134,7 @@ export const useInitMeter = ({
       width || 0,
       1
     );
-  }, ready && canvasDrawer && dimensionsReady && analysersReady);
+  }, ready && canvasDrawer && dimensionsReady && analyzersReady);
 };
 
 export const useStartMeter = (
@@ -142,7 +145,7 @@ export const useStartMeter = (
     analyserInstRight,
     analyserAvgRight,
     analyserAvgLeft,
-    analysersReady
+    analyzersReady
   } = useInitAnalysers();
 
   useInitMeter({
@@ -150,7 +153,7 @@ export const useStartMeter = (
     analyserInstLeft,
     analyserAvgRight,
     analyserAvgLeft,
-    analysersReady,
+    analyzersReady,
     containerRef
   });
 };
