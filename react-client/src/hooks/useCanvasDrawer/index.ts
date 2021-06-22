@@ -78,6 +78,6 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
 
   return {
     ready,
-    canvasDrawer: canvasDrawer
+    canvasDrawer
   };
 };

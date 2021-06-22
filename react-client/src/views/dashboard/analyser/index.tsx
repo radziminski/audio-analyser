@@ -14,6 +14,7 @@ import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
 import ActionButton from '~/components/ActionButton';
+import SingleParametersBar from '~/components/SingleParametersBar';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -24,13 +25,19 @@ const getFileDateTime = (datetime: string) => {
   };
 };
 
-const WIDGETS = ['waveform', 'volume', 'freq', 'spectro'];
+const WIDGETS = ['waveform', 'volume', 'freq', 'spectro', 'bar'];
 
-const initWidgets = { waveform: true, volume: true, freq: true, spectro: true };
+const INIT_WIDGETS = {
+  waveform: true,
+  volume: true,
+  freq: true,
+  spectro: true,
+  bar: true
+};
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
-  const [shownWidgets, setShownWidgets] = useState(initWidgets);
+  const [shownWidgets, setShownWidgets] = useState(INIT_WIDGETS);
 
   const {
     audio: {
@@ -131,6 +138,11 @@ export const AnalyserView: React.FC = () => {
             barBorderRadius={8}
             audioElement={AudioService.audioElement}
           />
+        )}
+        {shownWidgets.bar && (
+          <Box marginY='2rem'>
+            <SingleParametersBar />
+          </Box>
         )}
         <FlexBox justifyContent='space-between' marginTop='1rem'>
           {shownWidgets.volume && <VolumeMeter />}
