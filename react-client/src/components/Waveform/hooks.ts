@@ -4,6 +4,8 @@ import { useCanvasDrawer } from '~/hooks/useCanvasDrawer';
 import { useEffect, useState, useCallback } from 'react';
 import { useElementDimensions } from '~/hooks/useElementDimensions';
 
+const PASSED_COLOR = COLORS.accentSecondary100;
+
 export const useCalculatePeaks = <T extends HTMLElement | null>(
   audioBuffer: AudioBuffer | null | undefined,
   barWidth: number,
@@ -67,7 +69,7 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
   useEffect(() => {
     if (!canvasDrawer || !ready || !dimensionsReady) return;
 
-    canvasDrawer.fill(COLORS.accentSecondary100);
+    canvasDrawer.fill(PASSED_COLOR);
     canvasDrawer.noStroke();
 
     canvasDrawer.rect(0, 0, 2, height || 0);
@@ -76,31 +78,95 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
 
   const cursorAnimationFunction = useCallback(() => {
     if (
-      canvasDrawer &&
-      ready &&
-      audioElement &&
-      cursorContainerRef.current &&
-      width &&
-      height
-    ) {
-      const time = audioElement.currentTime || 0;
-      const duration = audioElement.duration;
+      !(
+        canvasDrawer &&
+        ready &&
+        audioElement &&
+        cursorContainerRef.current &&
+        width &&
+        height
+      )
+    )
+      return;
 
-      if (time || time === 0) {
-        canvasDrawer.clear();
-        canvasDrawer.noStroke();
-        canvasDrawer.fill(COLORS.accentSecondary100);
+    const time = audioElement.currentTime || 0;
+    const duration = audioElement.duration;
 
-        let currPosition = (time / duration) * width;
+    if (time || time === 0) {
+      canvasDrawer.clear();
+      canvasDrawer.noStroke();
+      canvasDrawer.fill(PASSED_COLOR);
 
-        if (currPosition >= width - cursorWidth)
-          currPosition = width - cursorWidth;
+      let currPosition = (time / duration) * width;
 
-        canvasDrawer.rect(currPosition, 0, cursorWidth, height);
-      }
+      if (currPosition >= width - cursorWidth)
+        currPosition = width - cursorWidth;
+
+      canvasDrawer.rect(currPosition, 0.5, cursorWidth, height);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasDrawer, audioElement, cursorContainerRef]);
 
   useAnimationFrameLoop(cursorAnimationFunction);
+};
+
+export const useBarsDrawer = <T extends HTMLElement | null>(
+  barsContainerRef: React.MutableRefObject<T>,
+  audioElement: HTMLAudioElement,
+  peaks: number[],
+  barWidth: number,
+  barSpacing: number,
+  borderRadius = 0
+) => {
+  const { ready, canvasDrawer } = useCanvasDrawer(barsContainerRef);
+  const { height, width, dimensionsReady } = useElementDimensions(
+    barsContainerRef,
+    true,
+    50
+  );
+
+  const barsAnimationFunction = useCallback(() => {
+    if (
+      !(
+        barsContainerRef.current &&
+        ready &&
+        canvasDrawer &&
+        dimensionsReady &&
+        width &&
+        height
+      )
+    )
+      return;
+    canvasDrawer.clear();
+
+    const time = audioElement.currentTime || 0;
+    const duration = audioElement.duration;
+    const currPosition = Math.ceil((time / duration) * width);
+
+    for (let peakNum = 0; peakNum < peaks.length; peakNum++) {
+      const peak = peaks[peakNum];
+
+      for (let line = 0; line < barWidth; line++) {
+        const positionX = peakNum * barWidth + barSpacing * peakNum + line;
+        if (positionX > currPosition)
+          canvasDrawer.stroke(
+            COLORS.white
+          );
+        else
+          canvasDrawer.stroke(
+            PASSED_COLOR
+          );
+        let actualHeight = height - borderRadius;
+        if (line < borderRadius || line > barWidth - borderRadius)
+          actualHeight = height;
+
+        const startY = Math.round((actualHeight - peak) / 2);
+        const endY = height - startY;
+
+        canvasDrawer.line(positionX, startY, positionX, endY);
+      }
+    }
+  }, [canvasDrawer, audioElement, barsContainerRef, dimensionsReady]);
+
+  useAnimationFrameLoop(barsAnimationFunction);
 };

@@ -3,6 +3,7 @@ import p5 from 'p5';
 import { useEffect, useState, useCallback } from 'react';
 
 const CANVAS_RESIZE_DEBOUNCE_MS = 50;
+/** Needs to be added to each coordinate while drawing */
 
 export const useCanvasDrawer = <T extends HTMLElement | null>(
   containerRef: React.MutableRefObject<T>,
@@ -26,6 +27,10 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
           canvasHeight ?? containerHeight ?? 0
         );
 
+        /** Canvas always needs to have 0.5 added 
+         * to each coordinate otherwise its blurry */
+        p.translate(0.5, 0.5);
+
         setReady(true);
       };
     },
@@ -43,7 +48,7 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
       setCanvasDrawer(currCanvasDrawer);
     }
 
-    return canvasDrawer?.remove();
+    return () => canvasDrawer?.remove();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef.current, dimensionsReady]);
@@ -78,6 +83,6 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
 
   return {
     ready,
-    canvasDrawer: canvasDrawer
+    canvasDrawer
   };
 };

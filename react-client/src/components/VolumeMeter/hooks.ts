@@ -12,7 +12,10 @@ import audioService, {
 } from '~/services/AudioService';
 import { useEffect, useState, useRef, MutableRefObject } from 'react';
 
-export const useInitAnalysers = () => {
+const INST_FFT_SIZE = 1024 * 4;
+const AVG_FFT_SIZE = 1024 * 16;
+
+export const useInitAnalyzers = () => {
   const [analyzersIds, setAnalyzersIds] = useState<number[]>([]);
   const [analyzersReady, setAnalyzersReady] = useState<boolean>(false);
 
@@ -44,8 +47,8 @@ export const useInitAnalysers = () => {
     analyserAvgRightNodeRef.current = analyserMaxRight.analyserNode;
     analyserAvgLeftNodeRef.current = analyserMaxLeft.analyserNode;
 
-    const instFFTSize = 1024 * 4;
-    const avgFFTSize = 1024 * 16;
+    const instFFTSize = INST_FFT_SIZE;
+    const avgFFTSize = AVG_FFT_SIZE;
     analyserInstRightNodeRef.current.fftSize = instFFTSize;
     analyserInstLeftNodeRef.current.fftSize = instFFTSize;
     analyserAvgRightNodeRef.current.fftSize = avgFFTSize;
@@ -146,7 +149,7 @@ export const useStartMeter = (
     analyserAvgRight,
     analyserAvgLeft,
     analyzersReady
-  } = useInitAnalysers();
+  } = useInitAnalyzers();
 
   useInitMeter({
     analyserInstRight,

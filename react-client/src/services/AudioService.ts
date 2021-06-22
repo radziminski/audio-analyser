@@ -1,4 +1,9 @@
-import { MeydaAnalyzer, createMeydaAnalyzer, MeydaAudioFeature } from 'meyda';
+import {
+  MeydaAnalyzer,
+  createMeydaAnalyzer,
+  MeydaAudioFeature,
+  MeydaFeaturesObject
+} from 'meyda';
 
 export interface AudioService {
   context: AudioContext;
@@ -232,6 +237,26 @@ export class AudioService implements AudioService {
     );
 
     this.meydaAnalyzers = {};
+  }
+
+  createMeydaAnalyzer(
+    bufferSize = 2048,
+    features: MeydaAudioFeature[],
+    callback: (features: Partial<MeydaFeaturesObject>) => void
+  ) {
+    const analyzer = createMeydaAnalyzer({
+      audioContext: this.context,
+      source: this.mixGainNode,
+      bufferSize,
+      featureExtractors: features,
+      callback
+    });
+
+    this.meydaAnalyzers[bufferSize] = { analyzer, features };
+
+    analyzer.start();
+
+    return analyzer;
   }
 
   play() {

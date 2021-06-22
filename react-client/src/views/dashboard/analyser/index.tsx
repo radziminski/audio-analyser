@@ -14,6 +14,7 @@ import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
 import ActionButton from '~/components/ActionButton';
+import SingleParametersBar from '~/components/SingleParametersBar';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -24,13 +25,23 @@ const getFileDateTime = (datetime: string) => {
   };
 };
 
-const WIDGETS = ['waveform', 'volume', 'freq', 'spectro'];
+const getFileSizeMb = (size: number) => {
+  return Math.round((size * 100) / (1024 * 1024)) / 100;
+};
 
-const initWidgets = { waveform: true, volume: true, freq: true, spectro: true };
+const WIDGETS = ['waveform', 'volume', 'freq', 'spectro', 'bar'];
+
+const INIT_WIDGETS = {
+  waveform: true,
+  volume: true,
+  freq: true,
+  spectro: true,
+  bar: true
+};
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
-  const [shownWidgets, setShownWidgets] = useState(initWidgets);
+  const [shownWidgets, setShownWidgets] = useState(INIT_WIDGETS);
 
   const {
     audio: {
@@ -103,7 +114,7 @@ export const AnalyserView: React.FC = () => {
 
     return (
       <>
-        <FlexBox>
+        <FlexBox marginBottom='2rem'>
           {WIDGETS.map((widget) => (
             <Box marginRight='2rem' key={widget}>
               <ActionButton
@@ -113,6 +124,7 @@ export const AnalyserView: React.FC = () => {
                     [widget]: !shownWidgets[widget]
                   });
                 }}
+                fontSize='0.75rem'
               >
                 {widget}
               </ActionButton>
@@ -125,12 +137,17 @@ export const AnalyserView: React.FC = () => {
             isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
             didLoadAudioBuffer={didLoadAudioBuffer ?? false}
             barMinHeight={1}
-            barWidth={4}
+            barWidth={5}
             barSpacing={1}
             height={140}
-            barBorderRadius={8}
+            barBorderRadius={0}
             audioElement={AudioService.audioElement}
           />
+        )}
+        {shownWidgets.bar && (
+          <Box margin='2rem 0 1rem'>
+            <SingleParametersBar />
+          </Box>
         )}
         <FlexBox justifyContent='space-between' marginTop='1rem'>
           {shownWidgets.volume && <VolumeMeter />}
@@ -182,7 +199,10 @@ export const AnalyserView: React.FC = () => {
       title={file?.name ?? 'Audio File'}
       subTitles={
         file
-          ? [getFileDateTime(file.createdAt ?? '').date, '2:00']
+          ? [
+              getFileDateTime(file.createdAt ?? '').date,
+              `${getFileSizeMb(file.size)}MB`
+            ]
           : ['Unknown']
       }
       canGoBack
