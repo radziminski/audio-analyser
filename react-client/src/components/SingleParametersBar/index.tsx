@@ -23,7 +23,6 @@ const PITCH_CLASSES = [
 
 const BAND_SQUARE_SIZE = 50;
 const BAND_SQUARE_DISTANCE = 5;
-const PITCH_NUM = PITCH_CLASSES.length;
 
 export const SingleParametersBar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -34,11 +33,14 @@ export const SingleParametersBar: React.FC = () => {
     (features: Partial<MeydaFeaturesObject>) => {
       if (canvasDrawer) {
         canvasDrawer.clear();
-        canvasDrawer.stroke('rgba(255, 255, 255, 0)');
+        canvasDrawer.noStroke();
 
         features.chroma?.forEach((band, index) => {
           canvasDrawer.fill(
-            `rgba(112, 51 ,255, ${Math.max(Math.round(band * 100) / 100, 0.2)})`
+            `rgba(112, 51 ,255, ${Math.max(
+              Math.round(band * band * 100) / 100,
+              0.2
+            )})`
           );
 
           canvasDrawer?.rect(

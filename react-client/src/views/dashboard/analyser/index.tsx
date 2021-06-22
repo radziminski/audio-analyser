@@ -110,7 +110,7 @@ export const AnalyserView: React.FC = () => {
 
     return (
       <>
-        <FlexBox>
+        <FlexBox marginBottom='2rem'>
           {WIDGETS.map((widget) => (
             <Box marginRight='2rem' key={widget}>
               <ActionButton
@@ -120,6 +120,7 @@ export const AnalyserView: React.FC = () => {
                     [widget]: !shownWidgets[widget]
                   });
                 }}
+                fontSize='0.75rem'
               >
                 {widget}
               </ActionButton>
@@ -132,15 +133,15 @@ export const AnalyserView: React.FC = () => {
             isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
             didLoadAudioBuffer={didLoadAudioBuffer ?? false}
             barMinHeight={1}
-            barWidth={4}
+            barWidth={5}
             barSpacing={1}
             height={140}
-            barBorderRadius={8}
+            barBorderRadius={0}
             audioElement={AudioService.audioElement}
           />
         )}
         {shownWidgets.bar && (
-          <Box marginY='2rem'>
+          <Box margin='2rem 0 1rem'>
             <SingleParametersBar />
           </Box>
         )}
