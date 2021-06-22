@@ -25,6 +25,10 @@ const getFileDateTime = (datetime: string) => {
   };
 };
 
+const getFileSizeMb = (size: number) => {
+  return Math.round((size * 100) / (1024 * 1024)) / 100;
+};
+
 const WIDGETS = ['waveform', 'volume', 'freq', 'spectro', 'bar'];
 
 const INIT_WIDGETS = {
@@ -195,7 +199,10 @@ export const AnalyserView: React.FC = () => {
       title={file?.name ?? 'Audio File'}
       subTitles={
         file
-          ? [getFileDateTime(file.createdAt ?? '').date, '2:00']
+          ? [
+              getFileDateTime(file.createdAt ?? '').date,
+              `${getFileSizeMb(file.size)}MB`
+            ]
           : ['Unknown']
       }
       canGoBack
