@@ -8,22 +8,20 @@ import NotFoundView from './not-found';
 
 export const AppRoutes: React.FC = () => {
   return (
-    <>
-      <Switch>
-        <Route path={ROUTES.ROOT} exact>
-          <Redirect to={ROUTES.DASHBOARD} />
-        </Route>
-        <Route path={ROUTES.AUTH}>
-          <AuthView />
-        </Route>
-        <ProtectedRoute path={ROUTES.DASHBOARD}>
-          <DashboardView />
-        </ProtectedRoute>
-        <Route>
-          <NotFoundView />
-        </Route>
-      </Switch>
-    </>
+    <Switch>
+      <Route path={ROUTES.ROOT} exact>
+        <Redirect to={ROUTES.DASHBOARD} />
+      </Route>
+      <Route path={ROUTES.AUTH}>
+        <AuthView />
+      </Route>
+      <ProtectedRoute path={ROUTES.DASHBOARD}>
+        <DashboardView />
+      </ProtectedRoute>
+      <Route>
+        <NotFoundView />
+      </Route>
+    </Switch>
   );
 };
 

@@ -6,3 +6,5 @@ export const ENV =
 
 export const APP_TITLE = 'Audio Analyser';
 export const API_BASE_URL = process.env.API_URL;
+
+export const MIN_SCREEN_WIDTH = 1100;
