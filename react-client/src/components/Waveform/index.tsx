@@ -12,7 +12,6 @@ interface Props {
   barWidth: number;
   barSpacing: number;
   barMinHeight: number;
-  barBorderRadius: number;
   height: number;
   audioElement: HTMLAudioElement;
 }
@@ -20,7 +19,6 @@ interface Props {
 export const Waveform: React.FC<Props> = ({
   barWidth,
   barSpacing,
-  barBorderRadius,
   height,
   audioElement,
   audioBuffer
@@ -48,8 +46,7 @@ export const Waveform: React.FC<Props> = ({
     audioElement,
     peaks || [],
     barWidth,
-    barSpacing,
-    barBorderRadius
+    barSpacing
   );
 
   // == Old bars rendered as react divs

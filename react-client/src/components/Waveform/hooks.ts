@@ -102,7 +102,7 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
       if (currPosition >= width - cursorWidth)
         currPosition = width - cursorWidth;
 
-      canvasDrawer.rect(currPosition, 0.5, cursorWidth, height);
+      canvasDrawer.rect(currPosition, 0, cursorWidth, height);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasDrawer, audioElement, cursorContainerRef]);
@@ -115,8 +115,7 @@ export const useBarsDrawer = <T extends HTMLElement | null>(
   audioElement: HTMLAudioElement,
   peaks: number[],
   barWidth: number,
-  barSpacing: number,
-  borderRadius = 0
+  barSpacing: number
 ) => {
   const { ready, canvasDrawer } = useCanvasDrawer(barsContainerRef);
   const { height, width, dimensionsReady } = useElementDimensions(
@@ -137,33 +136,36 @@ export const useBarsDrawer = <T extends HTMLElement | null>(
       )
     )
       return;
+
     canvasDrawer.clear();
 
     const time = audioElement.currentTime || 0;
     const duration = audioElement.duration;
     const currPosition = Math.ceil((time / duration) * width);
 
+    const barWidthWithSpacing = barWidth + barSpacing;
+
     for (let peakNum = 0; peakNum < peaks.length; peakNum++) {
       const peak = peaks[peakNum];
+      const startY = Math.round((height - peak) / 2);
 
-      for (let line = 0; line < barWidth; line++) {
-        const positionX = peakNum * barWidth + barSpacing * peakNum + line;
-        if (positionX > currPosition)
-          canvasDrawer.stroke(
-            COLORS.white
-          );
-        else
-          canvasDrawer.stroke(
-            PASSED_COLOR
-          );
-        let actualHeight = height - borderRadius;
-        if (line < borderRadius || line > barWidth - borderRadius)
-          actualHeight = height;
+      const startPosition = peakNum * barWidthWithSpacing;
 
-        const startY = Math.round((actualHeight - peak) / 2);
-        const endY = height - startY;
+      if (startPosition + barWidth - 1 < currPosition)
+        canvasDrawer.fill(PASSED_COLOR);
+      else canvasDrawer.fill(COLORS.white);
 
-        canvasDrawer.line(positionX, startY, positionX, endY);
+      canvasDrawer.noStroke();
+      canvasDrawer.rect(startPosition, startY, barWidth, peak);
+
+      if (Math.abs(currPosition - startPosition) < barWidth) {
+        for (let line = 0; line < currPosition - startPosition + 1; line++) {
+          const positionX = startPosition + line;
+          const endY = height - startY;
+
+          canvasDrawer.stroke(PASSED_COLOR);
+          canvasDrawer.line(positionX, startY, positionX, endY);
+        }
       }
     }
   }, [canvasDrawer, audioElement, barsContainerRef, dimensionsReady]);

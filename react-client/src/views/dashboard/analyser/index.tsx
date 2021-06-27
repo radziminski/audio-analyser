@@ -140,7 +140,6 @@ export const AnalyserView: React.FC = () => {
             barWidth={5}
             barSpacing={1}
             height={140}
-            barBorderRadius={0}
             audioElement={AudioService.audioElement}
           />
         )}
