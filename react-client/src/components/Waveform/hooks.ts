@@ -73,7 +73,6 @@ export const useCursorDrawer = <T extends HTMLElement | null>(
     canvasDrawer.noStroke();
 
     canvasDrawer.rect(0, 0, 2, height || 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasDrawer, ready, dimensionsReady]);
 
   const cursorAnimationFunction = useCallback(() => {

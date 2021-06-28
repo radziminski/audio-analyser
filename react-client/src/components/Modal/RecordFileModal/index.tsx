@@ -46,7 +46,6 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     });
 
     const mediaRecorder = new AudioRecorder(stream);
-    console.log(mediaRecorder);
 
     mediaRecorder.setAudioEncodingBitRate &&
       mediaRecorder.setAudioEncodingBitRate(16);
@@ -58,10 +57,8 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
 
     mediaRecorderRef.current = mediaRecorder;
     mediaRecorder.start();
-    console.log(mediaRecorder.state);
 
     mediaRecorder.addEventListener('dataavailable', (e) => {
-      console.log(e.data.type);
       audioChunksRef.current.push(e.data);
     });
 
@@ -75,7 +72,6 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const onStopRecord = () => {
     setIsRecording(false);
     setAudioRecorded(true);
-    console.log(audioChunksRef.current);
     mediaRecorderRef.current?.stop();
   };
 

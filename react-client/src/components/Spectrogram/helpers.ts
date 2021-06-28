@@ -42,10 +42,6 @@ export const getLogValue = (
       ? height
       : (sampleToDecibel(Math.abs(value)) * height) / minDecibels;
 
-  // if (value && Number.isFinite(value)) {
-  //   console.log(index, logIndex, value);
-  // }
-
   return currSampleDecNew || 0.001;
 };
 

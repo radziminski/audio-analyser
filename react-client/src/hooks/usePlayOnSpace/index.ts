@@ -12,5 +12,5 @@ export const usePlayOnSpace = (
     else play();
   };
 
-  useOnKeyboardPress(playOnSpace);
+  useOnKeyboardPress(playOnSpace, true);
 };

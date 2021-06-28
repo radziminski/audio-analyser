@@ -116,7 +116,6 @@ export const useInitMeter = ({
 
     const maxAverageLeft = calculateBufferMaxAverage(sampleBufferInstLeft);
     const maxAverageRight = calculateBufferMaxAverage(sampleBufferInstRight);
-    // console.log(performance.now() - start);
 
     // Display values
     drawInstantaneousVolume(

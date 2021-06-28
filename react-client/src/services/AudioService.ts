@@ -198,7 +198,6 @@ export class AudioService implements AudioService {
         )
       ) {
         const values = this.meydaAnalyzers[bufferSize].analyzer.get();
-        console.log(values ? values[feature] : defaultFeatures[feature]);
         return values ? values[feature] : defaultFeatures[feature];
       }
 

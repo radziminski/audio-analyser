@@ -13,12 +13,12 @@ export const useAnimationFrameLoop = (
       animationFrameRef.current = requestAnimationFrame(animationLoop);
     };
 
-    console.log('Starting animation frame');
     animationLoop();
+    console.log('Starting animation frame', animationFrameRef.current);
     return () => {
       if (animationFrameRef.current) {
+        console.log('Closing animation frame', animationFrameRef.current);
         cancelAnimationFrame(animationFrameRef.current);
-        console.log('Closing animation frame');
         animationFrameRef.current = undefined;
       }
     };

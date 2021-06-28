@@ -49,24 +49,6 @@ export const Waveform: React.FC<Props> = ({
     barSpacing
   );
 
-  // == Old bars rendered as react divs
-  // const barsRendered = useMemo(() => {
-  //   return (
-  //     peaks?.map((barHeight, i) => {
-  //       return (
-  //         <Box
-  //           key={i}
-  //           height={barHeight}
-  //           width={`${barWidth}px`}
-  //           marginRight={`${barSpacing}px`}
-  //           background='white'
-  //           borderRadius={barBorderRadius}
-  //         />
-  //       );
-  //     }) ?? null
-  //   );
-  // }, [peaks, barBorderRadius, barSpacing, barWidth]);
-
   const onWaveformClicked = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (
