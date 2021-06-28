@@ -18,7 +18,11 @@ export const SettingsView: React.FC = () => {
       instantaneousBufferSize,
       averageBufferSize
     },
-    frequency: { isOpened: isFrequencyOpened },
+    frequency: {
+      isOpened: isFrequencyOpened,
+      bufferSize: fftSize,
+      height: frequencyHeight
+    },
     spectrogram: { isOpened: isSpectrogramOpened },
     singleParams: { isOpened: isSingleParamsOpened }
   } = useStoreState((state) => state.ui.audioUIState);
@@ -106,6 +110,26 @@ export const SettingsView: React.FC = () => {
       />
     </SectionWithTitle>
   );
+  const frequencySettings = (
+    <SectionWithTitle title='Frequency Chart' description='todo'>
+      <ToggleInputBox
+        title='Frequency Chart shown: '
+        value={isFrequencyOpened}
+        onChange={(isOpened) => setFrequencyState({ isOpened })}
+      />
+      <SlideInputBox
+        title='FFT size'
+        value={Math.log2(fftSize)}
+        min={9}
+        max={14}
+        step={1}
+        onChange={(power) =>
+          setFrequencyState({ bufferSize: Math.pow(2, power) })
+        }
+        displayedValue={fftSize.toString()}
+      />
+    </SectionWithTitle>
+  );
 
   return (
     <DashboardContent
@@ -116,8 +140,13 @@ export const SettingsView: React.FC = () => {
       canGoBack
     >
       <Box height='1rem' />
-      {waveformSettings}
-      {volumeSettings}
+
+      <FlexBox justifyContent='space-between' width='100%' flexWrap='wrap'>
+        {waveformSettings}
+        {volumeSettings}
+        {frequencySettings}
+      </FlexBox>
+
       <FlexBox justifyContent='center' width='100%'>
         <Box width='200px'>
           <ActionButton

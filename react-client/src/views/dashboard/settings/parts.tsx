@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Box, { FlexBox } from '~/components/Box';
 import { Heading5 } from '~/components/Text';
 import TextInput from '~/components/TextInput';
@@ -16,8 +17,13 @@ export const SectionWithTitle: React.FC<SectionWithTitleProps> = ({
   children
 }) => {
   return (
-    <Box color={COLORS.white} marginBottom='3rem'>
-      <Box marginBottom='1rem'>
+    <Box
+      color={COLORS.white}
+      marginBottom='3rem'
+      width='50%'
+      paddingRight='100px'
+    >
+      <Box marginBottom='1.4rem'>
         {title && (
           <Box marginBottom='0.5rem'>
             <Heading5 fontWeight={FONT_WEIGHTS.medium}>{title}</Heading5>
@@ -48,11 +54,17 @@ export const ToggleInputBox: React.FC<ToggleInputBoxProps> = ({
   onChange
 }) => {
   return (
-    <FlexBox alignItems='center' marginBottom='1rem'>
+    <FlexBox
+      alignItems='center'
+      marginBottom='1rem'
+      justifyContent='space-between'
+    >
       <Box marginRight='1rem'>
         <Heading5 fontWeight={FONT_WEIGHTS.light}>{title}</Heading5>
       </Box>
-      <ToggleSwitch value={value} onChange={onChange} />
+      <Box width='250px'>
+        <ToggleSwitch value={value} onChange={onChange} />
+      </Box>
     </FlexBox>
   );
 };
@@ -91,6 +103,10 @@ interface SlideInputBoxProps {
   displayedValue?: string;
 }
 
+const Slider = styled.input`
+  width: 250px;
+`;
+
 export const SlideInputBox: React.FC<SlideInputBoxProps> = ({
   value,
   title,
@@ -102,7 +118,12 @@ export const SlideInputBox: React.FC<SlideInputBoxProps> = ({
   displayedValue
 }) => {
   return (
-    <FlexBox alignItems='center' marginBottom='1rem'>
+    <FlexBox
+      alignItems='center'
+      marginBottom='1rem'
+      width='100%'
+      justifyContent='space-between'
+    >
       <Box marginRight='1rem'>
         <Heading5 fontWeight={FONT_WEIGHTS.light}>
           {title}: {displayedValue ?? value}
@@ -110,7 +131,7 @@ export const SlideInputBox: React.FC<SlideInputBoxProps> = ({
         </Heading5>
       </Box>
       <Box cursor='pointer'>
-        <input
+        <Slider
           type='range'
           min={min}
           max={max}
