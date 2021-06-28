@@ -13,7 +13,6 @@ import { COLORS } from '~/styles/theme';
 import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
-import ActionButton from '~/components/ActionButton';
 import SingleParametersBar from '~/components/SingleParametersBar';
 
 const getFileDateTime = (datetime: string) => {
@@ -29,19 +28,8 @@ const getFileSizeMb = (size: number) => {
   return Math.round((size * 100) / (1024 * 1024)) / 100;
 };
 
-const WIDGETS = ['waveform', 'volume', 'freq', 'spectro', 'bar'];
-
-const INIT_WIDGETS = {
-  waveform: true,
-  volume: true,
-  freq: true,
-  spectro: true,
-  bar: true
-};
-
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
-  const [shownWidgets, setShownWidgets] = useState(INIT_WIDGETS);
 
   const {
     audio: {
@@ -50,7 +38,21 @@ export const AnalyserView: React.FC = () => {
       currSource,
       audioSources
     },
-    project: { projects }
+    project: { projects },
+    ui: {
+      audioUIState: {
+        waveform: {
+          barWidth,
+          barSpacing,
+          height: waveformHeight,
+          isOpened: isWaveformOpened
+        },
+        volume: { isOpened: isVolumeOpened },
+        frequency: { isOpened: isFrequencyOpened },
+        spectrogram: { isOpened: isSpectrogramOpened },
+        singleParams: { isOpened: isSingleParamsOpened }
+      }
+    }
   } = useStoreState((state) => state);
 
   const { id: srcId } = useParams<{ id: string }>();
@@ -114,50 +116,33 @@ export const AnalyserView: React.FC = () => {
 
     return (
       <>
-        <FlexBox marginBottom='2rem'>
-          {WIDGETS.map((widget) => (
-            <Box marginRight='2rem' key={widget}>
-              <ActionButton
-                onClick={() => {
-                  setShownWidgets({
-                    ...shownWidgets,
-                    [widget]: !shownWidgets[widget]
-                  });
-                }}
-                fontSize='0.75rem'
-              >
-                {widget}
-              </ActionButton>
-            </Box>
-          ))}
-        </FlexBox>
-        {shownWidgets.waveform && (
+        {isWaveformOpened && (
           <Waveform
             audioBuffer={AudioService?.buffer}
             isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
             didLoadAudioBuffer={didLoadAudioBuffer ?? false}
             barMinHeight={1}
-            barWidth={5}
-            barSpacing={1}
-            height={140}
+            barWidth={barWidth}
+            barSpacing={barSpacing}
+            height={waveformHeight}
             audioElement={AudioService.audioElement}
           />
         )}
-        {shownWidgets.bar && (
+        {isSingleParamsOpened && (
           <Box margin='2rem 0 1rem'>
             <SingleParametersBar />
           </Box>
         )}
         <FlexBox justifyContent='space-between' marginTop='1rem'>
-          {shownWidgets.volume && <VolumeMeter />}
+          {isVolumeOpened && <VolumeMeter />}
           <FlexBox
             flexDirection='column'
             justifyContent='space-between'
             flex={1}
-            paddingLeft={shownWidgets.volume ? '3rem' : 0}
+            paddingLeft={isVolumeOpened ? '3rem' : 0}
           >
-            {shownWidgets.freq && <FrequencyMeter />}
-            {shownWidgets.spectro && (
+            {isFrequencyOpened && <FrequencyMeter />}
+            {isSpectrogramOpened && (
               <Box marginTop='2rem'>
                 <Spectrogram />
               </Box>
@@ -166,7 +151,16 @@ export const AnalyserView: React.FC = () => {
         </FlexBox>
       </>
     );
-  }, [isLoadingAudioBuffer, didLoadAudioBuffer, audioLoaded, shownWidgets]);
+  }, [
+    isLoadingAudioBuffer,
+    didLoadAudioBuffer,
+    audioLoaded,
+    isVolumeOpened,
+    isFrequencyOpened,
+    isSpectrogramOpened,
+    isSingleParamsOpened,
+    isWaveformOpened
+  ]);
 
   if (!srcExists) {
     return (

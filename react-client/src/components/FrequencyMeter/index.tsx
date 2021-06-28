@@ -9,24 +9,25 @@ import {
 import { COLORS } from '~/styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text from '~/components/Text';
+import { useStoreState } from '~/global-state/hooks';
 
 const MIN_DECIBELS = 21;
-const CONTAINER_HEIGHT = 320;
-
-const FFT_SIZE = 1024 * 4;
-const HALF_FFT_SIZE = FFT_SIZE / 2;
 
 const FrequencyMeter: React.FC = () => {
   const analyser = useRef<AnalyserNode>();
   const container = useRef<HTMLDivElement | null>(null);
+
+  const { bufferSize, height: setHeight } = useStoreState(
+    (state) => state.ui.audioUIState.frequency
+  );
   const { canvasDrawer, ready } = useCanvasDrawer(container);
-  const { height: containerHeight, width: containerWidth } =
-    useElementDimensions(container);
-  const height = containerHeight ?? 0;
+  const { width: containerWidth } = useElementDimensions(container);
+
+  const fftSize = bufferSize;
+  const halfFftSize = fftSize / 2;
+
   const width = containerWidth ?? 0;
   const valuableSamplesNumber = (analyser.current?.fftSize || 0) / 2;
-
-  console.log(containerHeight, containerWidth);
 
   const sampleRate = AudioService.buffer?.sampleRate;
 
@@ -48,9 +49,9 @@ const FrequencyMeter: React.FC = () => {
         buffer,
         valuableSamplesNumber,
         width,
-        height,
+        setHeight,
         MIN_DECIBELS,
-        HALF_FFT_SIZE
+        halfFftSize
       );
       samplesInLog.push(logValue);
 
@@ -59,11 +60,11 @@ const FrequencyMeter: React.FC = () => {
 
       const stretchedHeight =
         currHeight -
-        (Math.pow(height - currHeight, power) * 300) /
+        (Math.pow(setHeight - currHeight, power) * 300) /
           Math.pow(currHeight, power);
 
       if (currHeight >= 50)
-        canvasDrawer.line(sampleNum, stretchedHeight, sampleNum, height);
+        canvasDrawer.line(sampleNum, stretchedHeight, sampleNum, setHeight);
     }
   };
 
@@ -74,7 +75,7 @@ const FrequencyMeter: React.FC = () => {
 
   useEffect(() => {
     const currAnalyser = AudioService.createAnalyser();
-    currAnalyser.analyserNode.fftSize = FFT_SIZE;
+    currAnalyser.analyserNode.fftSize = fftSize;
     analyser.current = currAnalyser.analyserNode;
     analyser.current.smoothingTimeConstant = 0.9;
   }, []);
@@ -89,7 +90,7 @@ const FrequencyMeter: React.FC = () => {
       <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
         <Box
           width='100%'
-          height={CONTAINER_HEIGHT}
+          height={setHeight}
           ref={container}
           borderRadius={14}
           background={COLORS.background20}

@@ -11,13 +11,15 @@ import audioService, {
   RIGHT_CHANNEL
 } from '~/services/AudioService';
 import { useEffect, useState, useRef, MutableRefObject } from 'react';
-
-const INST_FFT_SIZE = 1024 * 4;
-const AVG_FFT_SIZE = 1024 * 16;
+import { useStoreState } from '~/global-state/hooks';
 
 export const useInitAnalyzers = () => {
   const [analyzersIds, setAnalyzersIds] = useState<number[]>([]);
   const [analyzersReady, setAnalyzersReady] = useState<boolean>(false);
+
+  const { instantaneousBufferSize, averageBufferSize } = useStoreState(
+    (state) => state.ui.audioUIState.volume
+  );
 
   const analyserInstRightNodeRef = useRef<AnalyserNode>();
   const analyserInstLeftNodeRef = useRef<AnalyserNode>();
@@ -47,8 +49,8 @@ export const useInitAnalyzers = () => {
     analyserAvgRightNodeRef.current = analyserMaxRight.analyserNode;
     analyserAvgLeftNodeRef.current = analyserMaxLeft.analyserNode;
 
-    const instFFTSize = INST_FFT_SIZE;
-    const avgFFTSize = AVG_FFT_SIZE;
+    const instFFTSize = instantaneousBufferSize;
+    const avgFFTSize = averageBufferSize;
     analyserInstRightNodeRef.current.fftSize = instFFTSize;
     analyserInstLeftNodeRef.current.fftSize = instFFTSize;
     analyserAvgRightNodeRef.current.fftSize = avgFFTSize;

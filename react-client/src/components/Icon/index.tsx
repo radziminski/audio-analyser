@@ -14,13 +14,11 @@ import {
   RiCloseFill,
   RiLogoutBoxLine,
   RiDownload2Line,
-  RiRecordCircleLine
+  RiRecordCircleLine,
+  RiSettings5Fill
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 import { MdKeyboardBackspace } from 'react-icons/md';
-// import { AiFillHome } from 'react-icons/ai';
-// import { IoIosCreate } from 'react-icons/io';
-// import { GiSoundWaves } from 'react-icons/gi';
 import { Container } from './parts';
 
 export type SupportedIcon =
@@ -41,7 +39,8 @@ export type SupportedIcon =
   | 'logout'
   | 'close'
   | 'download'
-  | 'record';
+  | 'record'
+  | 'settings';
 
 export interface Props {
   icon: SupportedIcon;
@@ -88,6 +87,8 @@ export const Icon: React.FC<Props> = ({ icon, size, onClick }) => {
         return <MdKeyboardBackspace />;
       case 'record':
         return <RiRecordCircleLine />;
+      case 'settings':
+        return <RiSettings5Fill />;
     }
   };
   return (
