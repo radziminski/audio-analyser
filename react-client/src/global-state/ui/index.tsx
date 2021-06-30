@@ -23,7 +23,8 @@ const initAudioUIState: IAudioUIState = {
     averageBufferSize: 1024 * 16
   },
   singleParams: {
-    isOpened: true
+    isChromaOpened: true,
+    isMfccOpened: true
   }
 };
 

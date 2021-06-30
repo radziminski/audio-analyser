@@ -87,7 +87,7 @@ const FrequencyMeter: React.FC = () => {
 
   return (
     <>
-      <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
+      <FlexBox flexDirection='column' flexShrink={0} flexGrow={0}>
         <Box
           width='100%'
           height={setHeight}

@@ -5,6 +5,10 @@ import DashboardContent from '~/components/DashboardContent';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import { SectionWithTitle, SlideInputBox, ToggleInputBox } from './parts';
 
+const MAX_WIDGET_HEIGHT = 1000;
+const MIN_WIDGET_HEIGHT = 50;
+const WIDGET_HEIGHT_STEP = 20;
+
 export const SettingsView: React.FC = () => {
   const {
     waveform: {
@@ -23,8 +27,8 @@ export const SettingsView: React.FC = () => {
       bufferSize: fftSize,
       height: frequencyHeight
     },
-    spectrogram: { isOpened: isSpectrogramOpened },
-    singleParams: { isOpened: isSingleParamsOpened }
+    spectrogram: { isOpened: isSpectrogramOpened, height: spectrogramHeight },
+    singleParams: { isChromaOpened, isMfccOpened }
   } = useStoreState((state) => state.ui.audioUIState);
 
   const {
@@ -67,9 +71,9 @@ export const SettingsView: React.FC = () => {
       <SlideInputBox
         title='Waveform height'
         value={waveformHeight}
-        min={50}
-        max={1000}
-        step={10}
+        min={MIN_WIDGET_HEIGHT}
+        max={MAX_WIDGET_HEIGHT}
+        step={WIDGET_HEIGHT_STEP}
         onChange={(height) => setWaveformState({ height })}
         unit='px'
       />
@@ -111,9 +115,9 @@ export const SettingsView: React.FC = () => {
     </SectionWithTitle>
   );
   const frequencySettings = (
-    <SectionWithTitle title='Frequency Chart' description='todo'>
+    <SectionWithTitle title='Frequency chart' description='todo'>
       <ToggleInputBox
-        title='Frequency Chart shown: '
+        title='Frequency chart shown: '
         value={isFrequencyOpened}
         onChange={(isOpened) => setFrequencyState({ isOpened })}
       />
@@ -127,6 +131,49 @@ export const SettingsView: React.FC = () => {
           setFrequencyState({ bufferSize: Math.pow(2, power) })
         }
         displayedValue={fftSize.toString()}
+      />
+      <SlideInputBox
+        title='Frequency chart height:'
+        value={frequencyHeight}
+        min={MIN_WIDGET_HEIGHT}
+        max={MAX_WIDGET_HEIGHT}
+        step={WIDGET_HEIGHT_STEP}
+        onChange={(height) => setFrequencyState({ height })}
+        unit='px'
+      />
+    </SectionWithTitle>
+  );
+
+  const spectrogramSettings = (
+    <SectionWithTitle title='Spectrogram' description='todo'>
+      <ToggleInputBox
+        title='Spectrogram shown: '
+        value={isSpectrogramOpened}
+        onChange={(isOpened) => setSpectrogramState({ isOpened })}
+      />
+      <SlideInputBox
+        title='Spectrogram height:'
+        value={spectrogramHeight}
+        min={MIN_WIDGET_HEIGHT}
+        max={MAX_WIDGET_HEIGHT}
+        step={WIDGET_HEIGHT_STEP}
+        onChange={(height) => setSpectrogramState({ height })}
+        unit='px'
+      />
+    </SectionWithTitle>
+  );
+
+  const otherSettings = (
+    <SectionWithTitle title='Other parameters' description='todo'>
+      <ToggleInputBox
+        title='Chroma bands shown: '
+        value={isChromaOpened}
+        onChange={(isChromaOpened) => setSingleParamsState({ isChromaOpened })}
+      />
+      <ToggleInputBox
+        title='MFCC bands shown: '
+        value={isMfccOpened}
+        onChange={(isMfccOpened) => setSingleParamsState({ isMfccOpened })}
       />
     </SectionWithTitle>
   );
@@ -145,6 +192,8 @@ export const SettingsView: React.FC = () => {
         {waveformSettings}
         {volumeSettings}
         {frequencySettings}
+        {spectrogramSettings}
+        {otherSettings}
       </FlexBox>
 
       <FlexBox justifyContent='center' width='100%'>

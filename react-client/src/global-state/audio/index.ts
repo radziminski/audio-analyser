@@ -7,6 +7,7 @@ const audioState: IAudioState = {
   isLoadingAudioBuffer: false,
   didLoadAudioBuffer: false,
   currSource: null,
+  prevSource: null,
   audioSources: {},
 
   loadAudioBuffer: thunk(async (actions) => {
@@ -44,7 +45,11 @@ const audioState: IAudioState = {
   }),
 
   setCurrSource: action((state, src) => {
-    state.currSource = src;
+    if (src !== state.currSource) {
+      state.prevSource = state.currSource;
+      state.currSource = src;
+      state.didLoadAudioBuffer = false;
+    }
   }),
 
   loadAudio: action((state, src) => {

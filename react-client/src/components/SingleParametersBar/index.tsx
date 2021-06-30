@@ -26,6 +26,8 @@ const BAND_SQUARE_SIZE = 50;
 const BAND_SQUARE_DISTANCE = 5;
 const BAND_SQUARE_BORDER_RADIUS = 5;
 
+const MFCC_BANDS_NUM = 13;
+
 const drawBandSquares = (drawer: CanvasDrawer, bands: number[]) => {
   drawer.clear();
   drawer.noStroke();
@@ -46,7 +48,15 @@ const drawBandSquares = (drawer: CanvasDrawer, bands: number[]) => {
   });
 };
 
-export const SingleParametersBar: React.FC = () => {
+interface Props {
+  isChromaOpened?: boolean;
+  isMfccOpened?: boolean;
+}
+
+export const SingleParametersBar: React.FC<Props> = ({
+  isChromaOpened = true,
+  isMfccOpened = true
+}) => {
   const chromaContainerRef = useRef<HTMLDivElement | null>(null);
   const mfccContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -59,16 +69,18 @@ export const SingleParametersBar: React.FC = () => {
     (features: Partial<MeydaFeaturesObject>) => {
       const chromaBands = features.chroma;
       const mfccBands = features.mfcc;
-      if (chromaBands && chromaCanvasDrawer)
+
+      if (isChromaOpened && chromaBands && chromaCanvasDrawer)
         drawBandSquares(chromaCanvasDrawer, chromaBands);
-      if (mfccBands && mfccCanvasDrawer)
+
+      if (isMfccOpened && mfccBands && mfccCanvasDrawer)
         drawBandSquares(mfccCanvasDrawer, mfccBands);
     },
-    [chromaCanvasDrawer, mfccCanvasDrawer]
+    [chromaCanvasDrawer, mfccCanvasDrawer, isChromaOpened, isMfccOpened]
   );
 
   useEffect(() => {
-    if (!chromaCanvasDrawer || !mfccCanvasDrawer) return;
+    if (!chromaCanvasDrawer && !mfccCanvasDrawer) return;
 
     const analyzer = audioService.createMeydaAnalyzer(
       2048,
@@ -81,8 +93,11 @@ export const SingleParametersBar: React.FC = () => {
     };
   }, [onFrame]);
 
-  return (
-    <Box marginBottom='2rem'>
+  const chromaBar = (
+    <Box
+      marginRight='3rem'
+      width={(BAND_SQUARE_SIZE + BAND_SQUARE_DISTANCE) * PITCH_CLASSES.length}
+    >
       <Box marginBottom='0.5rem'>
         <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
           Chroma bands:
@@ -113,6 +128,11 @@ export const SingleParametersBar: React.FC = () => {
 
         <Box width='100%' ref={chromaContainerRef} />
       </FlexBox>
+    </Box>
+  );
+
+  const mfccBar = (
+    <Box width={(BAND_SQUARE_SIZE + BAND_SQUARE_DISTANCE) * MFCC_BANDS_NUM}>
       <Box marginBottom='0.5rem'>
         <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
           Mel-Frequency Cepstral Coefficients:
@@ -139,6 +159,13 @@ export const SingleParametersBar: React.FC = () => {
         <Box width='100%' ref={mfccContainerRef} />
       </FlexBox>
     </Box>
+  );
+
+  return (
+    <FlexBox marginBottom='2rem' flexWrap='wrap'>
+      {isChromaOpened && chromaBar}
+      {isMfccOpened && mfccBar}
+    </FlexBox>
   );
 };
 

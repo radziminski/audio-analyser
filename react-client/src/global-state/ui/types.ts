@@ -31,7 +31,10 @@ export interface IVolumeState extends IDefaultWidgetState {
   averageBufferSize: number;
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ISingleParamsState extends IDefaultWidgetState {}
+export interface ISingleParamsState {
+  isChromaOpened: boolean;
+  isMfccOpened: boolean;
+}
 
 export interface IAudioUIState {
   waveform: IWaveformState;

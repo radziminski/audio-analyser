@@ -29,8 +29,11 @@ const DashboardContent: React.FC<Props> = ({
   const ref = useRef<HTMLDivElement>(null);
 
   // Preventing down scroll on space
-  const onSpaceClick = useCallback(() => null, []);
-  useOnKeyboardPress(onSpaceClick, true, ref);
+  const onSpaceClick = useCallback(
+    (e) => (e.code === 'Space' ? e.preventDefault() : true),
+    []
+  );
+  useOnKeyboardPress(onSpaceClick, ref);
 
   return (
     <Container>

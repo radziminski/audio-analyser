@@ -5,9 +5,11 @@ import Spectro from 'spectrogram';
 import AudioService from '~/services/AudioService';
 import { scale } from 'chroma-js';
 
-const height = 220;
+interface Props {
+  height?: number;
+}
 
-const Spectrogram: React.FC = () => {
+const Spectrogram: React.FC<Props> = ({ height = 220 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
 
@@ -44,7 +46,7 @@ const Spectrogram: React.FC = () => {
   return (
     <>
       {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
-      <FlexBox flexDirection='column' paddingX={20} flexShrink={0} flexGrow={0}>
+      <FlexBox flexDirection='column' flexShrink={0} flexGrow={0}>
         <FlexBox
           width='100%'
           height={height}

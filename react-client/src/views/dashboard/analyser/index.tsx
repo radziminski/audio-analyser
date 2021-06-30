@@ -49,8 +49,11 @@ export const AnalyserView: React.FC = () => {
         },
         volume: { isOpened: isVolumeOpened },
         frequency: { isOpened: isFrequencyOpened },
-        spectrogram: { isOpened: isSpectrogramOpened },
-        singleParams: { isOpened: isSingleParamsOpened }
+        spectrogram: {
+          isOpened: isSpectrogramOpened,
+          height: spectrogramHeight
+        },
+        singleParams: { isChromaOpened, isMfccOpened }
       }
     }
   } = useStoreState((state) => state);
@@ -90,7 +93,7 @@ export const AnalyserView: React.FC = () => {
   useEffect(() => {
     if (!currSource) return;
 
-    loadAudioBuffer();
+    if (!didLoadAudioBuffer) loadAudioBuffer();
     setAudioLoaded(true);
   }, [currSource, loadAudioBuffer]);
 
@@ -128,9 +131,12 @@ export const AnalyserView: React.FC = () => {
             audioElement={AudioService.audioElement}
           />
         )}
-        {isSingleParamsOpened && (
+        {(isChromaOpened || isMfccOpened) && (
           <Box margin='2rem 0 1rem'>
-            <SingleParametersBar />
+            <SingleParametersBar
+              isChromaOpened={isChromaOpened}
+              isMfccOpened={isMfccOpened}
+            />
           </Box>
         )}
         <FlexBox justifyContent='space-between' marginTop='1rem'>
@@ -143,8 +149,8 @@ export const AnalyserView: React.FC = () => {
           >
             {isFrequencyOpened && <FrequencyMeter />}
             {isSpectrogramOpened && (
-              <Box marginTop='2rem'>
-                <Spectrogram />
+              <Box marginTop={isFrequencyOpened ? '2rem' : 0}>
+                <Spectrogram height={spectrogramHeight} />
               </Box>
             )}
           </FlexBox>
@@ -158,7 +164,8 @@ export const AnalyserView: React.FC = () => {
     isVolumeOpened,
     isFrequencyOpened,
     isSpectrogramOpened,
-    isSingleParamsOpened,
+    isChromaOpened,
+    isMfccOpened,
     isWaveformOpened
   ]);
 

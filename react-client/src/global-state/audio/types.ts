@@ -11,6 +11,7 @@ export interface IAudioState {
   isLoadingAudioBuffer: boolean;
   didLoadAudioBuffer: boolean;
   currSource: string | null;
+  prevSource: string | null;
   audioSources: Record<string, string>;
 
   setIsLoadingAudioBuffer: AudioAction<boolean>;

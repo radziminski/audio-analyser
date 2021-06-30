@@ -1,15 +1,11 @@
 import { RefObject, useEffect } from 'react';
 export const useOnKeyboardPress = <T extends HTMLElement>(
-  callback: (key: string) => void,
-  preventDefault = false,
+  callback: (e: KeyboardEvent) => void,
   rootElementRef?: RefObject<T>
 ) => {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (preventDefault) e.preventDefault();
-      callback(e.code);
-
-      if (preventDefault) return false;
+      callback(e);
     };
 
     const rootElement = rootElementRef?.current;
