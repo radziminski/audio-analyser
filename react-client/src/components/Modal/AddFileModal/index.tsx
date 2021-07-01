@@ -40,7 +40,9 @@ export const AddFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     <ModalWrapper title='Add new file to the project' onClose={onClose}>
       <Box>
         <Paragraph fontSize='0.8rem' textAlign='center'>
-          Lorem ipsum dolor sit amet, consectetur adip. Lorem ipsum aasl.
+          Drag and drop your audio file into the area below. Remember, that you
+          can upload one file at a time. File should be in mp3 or wav format and
+          it cannot be larger then 80MB.
         </Paragraph>
       </Box>
 

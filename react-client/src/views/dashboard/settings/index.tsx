@@ -2,7 +2,9 @@ import React from 'react';
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
+import { Heading5 } from '~/components/Text';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import { SectionWithTitle, SlideInputBox, ToggleInputBox } from './parts';
 
 const MAX_WIDGET_HEIGHT = 1000;
@@ -28,17 +30,36 @@ export const SettingsView: React.FC = () => {
       height: frequencyHeight
     },
     spectrogram: { isOpened: isSpectrogramOpened, height: spectrogramHeight },
-    singleParams: { isChromaOpened, isMfccOpened }
+    bands: { isChromaOpened, isMfccOpened },
+    coefficients: {
+      isOpened: isCoefficientsOpened,
+      isRmsShown,
+      isRolloffShown,
+      isCentroidShown,
+      height: coefficientsHeight,
+      bufferSize: coefficientsBufferSize
+    }
   } = useStoreState((state) => state.ui.audioUIState);
 
   const {
     setWaveformState,
     setFrequencyState,
     setVolumeState,
-    setSingleParamsState,
+    setBandsState,
     setSpectrogramState,
+    setCoefficientsState,
     resetToDefault
   } = useStoreActions((state) => state.ui);
+
+  const openedWidgetsNum = [
+    isWaveformOpened,
+    isFrequencyOpened,
+    isSpectrogramOpened,
+    isChromaOpened,
+    isMfccOpened,
+    isVolumeOpened,
+    isCoefficientsOpened
+  ].filter((v) => !!v).length;
 
   const waveformSettings = (
     <SectionWithTitle
@@ -46,7 +67,7 @@ export const SettingsView: React.FC = () => {
       description='The audio waveform visualization working as an audio player'
     >
       <ToggleInputBox
-        title='Waveform shown: '
+        title='Waveform shown'
         value={isWaveformOpened}
         onChange={(isOpened) => setWaveformState({ isOpened })}
       />
@@ -83,15 +104,15 @@ export const SettingsView: React.FC = () => {
   const volumeSettings = (
     <SectionWithTitle
       title='Volume Meter'
-      description='The vertical visualization of loudness of the audio'
+      description='The visualization of loudness of the audio'
     >
       <ToggleInputBox
-        title='Volume Meter shown: '
+        title='Volume Meter shown'
         value={isVolumeOpened}
         onChange={(isOpened) => setVolumeState({ isOpened })}
       />
       <SlideInputBox
-        title='Instantaneous volume buffer size'
+        title='Instantaneous (filled bars) buffer size'
         value={Math.log2(instantaneousBufferSize)}
         min={9}
         max={14}
@@ -102,7 +123,7 @@ export const SettingsView: React.FC = () => {
         displayedValue={instantaneousBufferSize.toString()}
       />
       <SlideInputBox
-        title='Average volume buffer size'
+        title='Average maximum (red lines) buffer size'
         value={Math.log2(averageBufferSize)}
         min={9}
         max={14}
@@ -115,9 +136,12 @@ export const SettingsView: React.FC = () => {
     </SectionWithTitle>
   );
   const frequencySettings = (
-    <SectionWithTitle title='Frequency chart' description='todo'>
+    <SectionWithTitle
+      title='Frequency chart'
+      description='The graph visualizing loudness of different frequencies of the audio'
+    >
       <ToggleInputBox
-        title='Frequency chart shown: '
+        title='Frequency chart shown'
         value={isFrequencyOpened}
         onChange={(isOpened) => setFrequencyState({ isOpened })}
       />
@@ -133,9 +157,9 @@ export const SettingsView: React.FC = () => {
         displayedValue={fftSize.toString()}
       />
       <SlideInputBox
-        title='Frequency chart height:'
+        title='Frequency chart height'
         value={frequencyHeight}
-        min={MIN_WIDGET_HEIGHT}
+        min={100}
         max={MAX_WIDGET_HEIGHT}
         step={WIDGET_HEIGHT_STEP}
         onChange={(height) => setFrequencyState({ height })}
@@ -145,14 +169,17 @@ export const SettingsView: React.FC = () => {
   );
 
   const spectrogramSettings = (
-    <SectionWithTitle title='Spectrogram' description='todo'>
+    <SectionWithTitle
+      title='Spectrogram'
+      description='Graph visualizing the loudness of different frequencies over time'
+    >
       <ToggleInputBox
-        title='Spectrogram shown: '
+        title='Spectrogram shown'
         value={isSpectrogramOpened}
         onChange={(isOpened) => setSpectrogramState({ isOpened })}
       />
       <SlideInputBox
-        title='Spectrogram height:'
+        title='Spectrogram height'
         value={spectrogramHeight}
         min={MIN_WIDGET_HEIGHT}
         max={MAX_WIDGET_HEIGHT}
@@ -163,17 +190,70 @@ export const SettingsView: React.FC = () => {
     </SectionWithTitle>
   );
 
-  const otherSettings = (
-    <SectionWithTitle title='Other parameters' description='todo'>
+  const bandsSettings = (
+    <SectionWithTitle
+      title='Chroma & MFCC bands'
+      description='Chroma and MFCC bands settings'
+    >
       <ToggleInputBox
-        title='Chroma bands shown: '
+        title='Chroma bands shown'
         value={isChromaOpened}
-        onChange={(isChromaOpened) => setSingleParamsState({ isChromaOpened })}
+        onChange={(isChromaOpened) => setBandsState({ isChromaOpened })}
       />
       <ToggleInputBox
-        title='MFCC bands shown: '
+        title='MFCC bands shown'
         value={isMfccOpened}
-        onChange={(isMfccOpened) => setSingleParamsState({ isMfccOpened })}
+        onChange={(isMfccOpened) => setBandsState({ isMfccOpened })}
+      />
+    </SectionWithTitle>
+  );
+
+  const coefficientsSettings = (
+    <SectionWithTitle
+      title='RMS, Spectral Centroid & Spectral Rolloff'
+      description='RMS, Spectral Centroid & Spectral Rolloff graph settings'
+    >
+      <ToggleInputBox
+        title='Graph shown'
+        value={isCoefficientsOpened}
+        onChange={(isOpened) => setCoefficientsState({ isOpened })}
+      />
+      <ToggleInputBox
+        title='RMS values shown'
+        value={isRmsShown}
+        onChange={(isRmsShown) => setCoefficientsState({ isRmsShown })}
+      />
+      <ToggleInputBox
+        title='Spectral Rolloff values shown'
+        value={isRolloffShown}
+        onChange={(isRolloffShown) => setCoefficientsState({ isRolloffShown })}
+      />
+      <ToggleInputBox
+        title='Spectral Centroid values shown'
+        value={isCentroidShown}
+        onChange={(isCentroidShown) =>
+          setCoefficientsState({ isCentroidShown })
+        }
+      />
+      <SlideInputBox
+        title='Graph height'
+        value={coefficientsHeight}
+        min={MIN_WIDGET_HEIGHT}
+        max={MAX_WIDGET_HEIGHT}
+        step={WIDGET_HEIGHT_STEP}
+        onChange={(height) => setCoefficientsState({ height })}
+        unit='px'
+      />
+      <SlideInputBox
+        title='Buffer size'
+        value={Math.log2(coefficientsBufferSize)}
+        min={8}
+        max={14}
+        step={1}
+        onChange={(power) =>
+          setCoefficientsState({ bufferSize: Math.pow(2, power) })
+        }
+        displayedValue={coefficientsBufferSize.toString()}
       />
     </SectionWithTitle>
   );
@@ -188,12 +268,27 @@ export const SettingsView: React.FC = () => {
     >
       <Box height='1rem' />
 
+      {openedWidgetsNum > 4 && (
+        <Box marginBottom='2rem' maxWidth='1000px'>
+          <Heading5
+            color={COLORS.accentSecondary100}
+            fontWeight={FONT_WEIGHTS.normal}
+          >
+            Warning: If you experience frame drops and performance loss while
+            running analyzer, try disabling some of th widgets here. It is not
+            recommended to have more than 4 widgets opened, unless a powerful
+            CPU is available.
+          </Heading5>
+        </Box>
+      )}
+
       <FlexBox justifyContent='space-between' width='100%' flexWrap='wrap'>
         {waveformSettings}
         {volumeSettings}
         {frequencySettings}
         {spectrogramSettings}
-        {otherSettings}
+        {bandsSettings}
+        {coefficientsSettings}
       </FlexBox>
 
       <FlexBox justifyContent='center' width='100%'>

@@ -1,8 +1,8 @@
 import { MeydaFeaturesObject } from 'meyda';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useCanvasDrawer } from '~/hooks';
 import { CanvasDrawer } from '~/hooks/useCanvasDrawer';
-import audioService from '~/services/AudioService';
+import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
 import { FONT_WEIGHTS, COLORS } from '~/styles/theme';
 import Box, { FlexBox } from '../Box';
 import Text, { Heading5 } from '../Text';
@@ -67,6 +67,8 @@ export const SingleParametersBar: React.FC<Props> = ({
 
   const onFrame = useCallback(
     (features: Partial<MeydaFeaturesObject>) => {
+      if (!chromaCanvasDrawer && !mfccCanvasDrawer) return;
+
       const chromaBands = features.chroma;
       const mfccBands = features.mfcc;
 
@@ -79,19 +81,7 @@ export const SingleParametersBar: React.FC<Props> = ({
     [chromaCanvasDrawer, mfccCanvasDrawer, isChromaOpened, isMfccOpened]
   );
 
-  useEffect(() => {
-    if (!chromaCanvasDrawer && !mfccCanvasDrawer) return;
-
-    const analyzer = audioService.createMeydaAnalyzer(
-      2048,
-      ['chroma', 'mfcc'],
-      onFrame
-    );
-
-    return () => {
-      analyzer.stop();
-    };
-  }, [onFrame]);
+  useMeydaAnalyser(['chroma', 'mfcc'], onFrame, 2048);
 
   const chromaBar = (
     <Box
@@ -150,7 +140,7 @@ export const SingleParametersBar: React.FC<Props> = ({
               alignItems='center'
             >
               <Text color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-                {bandNum + 1}
+                {bandNum}
               </Text>
             </FlexBox>
           ))}

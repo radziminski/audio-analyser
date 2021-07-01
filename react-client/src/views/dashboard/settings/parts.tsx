@@ -20,8 +20,8 @@ export const SectionWithTitle: React.FC<SectionWithTitleProps> = ({
     <Box
       color={COLORS.white}
       marginBottom='3rem'
-      width='50%'
-      paddingRight='100px'
+      width={window.innerWidth < 1700 ? '100%' : '50%'}
+      paddingRight='60px'
     >
       <Box marginBottom='1.4rem'>
         {title && (
@@ -60,7 +60,7 @@ export const ToggleInputBox: React.FC<ToggleInputBoxProps> = ({
       justifyContent='space-between'
     >
       <Box marginRight='1rem'>
-        <Heading5 fontWeight={FONT_WEIGHTS.light}>{title}</Heading5>
+        <Heading5 fontWeight={FONT_WEIGHTS.light}>{title}: </Heading5>
       </Box>
       <Box width='250px'>
         <ToggleSwitch value={value} onChange={onChange} />

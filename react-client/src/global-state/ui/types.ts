@@ -31,9 +31,16 @@ export interface IVolumeState extends IDefaultWidgetState {
   averageBufferSize: number;
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ISingleParamsState {
+export interface IBandsState {
   isChromaOpened: boolean;
   isMfccOpened: boolean;
+}
+export interface ICoefficientsState extends IDefaultWidgetState {
+  isRmsShown: boolean;
+  isCentroidShown: boolean;
+  isRolloffShown: boolean;
+  bufferSize: number;
+  height: number;
 }
 
 export interface IAudioUIState {
@@ -41,7 +48,8 @@ export interface IAudioUIState {
   frequency: IFrequencyState;
   spectrogram: ISpectrogramState;
   volume: IVolumeState;
-  singleParams: ISingleParamsState;
+  bands: IBandsState;
+  coefficients: ICoefficientsState;
 }
 
 export interface IUIState {
@@ -57,6 +65,7 @@ export interface IUIState {
   setFrequencyState: UIAction<Partial<IFrequencyState>>;
   setSpectrogramState: UIAction<Partial<ISpectrogramState>>;
   setVolumeState: UIAction<Partial<IVolumeState>>;
-  setSingleParamsState: UIAction<Partial<ISingleParamsState>>;
+  setBandsState: UIAction<Partial<IBandsState>>;
+  setCoefficientsState: UIAction<Partial<ICoefficientsState>>;
   resetToDefault: UIAction;
 }

@@ -22,9 +22,17 @@ const initAudioUIState: IAudioUIState = {
     instantaneousBufferSize: 1024 * 4,
     averageBufferSize: 1024 * 16
   },
-  singleParams: {
+  bands: {
     isChromaOpened: true,
     isMfccOpened: true
+  },
+  coefficients: {
+    isOpened: false,
+    isRmsShown: true,
+    isCentroidShown: true,
+    isRolloffShown: true,
+    bufferSize: 1024,
+    height: 300
   }
 };
 
@@ -75,9 +83,15 @@ const uiState: IUIState = {
       ...payload
     };
   }),
-  setSingleParamsState: action((state, payload) => {
-    state.audioUIState.singleParams = {
-      ...state.audioUIState.singleParams,
+  setBandsState: action((state, payload) => {
+    state.audioUIState.bands = {
+      ...state.audioUIState.bands,
+      ...payload
+    };
+  }),
+  setCoefficientsState: action((state, payload) => {
+    state.audioUIState.coefficients = {
+      ...state.audioUIState.coefficients,
       ...payload
     };
   }),

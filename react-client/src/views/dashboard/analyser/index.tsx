@@ -14,6 +14,7 @@ import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
 import SingleParametersBar from '~/components/SingleParametersBar';
+import CoefficientsGraph from '~/components/CoefficientsGraph';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -53,7 +54,8 @@ export const AnalyserView: React.FC = () => {
           isOpened: isSpectrogramOpened,
           height: spectrogramHeight
         },
-        singleParams: { isChromaOpened, isMfccOpened }
+        bands: { isChromaOpened, isMfccOpened },
+        coefficients: { isOpened: isCoefficientOpened }
       }
     }
   } = useStoreState((state) => state);
@@ -155,6 +157,11 @@ export const AnalyserView: React.FC = () => {
             )}
           </FlexBox>
         </FlexBox>
+        {isCoefficientOpened && (
+          <Box marginTop='3rem'>
+            <CoefficientsGraph />
+          </Box>
+        )}
       </>
     );
   }, [

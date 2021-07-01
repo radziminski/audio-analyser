@@ -97,7 +97,10 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     <ModalWrapper title='Record Audio Sample' onClose={onClose}>
       <Box marginBottom='3rem'>
         <Paragraph fontSize='0.8rem' textAlign='center'>
-          Lorem ipsum dolor sit amet, consectetur adip. Lorem ipsum aasl.
+          Here you can record new audio file. The recording will start once you
+          hit &quot;Start Recording&quot; button. Remember that you can only
+          record one file at a time, and further recordings will override the
+          previous ones.
         </Paragraph>
       </Box>
       <FlexBox flexDirection='column' alignItems='center' marginBottom='3rem'>

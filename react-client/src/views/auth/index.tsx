@@ -34,10 +34,9 @@ export const AuthView: React.FC = () => {
               color={COLORS.white}
               fontWeight={FONT_WEIGHTS.extraLight}
             >
-              Consectetur cupidatat velit esse laborum enim minim consequat
-              magna voluptate ullamco amet labore irure deserunt. Cupidatat
-              magna nulla do excepteur velit. Proident minim dolor qui cupidatat
-              commodo aliquip aliquip nulla in.
+              Web application for uploading, recording, managing and most
+              importantly - analyzing audio files. Log in or create a new
+              account to continue.
             </Paragraph>
           </Box>
         </Box>

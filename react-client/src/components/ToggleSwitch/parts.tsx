@@ -15,8 +15,8 @@ export const Slider = styled.span`
   right: 0;
   bottom: 0;
   background-color: #aaa;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
   border-radius: 34px;
 
   &:before {
@@ -27,8 +27,8 @@ export const Slider = styled.span`
     left: 4px;
     bottom: 4px;
     background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
     border-radius: 50%;
   }
 `;

@@ -38,8 +38,8 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
     <Modal title='Create New Project' onClose={onClose}>
       <Box marginBottom='2rem'>
         <Paragraph fontSize='0.8rem' textAlign='center'>
-          Eiusmod do proident mollit ad nulla officia duis magna magna dolor
-          dolore. Consectetur esse id non aliqua non sunt Lorem.
+          Here you can create new project. Projects are used to organize and
+          manage audio files. It will only be visible to you.
         </Paragraph>
       </Box>
       <Form onSubmit={onSubmit}>
@@ -55,7 +55,7 @@ export const CreateProjectModal: React.FC<Props> = ({ onClose }) => {
         <Box marginBottom='3rem'>
           <TextInput
             label='Description'
-            placeholder='Ex. New Project'
+            placeholder='Ex. Recordings from August'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
