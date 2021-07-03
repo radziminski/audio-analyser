@@ -3,14 +3,14 @@ import React from 'react';
 import DashboardContent from '~/components/DashboardContent';
 
 export const DashboardHomeView: React.FC = () => {
-
   return (
     <>
-      <DashboardContent title='Home'>
-        <FlexBox color='white' flexDirection='column' align-items='center'>
-
-
-        </FlexBox>
+      <DashboardContent title='Welcome to Audio Analyzer!'>
+        <FlexBox
+          color='white'
+          flexDirection='column'
+          alignItems='center'
+        ></FlexBox>
       </DashboardContent>
     </>
   );

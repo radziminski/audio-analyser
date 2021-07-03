@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Container,
   Title,
@@ -11,6 +11,7 @@ import Box, { FlexBox } from '~/components/Box';
 import ActionButton from '~/components/ActionButton';
 import { useHistory } from 'react-router';
 import Icon from '~/components/Icon';
+import { useOnKeyboardPress } from '~/hooks/useOnKeyboardPress';
 
 interface Props {
   title?: string;
@@ -25,10 +26,19 @@ const DashboardContent: React.FC<Props> = ({
   canGoBack
 }) => {
   const history = useHistory();
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Preventing down scroll on space
+  const onSpaceClick = useCallback(
+    (e) => (e.code === 'Space' ? e.preventDefault() : true),
+    []
+  );
+  useOnKeyboardPress(onSpaceClick, ref);
+
   return (
     <Container>
       <AudioControlBar />
-      <ScrollContainer>
+      <ScrollContainer ref={ref}>
         <FlexBox>
           {title && <Title>{title}</Title>}
           {canGoBack && (

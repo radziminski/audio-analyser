@@ -28,6 +28,11 @@ const NAV_LINKS: NavLink[] = [
     name: 'Analyze',
     linkTo: ROUTES.DASHBOARD_ANALYSER,
     icon: 'audio'
+  },
+  {
+    name: 'Settings',
+    linkTo: ROUTES.DASHBOARD_SETTINGS,
+    icon: 'settings'
   }
 ];
 
@@ -42,6 +47,10 @@ const getCurrDashboardPathIndex = (path: string) => {
     case ROUTES.DASHBOARD_PROJECTS.split('/')[2]:
       return NAV_LINKS.findIndex(
         (link) => link.linkTo === ROUTES.DASHBOARD_PROJECTS
+      );
+    case ROUTES.DASHBOARD_SETTINGS.split('/')[2]:
+      return NAV_LINKS.findIndex(
+        (link) => link.linkTo === ROUTES.DASHBOARD_SETTINGS
       );
 
     default:
@@ -76,7 +85,7 @@ export const Nav: React.FC = () => {
       <Box
         position='absolute'
         right={0}
-        top={128 + currRoute * 58}
+        top={130 + currRoute * 59}
         transition={'all 0.15s'}
       >
         <NavSelector />

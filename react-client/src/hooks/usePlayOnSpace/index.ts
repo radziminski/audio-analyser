@@ -5,11 +5,14 @@ export const usePlayOnSpace = (
   pause: () => void,
   isPlaying: boolean
 ) => {
-  const playOnSpace = (code: string) => {
-    if (code !== 'Space') return;
+  const playOnSpace = (e: KeyboardEvent) => {
+    if (e.code !== 'Space') return;
 
+    e.preventDefault();
     if (isPlaying) pause();
     else play();
+
+    return false;
   };
 
   useOnKeyboardPress(playOnSpace);

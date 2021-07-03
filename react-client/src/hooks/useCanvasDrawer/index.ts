@@ -2,14 +2,18 @@ import { useElementDimensions } from '~/hooks/useElementDimensions';
 import p5 from 'p5';
 import { useEffect, useState, useCallback } from 'react';
 
+export type CanvasDrawer = p5;
+
 const CANVAS_RESIZE_DEBOUNCE_MS = 50;
-/** Needs to be added to each coordinate while drawing */
 
 export const useCanvasDrawer = <T extends HTMLElement | null>(
   containerRef: React.MutableRefObject<T>,
   canvasHeight?: number,
   canvasWidth?: number
-) => {
+): {
+  canvasDrawer: CanvasDrawer | undefined;
+  ready: boolean;
+} => {
   const [canvasDrawer, setCanvasDrawer] = useState<p5>();
   const [ready, setReady] = useState<boolean>(false);
 
@@ -27,7 +31,7 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
           canvasHeight ?? containerHeight ?? 0
         );
 
-        /** Canvas always needs to have 0.5 added 
+        /** Canvas always needs to have 0.5 added
          * to each coordinate otherwise its blurry */
         p.translate(0.5, 0.5);
 

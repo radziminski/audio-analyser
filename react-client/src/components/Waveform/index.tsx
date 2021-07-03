@@ -1,7 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import Box, { FlexBox } from '~/components/Box';
 import { useElementDimensions } from '~/hooks';
-import { COLORS } from '~/styles/theme';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import { Heading5 } from '../Text';
 import { useBarsDrawer, useCalculatePeaks, useCursorDrawer } from './hooks';
 import { Container, Timeline, WaveformContainer } from './parts';
 
@@ -12,7 +13,6 @@ interface Props {
   barWidth: number;
   barSpacing: number;
   barMinHeight: number;
-  barBorderRadius: number;
   height: number;
   audioElement: HTMLAudioElement;
 }
@@ -20,7 +20,6 @@ interface Props {
 export const Waveform: React.FC<Props> = ({
   barWidth,
   barSpacing,
-  barBorderRadius,
   height,
   audioElement,
   audioBuffer
@@ -48,27 +47,8 @@ export const Waveform: React.FC<Props> = ({
     audioElement,
     peaks || [],
     barWidth,
-    barSpacing,
-    barBorderRadius
+    barSpacing
   );
-
-  // == Old bars rendered as react divs
-  // const barsRendered = useMemo(() => {
-  //   return (
-  //     peaks?.map((barHeight, i) => {
-  //       return (
-  //         <Box
-  //           key={i}
-  //           height={barHeight}
-  //           width={`${barWidth}px`}
-  //           marginRight={`${barSpacing}px`}
-  //           background='white'
-  //           borderRadius={barBorderRadius}
-  //         />
-  //       );
-  //     }) ?? null
-  //   );
-  // }, [peaks, barBorderRadius, barSpacing, barWidth]);
 
   const onWaveformClicked = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -91,6 +71,11 @@ export const Waveform: React.FC<Props> = ({
 
   return (
     <Container>
+      <Box marginBottom='0.8rem'>
+        <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
+          Waveform:
+        </Heading5>
+      </Box>
       <WaveformContainer>
         <FlexBox
           height={height}

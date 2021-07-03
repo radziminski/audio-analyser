@@ -46,7 +46,6 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     });
 
     const mediaRecorder = new AudioRecorder(stream);
-    console.log(mediaRecorder);
 
     mediaRecorder.setAudioEncodingBitRate &&
       mediaRecorder.setAudioEncodingBitRate(16);
@@ -58,10 +57,8 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
 
     mediaRecorderRef.current = mediaRecorder;
     mediaRecorder.start();
-    console.log(mediaRecorder.state);
 
     mediaRecorder.addEventListener('dataavailable', (e) => {
-      console.log(e.data.type);
       audioChunksRef.current.push(e.data);
     });
 
@@ -75,7 +72,6 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
   const onStopRecord = () => {
     setIsRecording(false);
     setAudioRecorded(true);
-    console.log(audioChunksRef.current);
     mediaRecorderRef.current?.stop();
   };
 
@@ -101,7 +97,10 @@ const RecordFileModal: React.FC<Props> = ({ onClose, projectId }) => {
     <ModalWrapper title='Record Audio Sample' onClose={onClose}>
       <Box marginBottom='3rem'>
         <Paragraph fontSize='0.8rem' textAlign='center'>
-          Lorem ipsum dolor sit amet, consectetur adip. Lorem ipsum aasl.
+          Here you can record new audio file. The recording will start once you
+          hit &quot;Start Recording&quot; button. Remember that you can only
+          record one file at a time, and further recordings will override the
+          previous ones.
         </Paragraph>
       </Box>
       <FlexBox flexDirection='column' alignItems='center' marginBottom='3rem'>
