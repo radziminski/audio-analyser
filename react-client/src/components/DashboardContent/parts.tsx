@@ -22,7 +22,7 @@ export const Title = styled.div`
   font-size: 20px;
   color: ${({ theme }) => theme.colors.white};
   font-weight: 400;
-  opacity: 0.85;
+  opacity: 1;
   margin-bottom: 10px;
 `;
 

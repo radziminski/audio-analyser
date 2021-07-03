@@ -53,18 +53,8 @@ export interface CustomTheme {
     headingMedium: string;
     headingBig: string;
   };
-  breakpoints: {
-    desktop: number;
-    laptop: number;
-    tab: number;
-    phone: number;
-  };
-  mediaQueries: {
-    desktop: string;
-    laptop: string;
-    tab: string;
-    phone: string;
-  };
+  breakpoints: Record<Device, number>;
+  mediaQueries: Record<Device, string>;
   zIndex: {
     backgroundBack: number;
     backgroundMiddle: number;
@@ -146,18 +136,49 @@ export const DEFAULTS = {
   transition: 'all .3s ease-in-out'
 };
 
-export const BREAKPOINTS = {
-  desktop: 1,
-  laptop: 1,
-  tab: 1,
-  phone: 1
+export enum Device {
+  Desktop = 'desktop',
+  DesktopS = 'desktopS',
+  Laptop = 'laptop',
+  LaptopS = 'laptopS',
+  Tab = 'tab',
+  TabS = 'tabS',
+  Mobile = 'mobile',
+  MobileS = 'mobileS',
+  MobileXS = 'mobileXS'
+}
+
+export const BREAKPOINTS: Record<Device, number> = {
+  [Device.Desktop]: 1920,
+  [Device.DesktopS]: 1600,
+  [Device.Laptop]: 1440,
+  [Device.LaptopS]: 1150,
+  [Device.Tab]: 970,
+  [Device.TabS]: 780,
+  [Device.Mobile]: 600,
+  [Device.MobileS]: 450,
+  [Device.MobileXS]: 320
 };
 
 export const MEDIA_QUERIES = {
-  desktop: '1',
-  laptop: '1',
-  tab: '1',
-  phone: '1'
+  ...Object.values(Device).reduce<Record<Device, string>>((acc, breakpoint) => {
+    return {
+      ...acc,
+      [breakpoint]: `only screen and (max-width: ${BREAKPOINTS[breakpoint]}px)`
+    };
+  }, {} as Record<Device, string>),
+  [Device.Mobile]: `only screen and (max-width: ${
+    BREAKPOINTS[Device.Mobile]
+  }px),
+    only screen and (max-height: ${BREAKPOINTS[Device.MobileS]}px)`,
+  [Device.MobileS]: `only screen and (max-width: ${
+    BREAKPOINTS[Device.MobileS]
+  }px),
+    only screen and (max-height: ${BREAKPOINTS[Device.MobileXS]}px)`,
+  [Device.MobileXS]: `only screen and (max-width: ${
+    BREAKPOINTS[Device.MobileXS]
+  }px),
+    only screen and (max-height: ${BREAKPOINTS[Device.MobileXS]}px)`
 };
 
 export const Z_INDEX = {

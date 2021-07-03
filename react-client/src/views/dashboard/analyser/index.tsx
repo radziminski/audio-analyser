@@ -151,7 +151,7 @@ export const AnalyserView: React.FC = () => {
           >
             {isFrequencyOpened && <FrequencyMeter />}
             {isSpectrogramOpened && (
-              <Box marginTop={isFrequencyOpened ? '2rem' : 0}>
+              <Box marginTop={isFrequencyOpened ? '1rem' : 0}>
                 <Spectrogram height={spectrogramHeight} />
               </Box>
             )}

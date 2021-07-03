@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react';
-import { FlexBox } from '~/components/Box';
-import { COLORS } from '~/styles/theme';
+import Box, { FlexBox } from '~/components/Box';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import Spectro from 'spectrogram';
 import AudioService from '~/services/AudioService';
 import { scale } from 'chroma-js';
+import { Heading5 } from '../Text';
 
 interface Props {
   height?: number;
@@ -45,8 +46,12 @@ const Spectrogram: React.FC<Props> = ({ height = 220 }) => {
 
   return (
     <>
-      {/* <button onClick={() => getFreq()}>GET FREQ</button> */}
       <FlexBox flexDirection='column' flexShrink={0} flexGrow={0}>
+        <Box marginBottom='0.8rem'>
+          <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
+            Spectrogram:
+          </Heading5>
+        </Box>
         <FlexBox
           width='100%'
           height={height}

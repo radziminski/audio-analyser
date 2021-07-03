@@ -1,9 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
 import Box, { FlexBox } from '~/components/Box';
+import { Slider } from '~/components/Slider';
 import { Heading5 } from '~/components/Text';
 import TextInput from '~/components/TextInput';
 import ToggleSwitch from '~/components/ToggleSwitch';
+import { useDevice } from '~/hooks/useDevice';
 import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 
 interface SectionWithTitleProps {
@@ -16,11 +17,12 @@ export const SectionWithTitle: React.FC<SectionWithTitleProps> = ({
   description,
   children
 }) => {
+  const { isDesktopS } = useDevice();
   return (
     <Box
       color={COLORS.white}
       marginBottom='3rem'
-      width={window.innerWidth < 1700 ? '100%' : '50%'}
+      width={isDesktopS ? '100%' : '50%'}
       paddingRight='60px'
     >
       <Box marginBottom='1.4rem'>
@@ -103,10 +105,6 @@ interface SlideInputBoxProps {
   displayedValue?: string;
 }
 
-const Slider = styled.input`
-  width: 250px;
-`;
-
 export const SlideInputBox: React.FC<SlideInputBoxProps> = ({
   value,
   title,
@@ -132,12 +130,12 @@ export const SlideInputBox: React.FC<SlideInputBoxProps> = ({
       </Box>
       <Box cursor='pointer'>
         <Slider
-          type='range'
+          width='250px'
           min={min}
           max={max}
           step={step}
           value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(value) => onChange(value)}
         />
       </Box>
     </FlexBox>

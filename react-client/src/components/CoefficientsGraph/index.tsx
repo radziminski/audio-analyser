@@ -1,33 +1,39 @@
-import React, { useCallback, useRef } from 'react';
+import React, { RefObject, useCallback, useMemo, useRef } from 'react';
 import { useCanvasDrawer, useElementDimensions } from '~/hooks';
-import Box from '../Box';
+import Box, { FlexBox } from '../Box';
 import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
 import { MeydaFeaturesObject } from 'meyda';
 import { Image } from 'p5';
-import { COLORS } from '~/styles/theme';
-import { CanvasDrawer } from '~/hooks/useCanvasDrawer';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
 import { useStoreState } from '~/global-state/hooks';
+import Text, { Heading5 } from '../Text';
 
+const HALF_SAMPLING_FREQ = 44100 / 2;
+const MAX_RMS = 0.6;
 const useDrawLine = (
-  canvasDrawer: CanvasDrawer | undefined,
-  width: number | undefined,
-  height: number | undefined,
-  color: string
+  container: RefObject<HTMLDivElement>,
+  color: string,
+  startHeight?: number
 ) => {
   const image = useRef<Image | null>(null);
-  const prevHeight = useRef<number | null>(null);
+  const { canvasDrawer } = useCanvasDrawer(container);
+  const { width, height } = useElementDimensions(container);
+
+  const prevHeight = useRef<number>(startHeight ?? 0);
+  const startPointX = width ? width - 1 : 0;
+  const endPointX = width ? width - 2 : 0;
 
   return useCallback(
     (value: number) => {
       if (canvasDrawer && width && height) {
+        canvasDrawer.clear();
         canvasDrawer.stroke(color);
-        if (prevHeight.current || prevHeight.current === 0)
-          canvasDrawer.line(
-            width - 1,
-            height - value * height,
-            width - 2,
-            height - prevHeight.current * height + 1
-          );
+        canvasDrawer.line(
+          startPointX,
+          height * (1 - value),
+          endPointX,
+          height * (1 - prevHeight.current)
+        );
 
         prevHeight.current = value;
 
@@ -38,12 +44,15 @@ const useDrawLine = (
         image.current = canvasDrawer.get(0, 0, width, height);
       }
     },
-    [canvasDrawer]
+    [canvasDrawer, width, height, color]
   );
 };
 
 export const CoefficientsGraph: React.FC = () => {
   const rmsContainer = useRef<HTMLDivElement | null>(null);
+  const centroidContainer = useRef<HTMLDivElement | null>(null);
+  const rolloffContainer = useRef<HTMLDivElement | null>(null);
+
   const {
     bufferSize,
     height: propHeight,
@@ -54,36 +63,60 @@ export const CoefficientsGraph: React.FC = () => {
 
   const halfBufferSize = bufferSize / 2;
 
-  const { canvasDrawer } = useCanvasDrawer(rmsContainer);
-  const { width, height } = useElementDimensions(rmsContainer);
-
-  const onRmsFrame = useDrawLine(
-    canvasDrawer,
-    width,
-    height,
-    COLORS.accentPrimary100
+  const graphsData = useMemo(
+    () => [
+      {
+        title: 'RMS (Root Mean Square):',
+        yAxis: ['0', MAX_RMS / 2, MAX_RMS]
+      },
+      {
+        title: 'Spectral Centroid:',
+        yAxis: ['0', halfBufferSize / 2, halfBufferSize]
+      },
+      {
+        title: 'Spectral Rolloff:',
+        yAxis: [
+          '0 kHz',
+          `${Math.round(HALF_SAMPLING_FREQ / 2 / 1000)} kHz`,
+          `${Math.round(HALF_SAMPLING_FREQ / 1000)} kHz`
+        ]
+      }
+    ],
+    [halfBufferSize]
   );
+
+  const containers = [
+    isRmsShown && { container: rmsContainer, data: graphsData[0] },
+    isCentroidShown && { container: centroidContainer, data: graphsData[1] },
+    isRolloffShown && { container: rolloffContainer, data: graphsData[2] }
+  ].filter((c) => Boolean(c));
+
+  const onRmsFrame = useDrawLine(rmsContainer, COLORS.accentPrimary100, 0);
   const onCentroidFrame = useDrawLine(
-    canvasDrawer,
-    width,
-    height,
-    COLORS.accentSecondary100
+    centroidContainer,
+    COLORS.accentSecondary100,
+    0
   );
-  const onSpectralFrame = useDrawLine(
-    canvasDrawer,
-    width,
-    height,
-    COLORS.primary100
+  const onSpectralFrame = useDrawLine(rolloffContainer, COLORS.primary100, 1);
+
+  const onFrame = useCallback(
+    (features: Partial<MeydaFeaturesObject>) => {
+      isRmsShown && onRmsFrame((features.rms ?? 0) / 0.6);
+      isCentroidShown &&
+        onCentroidFrame((features.spectralCentroid ?? 0) / halfBufferSize);
+      isRolloffShown &&
+        onSpectralFrame((features.spectralRolloff ?? 0) / HALF_SAMPLING_FREQ);
+    },
+    [
+      isRmsShown,
+      isCentroidShown,
+      isRolloffShown,
+      onRmsFrame,
+      onCentroidFrame,
+      onSpectralFrame,
+      halfBufferSize
+    ]
   );
-
-  const onFrame = (features: Partial<MeydaFeaturesObject>) => {
-    canvasDrawer?.clear();
-
-    isRmsShown && onRmsFrame(features.rms ?? 0);
-    isCentroidShown &&
-      onCentroidFrame((features.spectralCentroid ?? 0) / halfBufferSize);
-    isRolloffShown && onSpectralFrame((features.spectralRolloff ?? 0) / 22050);
-  };
 
   useMeydaAnalyser(
     ['rms', 'spectralCentroid', 'spectralRolloff'],
@@ -92,14 +125,48 @@ export const CoefficientsGraph: React.FC = () => {
   );
 
   return (
-    <Box
-      width='100%'
-      height={propHeight ?? 300}
-      background={COLORS.background20}
-      borderRadius='1rem'
-    >
-      <Box width='100%' height='100%' ref={rmsContainer} />
-    </Box>
+    <FlexBox justifyContent='space-between'>
+      {containers.map(
+        (graph, i) =>
+          graph && (
+            <Box flexGrow={1} marginLeft={i ? '2rem' : 0} key={i}>
+              <Heading5 fontWeight={FONT_WEIGHTS.normal} color={COLORS.white}>
+                {graph.data.title}
+              </Heading5>
+              <FlexBox marginTop='1rem'>
+                <FlexBox
+                  marginRight='4px'
+                  flexDirection='column-reverse'
+                  justifyContent='space-between'
+                  alignItems='center'
+                  flexShrink={0}
+                >
+                  {graph.data.yAxis.map((label) => (
+                    <Box key={label} width='max-content'>
+                      <Text
+                        fontWeight={FONT_WEIGHTS.light}
+                        color={COLORS.white}
+                        fontSize='0.8rem'
+                      >
+                        {label}
+                      </Text>
+                    </Box>
+                  ))}
+                </FlexBox>
+
+                <Box
+                  height={propHeight ?? 300}
+                  background={COLORS.background20}
+                  borderRadius='1rem'
+                  flexGrow={1}
+                >
+                  <Box width='100%' height='100%' ref={graph.container} />
+                </Box>
+              </FlexBox>
+            </Box>
+          )
+      )}
+    </FlexBox>
   );
 };
 

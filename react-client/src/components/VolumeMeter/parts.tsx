@@ -9,6 +9,8 @@ export const Container = styled.div`
   border-radius: 12px;
   position: relative;
   overflow: hidden;
+  margin-top: 0.8rem;
+  flex-grow: 1;
 `;
 
 export const CanvasContainer = styled.div`
