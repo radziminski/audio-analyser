@@ -15,7 +15,7 @@ const initAudioUIState: IAudioUIState = {
   },
   spectrogram: {
     isOpened: true,
-    height: 320
+    height: 260
   },
   volume: {
     isOpened: true,
@@ -27,7 +27,7 @@ const initAudioUIState: IAudioUIState = {
     isMfccOpened: true
   },
   coefficients: {
-    isOpened: false,
+    isOpened: true,
     isRmsShown: true,
     isCentroidShown: true,
     isRolloffShown: true,
