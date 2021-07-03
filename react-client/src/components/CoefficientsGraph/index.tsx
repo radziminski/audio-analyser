@@ -38,6 +38,7 @@ const useDrawLine = (
         prevHeight.current = value;
 
         if (image.current) {
+          canvasDrawer.noSmooth();
           canvasDrawer.set(-1, 0, image.current);
           canvasDrawer.updatePixels();
         }
