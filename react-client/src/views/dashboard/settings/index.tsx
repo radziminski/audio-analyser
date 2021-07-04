@@ -4,7 +4,7 @@ import Box, { FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
 import { Heading5 } from '~/components/Text';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import { COLORS } from '~/styles/theme';
 import { SectionWithTitle, SlideInputBox, ToggleInputBox } from './parts';
 
 const MAX_WIDGET_HEIGHT = 1000;
@@ -269,11 +269,12 @@ export const SettingsView: React.FC = () => {
       <Box height='1rem' />
 
       {openedWidgetsNum > 4 && (
-        <Box marginBottom='2rem' maxWidth='1000px'>
-          <Heading5
-            color={COLORS.accentSecondary100}
-            fontWeight={FONT_WEIGHTS.normal}
-          >
+        <Box
+          marginBottom='2rem'
+          maxWidth='1000px'
+          color={COLORS.accentSecondary100}
+        >
+          <Heading5>
             Warning: If you experience frame drops and performance loss while
             running analyzer, try disabling some of th widgets here. It is not
             recommended to have more than 4 widgets opened, unless a powerful

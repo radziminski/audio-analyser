@@ -7,9 +7,14 @@ import { Container } from './parts';
 interface Props {
   onFileChange: (file: File) => void;
   disabled?: boolean;
+  text?: string;
 }
 
-export const FileDropZone: React.FC<Props> = ({ onFileChange, disabled }) => {
+export const FileDropZone: React.FC<Props> = ({
+  onFileChange,
+  disabled,
+  text
+}) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       if (acceptedFiles.length) onFileChange(acceptedFiles[0]);
@@ -25,7 +30,8 @@ export const FileDropZone: React.FC<Props> = ({ onFileChange, disabled }) => {
       <Heading5 fontWeight={FONT_WEIGHTS.normal} fontSize='1rem'>
         {isDragActive
           ? 'Drop the file here!'
-          : 'Drag & drop the file here, or click to select file manually'}
+          : text ??
+            'Drag & drop the file here, or click to select file manually'}
       </Heading5>
     </Container>
   );

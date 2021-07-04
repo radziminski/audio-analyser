@@ -15,6 +15,7 @@ import { ROUTES } from '~/constants/routes';
 import Loader from '~/components/Loader';
 import SingleParametersBar from '~/components/SingleParametersBar';
 import CoefficientsGraph from '~/components/CoefficientsGraph';
+import { CustomSource } from '~/global-state/audio/types';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -31,6 +32,7 @@ const getFileSizeMb = (size: number) => {
 
 export const AnalyserView: React.FC = () => {
   const [audioLoaded, setAudioLoaded] = useState(false);
+  const { id: srcId } = useParams<{ id: string }>();
 
   const {
     audio: {
@@ -60,15 +62,30 @@ export const AnalyserView: React.FC = () => {
     }
   } = useStoreState((state) => state);
 
-  const { id: srcId } = useParams<{ id: string }>();
+  const {
+    loadAudioBuffer,
+    loadAudio,
+    setCurrSource,
+    setMicrophoneAsCurrSource
+  } = useStoreActions((actions) => actions.audio);
+
+  const isAnalyzingLiveAudio = srcId === CustomSource.LiveAudio;
+
+  const srcExists =
+    currSource || (srcId && audioSources[srcId]) || isAnalyzingLiveAudio;
+
   const file = projects
     ?.map((project) => project.files)
     .flat()
     .find((file) => file?.id === +srcId);
 
-  const { loadAudioBuffer, loadAudio, setCurrSource } = useStoreActions(
-    (actions) => actions.audio
-  );
+  useEffect(() => {
+    setMicrophoneAsCurrSource(isAnalyzingLiveAudio);
+
+    return () => {
+      setMicrophoneAsCurrSource(false);
+    };
+  }, [isAnalyzingLiveAudio]);
 
   useEffect(() => {
     const setAudioLoadedFunction = () => setAudioLoaded(true);
@@ -81,16 +98,14 @@ export const AnalyserView: React.FC = () => {
         'canplay',
         setAudioLoadedFunction
       );
+
+      return () =>
+        AudioService.audioElement.removeEventListener(
+          'canplay',
+          setAudioLoadedFunction
+        );
     }
-
-    return () =>
-      AudioService.audioElement.removeEventListener(
-        'canplay',
-        setAudioLoadedFunction
-      );
   }, [srcId, audioSources, loadAudio, currSource, setCurrSource]);
-
-  const srcExists = currSource || (srcId && audioSources[srcId]);
 
   useEffect(() => {
     if (!currSource) return;
@@ -101,11 +116,12 @@ export const AnalyserView: React.FC = () => {
 
   const content = useMemo(() => {
     if (
-      !AudioService.audioElement ||
-      isLoadingAudioBuffer ||
-      !didLoadAudioBuffer ||
-      !AudioService ||
-      !audioLoaded
+      (!AudioService.audioElement ||
+        isLoadingAudioBuffer ||
+        !didLoadAudioBuffer ||
+        !AudioService ||
+        !audioLoaded) &&
+      !isAnalyzingLiveAudio
     )
       return (
         <FlexBox
@@ -121,7 +137,7 @@ export const AnalyserView: React.FC = () => {
 
     return (
       <>
-        {isWaveformOpened && (
+        {isWaveformOpened && !isAnalyzingLiveAudio && (
           <Waveform
             audioBuffer={AudioService?.buffer}
             isLoadingAudioBuffer={isLoadingAudioBuffer ?? false}
@@ -173,7 +189,8 @@ export const AnalyserView: React.FC = () => {
     isSpectrogramOpened,
     isChromaOpened,
     isMfccOpened,
-    isWaveformOpened
+    isWaveformOpened,
+    isAnalyzingLiveAudio
   ]);
 
   if (!srcExists) {

@@ -52,7 +52,9 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
       setCanvasDrawer(currCanvasDrawer);
     }
 
-    return () => canvasDrawer?.remove();
+    return () => {
+      canvasDrawer?.remove();
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef.current, dimensionsReady]);
@@ -74,6 +76,11 @@ export const useCanvasDrawer = <T extends HTMLElement | null>(
       );
 
       setCanvasDrawer(currCanvasDrawer);
+
+      return () => {
+        canvasDrawer?.remove();
+        currCanvasDrawer?.remove();
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerWidth, containerHeight]);

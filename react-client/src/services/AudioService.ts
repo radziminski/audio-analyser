@@ -13,12 +13,16 @@ export interface AudioService {
   bufferError: string;
   isPlaying: boolean;
   connected: boolean;
+  microphoneAllowed: boolean;
+  prevGain: number;
+  isMicrophoneSetAsSource: boolean;
 
   sourceNode: MediaElementAudioSourceNode;
+  microphoneSourceNode: MediaStreamAudioSourceNode;
   mixGainNode: GainNode;
   masterGainNode: GainNode;
   splitterNode: ChannelSplitterNode;
-  analysers: Analyser[];
+  analyzers: Analyser[];
   currAnalyserId: number;
 
   meydaAnalyzers: Record<number, MeydaAnalyserWithFeatures>;
@@ -50,7 +54,8 @@ export class AudioService implements AudioService {
   constructor() {
     this.context = new AudioContext();
     this.buffer = null;
-    this.analysers = [];
+    this.analyzers = [];
+    this.prevGain = 1;
 
     this.isPlaying = false;
     this.currAnalyserId = 0;
@@ -59,6 +64,7 @@ export class AudioService implements AudioService {
   }
 
   init(element: HTMLAudioElement) {
+    this.isMicrophoneSetAsSource = false;
     this.audioElement = element;
     this.isPlaying = !element.paused;
 
@@ -98,6 +104,38 @@ export class AudioService implements AudioService {
     return audioService;
   }
 
+  switchAnalyserToMicrophone() {
+    if (this.isMicrophoneSetAsSource) return;
+
+    this.sourceNode.disconnect();
+    this.prevGain = this.masterGainNode.gain.value;
+    this.masterGainNode.gain.value = 0;
+
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia(
+        { audio: true },
+        (stream) => {
+          this.microphoneSourceNode =
+            this.context.createMediaStreamSource(stream);
+          this.microphoneSourceNode.connect(this.mixGainNode);
+          this.isMicrophoneSetAsSource = true;
+        },
+        () => {
+          this.microphoneAllowed = false;
+        }
+      );
+    }
+  }
+
+  switchAnalyserToAudioElement() {
+    if (!this.isMicrophoneSetAsSource) return;
+
+    this.isMicrophoneSetAsSource = false;
+    this.microphoneSourceNode?.disconnect();
+    this.masterGainNode.gain.value = this.prevGain ?? 1;
+    this.sourceNode?.connect(this.mixGainNode);
+  }
+
   createAnalyser(channel: 0 | 1 = 0): Analyser {
     const analyserNode = this.context.createAnalyser();
     this.splitterNode.connect(analyserNode, channel);
@@ -107,21 +145,21 @@ export class AudioService implements AudioService {
       analyserNode,
       channel
     };
-    this.analysers.push(analyser);
+    this.analyzers.push(analyser);
 
     return analyser;
   }
 
   removeAnalyser(id: number): boolean {
-    const analyser = this.analysers.find(
+    const analyser = this.analyzers.find(
       (currAnalyser) => currAnalyser.id === id
     );
     if (!analyser) return false;
 
     this.splitterNode.disconnect(analyser.analyserNode, analyser.channel);
     analyser.analyserNode.disconnect();
-    const analyserIndex = this.analysers.indexOf(analyser);
-    if (analyserIndex > 0) this.analysers.splice(analyserIndex, 1);
+    const analyserIndex = this.analyzers.indexOf(analyser);
+    if (analyserIndex > 0) this.analyzers.splice(analyserIndex, 1);
 
     return true;
   }
@@ -285,7 +323,7 @@ export class AudioService implements AudioService {
 
   remove() {
     if (this.connected) {
-      this.analysers.forEach((analyser) => this.removeAnalyser(analyser.id));
+      this.analyzers.forEach((analyser) => this.removeAnalyser(analyser.id));
 
       this.sourceNode.disconnect(this.mixGainNode);
       this.mixGainNode.disconnect(this.splitterNode);

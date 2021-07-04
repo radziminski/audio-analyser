@@ -4,13 +4,17 @@ export type AudioAction<Payload = void> = Action<IAudioState, Payload>;
 export type AudioThunk<Payload = void> = Thunk<IAudioState, Payload>;
 export type AudioComputed<Result = void> = Computed<IAudioState, Result>;
 
+export enum CustomSource {
+  LiveAudio = 'live-audio'
+}
+
 export interface IAudioState {
   currTime: AudioComputed<number>;
   duration: AudioComputed<number>;
   isPlaying: boolean;
   isLoadingAudioBuffer: boolean;
   didLoadAudioBuffer: boolean;
-  currSource: string | null;
+  currSource: string | CustomSource | null;
   prevSource: string | null;
   audioSources: Record<string, string>;
 
@@ -24,4 +28,5 @@ export interface IAudioState {
   loadAudio: AudioAction<string>;
   addAudioSources: AudioAction<Record<string, string>>;
   clear: AudioAction;
+  setMicrophoneAsCurrSource: AudioAction<boolean>;
 }
