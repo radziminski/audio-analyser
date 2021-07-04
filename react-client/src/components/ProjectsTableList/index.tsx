@@ -67,12 +67,20 @@ const sortProjectsByLabel = (
   return sortedProjects;
 };
 
-export const ProjectsTableList: React.FC = () => {
+interface Props {
+  projectsShownLimit?: number;
+}
+
+export const ProjectsTableList: React.FC<Props> = ({ projectsShownLimit }) => {
   const [error, setError] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<ProjectTableListLabel>(
-    ProjectTableListLabel.Created
+    projectsShownLimit
+      ? ProjectTableListLabel.Edited
+      : ProjectTableListLabel.Created
   );
-  const [sortDescending, setSortDescending] = useState<boolean>(false);
+  const [sortDescending, setSortDescending] = useState<boolean>(
+    !!projectsShownLimit
+  );
 
   const { projects, fetchedAll, isLoading } = useStoreState(
     (state) => state.project
@@ -82,6 +90,15 @@ export const ProjectsTableList: React.FC = () => {
     ui: { openModal, modifyModalArgs, closeModal }
   } = useStoreActions((state) => state);
   const history = useHistory();
+
+  const shownProjects =
+    projects && projectsShownLimit
+      ? sortProjectsByLabel(
+          sortProjectsByLabel(projects, ProjectTableListLabel.Created, true),
+          ProjectTableListLabel.Edited,
+          true
+        ).slice(0, projectsShownLimit)
+      : projects;
 
   const onEnterProject = useCallback(
     (id: number) => {
@@ -150,8 +167,8 @@ export const ProjectsTableList: React.FC = () => {
         selectedLabelArrowReversed={!sortDescending}
         selectedLabel={selectedLabel}
       >
-        {projects &&
-          sortProjectsByLabel(projects, selectedLabel, sortDescending).map(
+        {shownProjects &&
+          sortProjectsByLabel(shownProjects, selectedLabel, sortDescending).map(
             (project, index) => (
               <ProjectTableListElement
                 project={project}

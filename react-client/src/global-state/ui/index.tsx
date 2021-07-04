@@ -15,6 +15,7 @@ const initAudioUIState: IAudioUIState = {
   },
   spectrogram: {
     isOpened: true,
+    bufferSize: 1024 * 4,
     height: 260
   },
   volume: {
@@ -24,7 +25,8 @@ const initAudioUIState: IAudioUIState = {
   },
   bands: {
     isChromaOpened: true,
-    isMfccOpened: true
+    isMfccOpened: true,
+    bufferSize: 1024 * 2
   },
   coefficients: {
     isOpened: true,

@@ -1,5 +1,6 @@
 import { MeydaFeaturesObject } from 'meyda';
 import React, { useCallback, useRef } from 'react';
+import { useStoreState } from '~/global-state/hooks';
 import { useCanvasDrawer } from '~/hooks';
 import { CanvasDrawer } from '~/hooks/useCanvasDrawer';
 import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
@@ -60,6 +61,8 @@ export const SingleParametersBar: React.FC<Props> = ({
   const chromaContainerRef = useRef<HTMLDivElement | null>(null);
   const mfccContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const { bufferSize } = useStoreState((state) => state.ui.audioUIState.bands);
+
   const { canvasDrawer: chromaCanvasDrawer } =
     useCanvasDrawer(chromaContainerRef);
 
@@ -81,7 +84,7 @@ export const SingleParametersBar: React.FC<Props> = ({
     [chromaCanvasDrawer, mfccCanvasDrawer, isChromaOpened, isMfccOpened]
   );
 
-  useMeydaAnalyser(['chroma', 'mfcc'], onFrame, 2048);
+  useMeydaAnalyser(['chroma', 'mfcc'], onFrame, bufferSize);
 
   const chromaBar = (
     <Box
@@ -89,9 +92,7 @@ export const SingleParametersBar: React.FC<Props> = ({
       width={(BAND_SQUARE_SIZE + BAND_SQUARE_DISTANCE) * PITCH_CLASSES.length}
     >
       <Box marginBottom='0.5rem'>
-        <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-          Chroma bands:
-        </Heading5>
+        <Heading5 light>Chroma bands:</Heading5>
       </Box>
       <FlexBox
         height={BAND_SQUARE_SIZE}
@@ -124,9 +125,7 @@ export const SingleParametersBar: React.FC<Props> = ({
   const mfccBar = (
     <Box width={(BAND_SQUARE_SIZE + BAND_SQUARE_DISTANCE) * MFCC_BANDS_NUM}>
       <Box marginBottom='0.5rem'>
-        <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-          Mel-Frequency Cepstral Coefficients:
-        </Heading5>
+        <Heading5 light>Mel-Frequency Cepstral Coefficients:</Heading5>
       </Box>
       <FlexBox height={BAND_SQUARE_SIZE} width='100%' position='relative'>
         <FlexBox position='absolute' top={0} left={0}>

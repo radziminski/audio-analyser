@@ -6,7 +6,7 @@ import {
   useAnimationFrameLoop,
   useElementDimensions
 } from '~/hooks';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import { COLORS } from '~/styles/theme';
 import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text, { Heading5 } from '~/components/Text';
 import { useStoreState } from '~/global-state/hooks';
@@ -87,9 +87,7 @@ const FrequencyMeter: React.FC = () => {
 
   return (
     <Box flexShrink={0} flexGrow={0}>
-      <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-        Frequency Spectrum:{' '}
-      </Heading5>
+      <Heading5 light>Frequency Spectrum: </Heading5>
       <FlexBox flexDirection='column' marginTop='0.8rem'>
         <Box
           width='100%'

@@ -9,12 +9,18 @@ export const useOnKeyboardPress = <T extends HTMLElement>(
     };
 
     const rootElement = rootElementRef?.current;
+
     if (rootElement) {
       rootElement.addEventListener('keydown', onKey);
-      return () => rootElement.removeEventListener('keydown', onKey);
+      return () => {
+        rootElement.removeEventListener('keydown', onKey);
+      };
     }
 
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+
+    return () => {
+      document.removeEventListener('keydown', onKey);
+    };
   }, [callback]);
 };

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import Box, { FlexBox } from '~/components/Box';
 import { useElementDimensions } from '~/hooks';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import { COLORS } from '~/styles/theme';
 import { Heading5 } from '../Text';
 import { useBarsDrawer, useCalculatePeaks, useCursorDrawer } from './hooks';
 import { Container, Timeline, WaveformContainer } from './parts';
@@ -72,9 +72,7 @@ export const Waveform: React.FC<Props> = ({
   return (
     <Container>
       <Box marginBottom='0.8rem'>
-        <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-          Waveform:
-        </Heading5>
+        <Heading5 light>Waveform:</Heading5>
       </Box>
       <WaveformContainer>
         <FlexBox

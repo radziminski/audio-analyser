@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import Box, { FlexBox } from '~/components/Box';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import { COLORS } from '~/styles/theme';
 import Spectro from 'spectrogram';
 import AudioService from '~/services/AudioService';
 import { scale } from 'chroma-js';
 import { Heading5 } from '../Text';
+import { useStoreState } from '~/global-state/hooks';
 
 interface Props {
   height?: number;
@@ -14,11 +15,15 @@ const Spectrogram: React.FC<Props> = ({ height = 220 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
 
+  const { bufferSize } = useStoreState(
+    (state) => state.ui.audioUIState.spectrogram
+  );
+
   useEffect(() => {
     if (canvas.current) {
       const analyser = AudioService.createAnalyser();
       analyser.analyserNode.smoothingTimeConstant = 0;
-      analyser.analyserNode.fftSize = 1024;
+      analyser.analyserNode.fftSize = bufferSize;
 
       const spectrogram = Spectro(canvas.current, {
         audio: {
@@ -48,9 +53,7 @@ const Spectrogram: React.FC<Props> = ({ height = 220 }) => {
     <>
       <FlexBox flexDirection='column' flexShrink={0} flexGrow={0}>
         <Box marginBottom='0.8rem'>
-          <Heading5 color={COLORS.white} fontWeight={FONT_WEIGHTS.medium}>
-            Spectrogram:
-          </Heading5>
+          <Heading5 light>Spectrogram:</Heading5>
         </Box>
         <FlexBox
           width='100%'

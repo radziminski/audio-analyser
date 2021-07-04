@@ -1,4 +1,4 @@
-import { IAudioState } from './types';
+import { IAudioState, CustomSource } from './types';
 import { action, thunk, computed } from 'easy-peasy';
 import AudioService from '../../services/AudioService';
 
@@ -65,12 +65,31 @@ const audioState: IAudioState = {
     };
   }),
 
+  setMicrophoneAsCurrSource: action((state, setAsCurrSource) => {
+    if (setAsCurrSource && !AudioService.isMicrophoneSetAsSource) {
+      AudioService.stop();
+      state.isPlaying = false;
+
+      AudioService.switchAnalyserToMicrophone();
+      state.prevSource = CustomSource.LiveAudio;
+      state.currSource = CustomSource.LiveAudio;
+    } else if (!setAsCurrSource && AudioService.isMicrophoneSetAsSource) {
+      AudioService.stop();
+      state.isPlaying = false;
+
+      state.prevSource = null;
+
+      AudioService.switchAnalyserToAudioElement();
+    }
+  }),
+
   clear: action((state) => {
     state.isPlaying = false;
     state.isLoadingAudioBuffer = false;
     state.didLoadAudioBuffer = false;
     state.currSource = null;
     state.audioSources = {};
+    AudioService.switchAnalyserToAudioElement();
     AudioService.clear();
   })
 };

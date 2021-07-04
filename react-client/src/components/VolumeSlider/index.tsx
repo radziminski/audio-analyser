@@ -5,8 +5,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import audioService from '~/services/AudioService';
 
 export const VolumeSlider: React.FC = () => {
-  const [gainValue, setGainValue] = useState(1);
-  const [prevGainValue, setPrevGainValue] = useState(1);
+  const currVal = audioService.masterGainNode.gain.value;
+
+  const [gainValue, setGainValue] = useState(currVal);
+  const [prevGainValue, setPrevGainValue] = useState(currVal);
   const [isMuted, setIsMuted] = useState(false);
 
   const onVolumeChange = useCallback(

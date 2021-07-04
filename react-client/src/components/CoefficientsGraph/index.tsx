@@ -131,9 +131,7 @@ export const CoefficientsGraph: React.FC = () => {
         (graph, i) =>
           graph && (
             <Box flexGrow={1} marginLeft={i ? '2rem' : 0} key={i}>
-              <Heading5 fontWeight={FONT_WEIGHTS.normal} color={COLORS.white}>
-                {graph.data.title}
-              </Heading5>
+              <Heading5 light>{graph.data.title}</Heading5>
               <FlexBox marginTop='1rem'>
                 <FlexBox
                   marginRight='4px'

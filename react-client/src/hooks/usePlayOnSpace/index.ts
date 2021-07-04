@@ -8,7 +8,6 @@ export const usePlayOnSpace = (
   const playOnSpace = (e: KeyboardEvent) => {
     if (e.code !== 'Space') return;
 
-    e.preventDefault();
     if (isPlaying) pause();
     else play();
 
