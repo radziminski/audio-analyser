@@ -7,14 +7,12 @@ export const useAnimationFrameLoop = (
   const animationFrameRef = useRef<number>();
 
   useEffect(() => {
-    const onReturn = () => {
-      if (animationFrameRef.current) {
-        console.log('Closing animation frame', animationFrameRef.current);
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
+    if (!startCondition) return;
 
-    if (!startCondition || animationFrameRef.current) return onReturn;
+    if (animationFrameRef.current) {
+      console.log('Closing animation frame', animationFrameRef.current);
+      cancelAnimationFrame(animationFrameRef.current);
+    }
 
     const animationLoop = () => {
       animationFunction();
@@ -24,6 +22,11 @@ export const useAnimationFrameLoop = (
     animationLoop();
     console.log('Starting animation frame', animationFrameRef.current);
 
-    return onReturn;
+    return () => {
+      if (animationFrameRef.current) {
+        console.log('Closing animation frame', animationFrameRef.current);
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, [animationFunction, startCondition]);
 };

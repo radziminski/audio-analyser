@@ -5,6 +5,7 @@ import Spectro from 'spectrogram';
 import AudioService from '~/services/AudioService';
 import { scale } from 'chroma-js';
 import { Heading5 } from '../Text';
+import { useStoreState } from '~/global-state/hooks';
 
 interface Props {
   height?: number;
@@ -14,11 +15,15 @@ const Spectrogram: React.FC<Props> = ({ height = 220 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
 
+  const { bufferSize } = useStoreState(
+    (state) => state.ui.audioUIState.spectrogram
+  );
+
   useEffect(() => {
     if (canvas.current) {
       const analyser = AudioService.createAnalyser();
       analyser.analyserNode.smoothingTimeConstant = 0;
-      analyser.analyserNode.fftSize = 1024;
+      analyser.analyserNode.fftSize = bufferSize;
 
       const spectrogram = Spectro(canvas.current, {
         audio: {

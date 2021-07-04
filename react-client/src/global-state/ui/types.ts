@@ -25,15 +25,16 @@ export interface IFrequencyState extends IDefaultWidgetState {
 }
 export interface ISpectrogramState extends IDefaultWidgetState {
   height: number;
+  bufferSize: number;
 }
 export interface IVolumeState extends IDefaultWidgetState {
   instantaneousBufferSize: number;
   averageBufferSize: number;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IBandsState {
   isChromaOpened: boolean;
   isMfccOpened: boolean;
+  bufferSize: number;
 }
 export interface ICoefficientsState extends IDefaultWidgetState {
   isRmsShown: boolean;

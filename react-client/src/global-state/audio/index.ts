@@ -67,12 +67,18 @@ const audioState: IAudioState = {
 
   setMicrophoneAsCurrSource: action((state, setAsCurrSource) => {
     if (setAsCurrSource && !AudioService.isMicrophoneSetAsSource) {
+      AudioService.stop();
+      state.isPlaying = false;
+
       AudioService.switchAnalyserToMicrophone();
       state.prevSource = CustomSource.LiveAudio;
       state.currSource = CustomSource.LiveAudio;
     } else if (!setAsCurrSource && AudioService.isMicrophoneSetAsSource) {
+      AudioService.stop();
+      state.isPlaying = false;
+
       state.prevSource = null;
-      state.currSource = null;
+
       AudioService.switchAnalyserToAudioElement();
     }
   }),

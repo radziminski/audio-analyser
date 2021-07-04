@@ -83,6 +83,7 @@ export const AnalyserView: React.FC = () => {
     setMicrophoneAsCurrSource(isAnalyzingLiveAudio);
 
     return () => {
+      console.log('returned');
       setMicrophoneAsCurrSource(false);
     };
   }, [isAnalyzingLiveAudio]);

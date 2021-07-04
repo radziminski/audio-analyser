@@ -61,10 +61,10 @@ export class AudioService implements AudioService {
     this.currAnalyserId = 0;
     this.connected = false;
     this.meydaAnalyzers = {};
+    this.isMicrophoneSetAsSource = false;
   }
 
   init(element: HTMLAudioElement) {
-    this.isMicrophoneSetAsSource = false;
     this.audioElement = element;
     this.isPlaying = !element.paused;
 
@@ -105,6 +105,7 @@ export class AudioService implements AudioService {
   }
 
   switchAnalyserToMicrophone() {
+    console.log('switchng to micro while', this.isMicrophoneSetAsSource);
     if (this.isMicrophoneSetAsSource) return;
 
     this.sourceNode.disconnect();
@@ -128,6 +129,8 @@ export class AudioService implements AudioService {
   }
 
   switchAnalyserToAudioElement() {
+    console.log('switchng to audio while', this.isMicrophoneSetAsSource);
+
     if (!this.isMicrophoneSetAsSource) return;
 
     this.isMicrophoneSetAsSource = false;

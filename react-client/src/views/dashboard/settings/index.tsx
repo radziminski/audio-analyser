@@ -26,11 +26,15 @@ export const SettingsView: React.FC = () => {
     },
     frequency: {
       isOpened: isFrequencyOpened,
-      bufferSize: fftSize,
+      bufferSize: freqFftSize,
       height: frequencyHeight
     },
-    spectrogram: { isOpened: isSpectrogramOpened, height: spectrogramHeight },
-    bands: { isChromaOpened, isMfccOpened },
+    spectrogram: {
+      isOpened: isSpectrogramOpened,
+      height: spectrogramHeight,
+      bufferSize: spectrogramFftSize
+    },
+    bands: { isChromaOpened, isMfccOpened, bufferSize: bandsBufferSize },
     coefficients: {
       isOpened: isCoefficientsOpened,
       isRmsShown,
@@ -147,14 +151,14 @@ export const SettingsView: React.FC = () => {
       />
       <SlideInputBox
         title='FFT size'
-        value={Math.log2(fftSize)}
+        value={Math.log2(freqFftSize)}
         min={9}
         max={14}
         step={1}
         onChange={(power) =>
           setFrequencyState({ bufferSize: Math.pow(2, power) })
         }
-        displayedValue={fftSize.toString()}
+        displayedValue={freqFftSize.toString()}
       />
       <SlideInputBox
         title='Frequency chart height'
@@ -187,6 +191,17 @@ export const SettingsView: React.FC = () => {
         onChange={(height) => setSpectrogramState({ height })}
         unit='px'
       />
+      <SlideInputBox
+        title='FFT size'
+        value={Math.log2(spectrogramFftSize)}
+        min={9}
+        max={14}
+        step={1}
+        onChange={(power) =>
+          setSpectrogramState({ bufferSize: Math.pow(2, power) })
+        }
+        displayedValue={spectrogramFftSize.toString()}
+      />
     </SectionWithTitle>
   );
 
@@ -204,6 +219,15 @@ export const SettingsView: React.FC = () => {
         title='MFCC bands shown'
         value={isMfccOpened}
         onChange={(isMfccOpened) => setBandsState({ isMfccOpened })}
+      />
+      <SlideInputBox
+        title='Buffer size'
+        value={Math.log2(bandsBufferSize)}
+        min={9}
+        max={14}
+        step={1}
+        onChange={(power) => setBandsState({ bufferSize: Math.pow(2, power) })}
+        displayedValue={bandsBufferSize.toString()}
       />
     </SectionWithTitle>
   );

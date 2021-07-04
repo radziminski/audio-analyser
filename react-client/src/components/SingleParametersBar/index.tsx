@@ -1,5 +1,6 @@
 import { MeydaFeaturesObject } from 'meyda';
 import React, { useCallback, useRef } from 'react';
+import { useStoreState } from '~/global-state/hooks';
 import { useCanvasDrawer } from '~/hooks';
 import { CanvasDrawer } from '~/hooks/useCanvasDrawer';
 import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
@@ -60,6 +61,8 @@ export const SingleParametersBar: React.FC<Props> = ({
   const chromaContainerRef = useRef<HTMLDivElement | null>(null);
   const mfccContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const { bufferSize } = useStoreState((state) => state.ui.audioUIState.bands);
+
   const { canvasDrawer: chromaCanvasDrawer } =
     useCanvasDrawer(chromaContainerRef);
 
@@ -81,7 +84,7 @@ export const SingleParametersBar: React.FC<Props> = ({
     [chromaCanvasDrawer, mfccCanvasDrawer, isChromaOpened, isMfccOpened]
   );
 
-  useMeydaAnalyser(['chroma', 'mfcc'], onFrame, 2048);
+  useMeydaAnalyser(['chroma', 'mfcc'], onFrame, bufferSize);
 
   const chromaBar = (
     <Box
