@@ -16,6 +16,7 @@ import Loader from '~/components/Loader';
 import SingleParametersBar from '~/components/SingleParametersBar';
 import CoefficientsGraph from '~/components/CoefficientsGraph';
 import { CustomSource } from '~/global-state/audio/types';
+import audioService from '~/services/AudioService';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);
@@ -83,10 +84,15 @@ export const AnalyserView: React.FC = () => {
     setMicrophoneAsCurrSource(isAnalyzingLiveAudio);
 
     return () => {
-      console.log('returned');
       setMicrophoneAsCurrSource(false);
     };
   }, [isAnalyzingLiveAudio]);
+
+  useEffect(() => {
+    return () => {
+      audioService.removeAllAnalyzers();
+    };
+  }, []);
 
   useEffect(() => {
     const setAudioLoadedFunction = () => setAudioLoaded(true);
