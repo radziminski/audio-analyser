@@ -18,9 +18,9 @@ COPY ./scripts/build_config.js .
 COPY ./config.json .
 
 RUN ls -alt
-RUN cat ../.dockerenv
 
 RUN node ./build_config.js
+RUN cat ./default.conf
 
 FROM nginx
 

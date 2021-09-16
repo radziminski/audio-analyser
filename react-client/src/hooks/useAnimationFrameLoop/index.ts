@@ -1,10 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 export const useAnimationFrameLoop = (
   animationFunction: () => void,
   startCondition = true
 ) => {
   const animationFrameRef = useRef<number>();
+
+  const animationLoop = useCallback(() => {
+    animationFunction();
+    animationFrameRef.current = requestAnimationFrame(animationLoop);
+  }, [animationFunction]);
 
   useEffect(() => {
     if (!startCondition) return;
@@ -14,12 +19,7 @@ export const useAnimationFrameLoop = (
       cancelAnimationFrame(animationFrameRef.current);
     }
 
-    const animationLoop = () => {
-      animationFunction();
-      animationFrameRef.current = requestAnimationFrame(animationLoop);
-    };
-
-    animationLoop();
+    animationFrameRef.current = requestAnimationFrame(animationLoop);
     console.log('Starting animation frame', animationFrameRef.current);
 
     return () => {
@@ -28,5 +28,5 @@ export const useAnimationFrameLoop = (
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [animationFunction, startCondition]);
+  }, [animationLoop, startCondition]);
 };

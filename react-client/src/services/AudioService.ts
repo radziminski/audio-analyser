@@ -159,12 +159,20 @@ export class AudioService implements AudioService {
     );
     if (!analyser) return false;
 
-    this.splitterNode.disconnect(analyser.analyserNode, analyser.channel);
+    try {
+      this.splitterNode.disconnect(analyser.analyserNode, analyser.channel);
+    } catch (e) {
+      //
+    }
     analyser.analyserNode.disconnect();
     const analyserIndex = this.analyzers.indexOf(analyser);
     if (analyserIndex > 0) this.analyzers.splice(analyserIndex, 1);
 
     return true;
+  }
+
+  removeAllAnalyzers() {
+    this.analyzers.forEach((analyser) => this.removeAnalyser(analyser.id));
   }
 
   async loadBuffer(): Promise<AudioBuffer | null> {
@@ -292,8 +300,6 @@ export class AudioService implements AudioService {
       callback
     });
 
-    this.meydaAnalyzers[bufferSize] = { analyzer, features };
-
     analyzer.start();
 
     return analyzer;
@@ -337,6 +343,7 @@ export class AudioService implements AudioService {
 
   clear() {
     this.clearMeydaAnalyzers();
+    this.removeAllAnalyzers();
     this.stop();
     this.reloadAudio('');
   }

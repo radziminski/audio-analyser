@@ -12,9 +12,7 @@ services:
       - node-api
       - react-client
     ports:
-      - 5432:5432
       - 80:80
-      - 5050:5050
 
   postgres:
     restart: unless-stopped
@@ -63,7 +61,6 @@ services:
 
   react-client:
     restart: unless-stopped
-    stdin_open: true
     build:
       dockerfile: Dockerfile.dev
       context: './react-client'
@@ -72,5 +69,6 @@ services:
       - ./react-client:/app
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - PORT=${REACT_CLIENT_PORT}
     ports:
       - '${REACT_CLIENT_PORT}:${REACT_CLIENT_PORT}'

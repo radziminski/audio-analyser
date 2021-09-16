@@ -34,7 +34,8 @@ module.exports = merge(WEBPACK_BASE, {
     contentBase: require('./webpack.base').BUILD_DIR,
     historyApiFallback: true,
     publicPath: '/',
-    open: true
+    open: true,
+    host: '0.0.0.0',
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin(),
