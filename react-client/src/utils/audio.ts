@@ -1,4 +1,5 @@
-export const sampleToDecibel = (value: number) => 10 * Math.log10(value);
+export const sampleToDecibel = (value: number) =>
+  value > 0 ? 10 * Math.log10(value) : 0;
 
 export const calculateBufferAverage = (buffer: Float32Array) => {
   let sumOfSquares = 0;

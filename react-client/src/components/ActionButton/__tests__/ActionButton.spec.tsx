@@ -3,7 +3,7 @@ import React from 'react';
 
 import { renderWithTheme } from '~/.jest/helpers';
 
-import Button from '.';
+import Button from '..';
 
 describe('ActionButton', () => {
   it('renders inside DOM', () => {
