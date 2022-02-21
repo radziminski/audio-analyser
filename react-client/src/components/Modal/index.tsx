@@ -1,10 +1,12 @@
-import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React from 'react';
+
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
+
 import AddFileModal from './AddFileModal';
 import ConfirmActionModal from './ConfirmActionModal';
 import CreateProjectModal from './CreateProjectModal';
-import { ModalType } from './types';
 import RecordFileModal from './RecordFileModal';
+import { ModalType } from './types';
 
 export const ModalsContainer: React.FC = () => {
   const { openedModal, modalArgs } = useStoreState((state) => state.ui);

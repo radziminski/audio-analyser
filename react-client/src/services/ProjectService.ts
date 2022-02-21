@@ -1,7 +1,8 @@
-import { ProjectWithUsersAndFilesDto } from './../dtos/project/project-dto';
-import { API_ROUTES } from './../constants/api-routes';
-import RequestService from './RequestService';
 import { CreateProjectDto } from '~/dtos/project/create-project-dto';
+
+import { API_ROUTES } from './../constants/api-routes';
+import { ProjectWithUsersAndFilesDto } from './../dtos/project/project-dto';
+import RequestService from './RequestService';
 
 export class ProjectService {
   async fetchMyProjects(): Promise<ProjectWithUsersAndFilesDto[]> {

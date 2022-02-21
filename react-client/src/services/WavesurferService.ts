@@ -1,6 +1,7 @@
-import { COLORS } from './../styles/theme';
 import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.min.js';
+
+import { COLORS } from './../styles/theme';
 
 const WAVEFORM_OPTIONS: Omit<WaveSurfer.WaveSurferParams, 'container'> = {
   waveColor: 'white',

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Container, LogoIcon, LogoText } from './parts';
+
 import { APP_TITLE } from '~/constants/constants';
+
+import { Container, LogoIcon, LogoText } from './parts';
 
 const Logo: React.FC = () => {
   return (

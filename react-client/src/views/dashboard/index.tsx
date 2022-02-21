@@ -1,13 +1,15 @@
 import React from 'react';
-import { ROUTES } from '~/constants/routes';
-import NavPanel from '~/components/NavPanel';
 import { Redirect, Route, Switch } from 'react-router';
-import DashboardHomeView from './home';
-import AnalyserView from './analyser';
-import ProjectsView from './projects';
-import ProjectView from './project';
-import NotFoundView from '~/views/not-found';
+
 import Box from '~/components/Box';
+import NavPanel from '~/components/NavPanel';
+import { ROUTES } from '~/constants/routes';
+import NotFoundView from '~/views/not-found';
+
+import AnalyserView from './analyser';
+import DashboardHomeView from './home';
+import ProjectView from './project';
+import ProjectsView from './projects';
 import SettingsView from './settings';
 
 const DashboardView: React.FC = () => {

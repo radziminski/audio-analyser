@@ -1,17 +1,19 @@
-import { useElementDimensions } from './../../hooks/useElementDimensions/index';
-import { useCanvasDrawer } from './../../hooks/useCanvasDrawer/index';
-import { drawInstantaneousVolume, drawMaxAverageVolume } from './helpers';
-import {
-  calculateBufferAverage,
-  calculateBufferMaxAverage
-} from './../../utils/audio';
-import { useAnimationFrameLoop } from './../../hooks/useAnimationFrameLoop/index';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+
+import { useStoreState } from '~/global-state/hooks';
 import audioService, {
   LEFT_CHANNEL,
   RIGHT_CHANNEL
 } from '~/services/AudioService';
-import { useEffect, useState, useRef, MutableRefObject } from 'react';
-import { useStoreState } from '~/global-state/hooks';
+
+import { useAnimationFrameLoop } from './../../hooks/useAnimationFrameLoop/index';
+import { useCanvasDrawer } from './../../hooks/useCanvasDrawer/index';
+import { useElementDimensions } from './../../hooks/useElementDimensions/index';
+import {
+  calculateBufferAverage,
+  calculateBufferMaxAverage
+} from './../../utils/audio';
+import { drawInstantaneousVolume, drawMaxAverageVolume } from './helpers';
 
 export const useInitAnalyzers = () => {
   const [analyzersIds, setAnalyzersIds] = useState<number[]>([]);

@@ -2,17 +2,15 @@ import styled, {
   CSSProperties,
   StyledComponentPropsWithRef
 } from 'styled-components';
-
 import {
   color,
   ColorProps,
   compose,
+  system,
   textShadow,
   TextShadowProps,
   typography,
-  TypographyProps,
-  system
-} from 'styled-system';
+  TypographyProps} from 'styled-system';
 
 export type TextProps = ColorProps &
   TextShadowProps &

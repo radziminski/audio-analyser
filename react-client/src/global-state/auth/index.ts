@@ -1,7 +1,8 @@
-import { IAuthState } from './types';
 import { action, thunk } from 'easy-peasy';
 
 import AuthService from '~/services/AuthService';
+
+import { IAuthState } from './types';
 
 const authState: IAuthState = {
   isLoading: false,

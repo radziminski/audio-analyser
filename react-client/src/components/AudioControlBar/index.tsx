@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, IconContainer } from './parts';
-import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import Icon from '~/components/Icon';
-import Box, { FlexBox } from '~/components/Box';
+
 import AudioTimer from '~/components/AudioTimer';
+import Box, { FlexBox } from '~/components/Box';
+import Icon from '~/components/Icon';
 import VolumeSlider from '~/components/VolumeSlider';
-import audioService from '~/services/AudioService';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import { usePlayOnSpace } from '~/hooks';
+import audioService from '~/services/AudioService';
+
+import { Container, IconContainer } from './parts';
 
 const ICON_SIZE_SMALL = 24;
 const ICON_SIZE_BIG = 34;

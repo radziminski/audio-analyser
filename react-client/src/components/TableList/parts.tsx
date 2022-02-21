@@ -1,10 +1,11 @@
+import React from 'react';
 import styled from 'styled-components';
 
-import React from 'react';
 import Box, { FlexBox } from '~/components/Box';
 import Icon from '~/components/Icon';
 import Text from '~/components/Text';
 import { COLORS } from '~/styles/theme';
+
 import ActionButton, { ButtonType } from '../ActionButton';
 
 export const TableListButton: React.FC<{

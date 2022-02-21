@@ -1,7 +1,9 @@
-import ProtectedRoute from '~/components/ProtectedRoute';
-import { ROUTES } from '~/constants/routes';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
+
+import ProtectedRoute from '~/components/ProtectedRoute';
+import { ROUTES } from '~/constants/routes';
+
 import AuthView from './auth';
 import DashboardView from './dashboard';
 import NotFoundView from './not-found';

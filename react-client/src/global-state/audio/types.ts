@@ -1,4 +1,4 @@
-import { Action, Thunk, Computed } from 'easy-peasy';
+import { Action, Computed, Thunk } from 'easy-peasy';
 
 export type AudioAction<Payload = void> = Action<IAudioState, Payload>;
 export type AudioThunk<Payload = void> = Thunk<IAudioState, Payload>;

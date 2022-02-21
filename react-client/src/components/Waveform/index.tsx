@@ -1,7 +1,9 @@
 import React, { useCallback, useRef } from 'react';
+
 import Box, { FlexBox } from '~/components/Box';
 import { useElementDimensions } from '~/hooks';
 import { COLORS } from '~/styles/theme';
+
 import { Heading5 } from '../Text';
 import { useBarsDrawer, useCalculatePeaks, useCursorDrawer } from './hooks';
 import { Container, Timeline, WaveformContainer } from './parts';

@@ -1,6 +1,7 @@
 import React from 'react';
-import Box from '~/components/Box';
 import styled from 'styled-components';
+
+import Box from '~/components/Box';
 
 export const Container = styled.ul`
   display: flex;

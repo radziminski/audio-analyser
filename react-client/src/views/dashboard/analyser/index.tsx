@@ -1,22 +1,23 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import VolumeMeter from '~/components/VolumeMeter';
-import Waveform from '~/components/Waveform';
-import FrequencyMeter from '~/components/FrequencyMeter';
-import { useStoreState, useStoreActions } from '~/global-state/hooks';
-import DashboardContent from '~/components/DashboardContent';
-import AudioService from '~/services/AudioService';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import Box, { FlexBox } from '~/components/Box';
-import Spectrogram from '~/components/Spectrogram';
-import { Heading2, Heading3 } from '~/components/Text';
-import { COLORS } from '~/styles/theme';
+
 import Anchor from '~/components/Anchor';
-import { ROUTES } from '~/constants/routes';
+import Box, { FlexBox } from '~/components/Box';
+import CoefficientsGraph from '~/components/CoefficientsGraph';
+import DashboardContent from '~/components/DashboardContent';
+import FrequencyMeter from '~/components/FrequencyMeter';
 import Loader from '~/components/Loader';
 import SingleParametersBar from '~/components/SingleParametersBar';
-import CoefficientsGraph from '~/components/CoefficientsGraph';
+import Spectrogram from '~/components/Spectrogram';
+import { Heading2, Heading3 } from '~/components/Text';
+import VolumeMeter from '~/components/VolumeMeter';
+import Waveform from '~/components/Waveform';
+import { ROUTES } from '~/constants/routes';
 import { CustomSource } from '~/global-state/audio/types';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
+import AudioService from '~/services/AudioService';
 import audioService from '~/services/AudioService';
+import { COLORS } from '~/styles/theme';
 
 const getFileDateTime = (datetime: string) => {
   const date = new Date(datetime);

@@ -1,7 +1,8 @@
+import { action, computed, thunk } from 'easy-peasy';
+
 import { CreateProjectDto } from './../../dtos/project/create-project-dto';
-import { IProject, IProjectState } from './types';
 import ProjectService from './../../services/ProjectService';
-import { action, thunk, computed } from 'easy-peasy';
+import { IProject, IProjectState } from './types';
 
 const projectState: IProjectState = {
   projects: null,

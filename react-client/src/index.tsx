@@ -1,7 +1,9 @@
 import { StoreProvider } from 'easy-peasy';
-import initStore from '~/global-state';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import initStore from '~/global-state';
+
 import App from './App';
 
 const store = initStore();

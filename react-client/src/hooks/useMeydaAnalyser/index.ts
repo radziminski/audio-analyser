@@ -1,5 +1,6 @@
 import { MeydaAudioFeature, MeydaFeaturesObject } from 'meyda';
 import { useEffect } from 'react';
+
 import audioService from '~/services/AudioService';
 
 export const useMeydaAnalyser = (

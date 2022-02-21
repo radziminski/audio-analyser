@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyledComponentPropsWithRef } from 'styled-components';
+
 import { Container, Input, Label } from './parts';
 
 export type TextProps = StyledComponentPropsWithRef<'input'>;

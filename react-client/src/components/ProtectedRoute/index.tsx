@@ -1,9 +1,10 @@
-import { ROUTES } from '~/constants/routes';
-import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router';
-import LoadingView from '~/views/loading';
+
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import RequestService from '~/services/RequestService';
+import LoadingView from '~/views/loading';
 
 type Props = RouteProps;
 

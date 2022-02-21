@@ -1,9 +1,8 @@
 import {
-  MeydaAnalyzer,
   createMeydaAnalyzer,
+  MeydaAnalyzer,
   MeydaAudioFeature,
-  MeydaFeaturesObject
-} from 'meyda';
+  MeydaFeaturesObject} from 'meyda';
 
 export interface AudioService {
   context: AudioContext;

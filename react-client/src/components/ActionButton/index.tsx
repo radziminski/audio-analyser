@@ -1,6 +1,7 @@
-import Button from '~/components/Button';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
+
+import Button from '~/components/Button';
 import Loader from '~/components/Loader';
 
 export type ButtonType = 'danger' | 'submit' | 'normal' | 'text';

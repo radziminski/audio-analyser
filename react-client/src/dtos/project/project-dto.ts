@@ -1,5 +1,5 @@
-import { ProjectUserDto } from './project-user-dto';
 import { ProjectFileDto } from './project-file-dto';
+import { ProjectUserDto } from './project-user-dto';
 
 export interface ProjectDto {
   id: number;

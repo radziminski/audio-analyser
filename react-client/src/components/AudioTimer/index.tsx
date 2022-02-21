@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Box from '~/components/Box';
 import { formatTime } from '~/utils/time';
+
 import { Container } from './parts';
 
 interface Props {

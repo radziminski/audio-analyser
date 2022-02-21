@@ -1,4 +1,5 @@
 import { BREAKPOINTS, Device } from '~/styles/theme';
+
 import { useViewportSize } from '../useViewportSize';
 
 const MAX_MOBILE_HEIGHT = 800;

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+
 import Box from '../Box';
 import { Paragraph } from '../Text';
 

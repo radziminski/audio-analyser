@@ -1,7 +1,8 @@
-import Box, { FlexBox } from '~/components/Box';
-import SliderPrimary from '~/components/Slider';
-import Icon, { SupportedIcon } from '~/components/Icon';
 import React, { useCallback, useMemo, useState } from 'react';
+
+import Box, { FlexBox } from '~/components/Box';
+import Icon, { SupportedIcon } from '~/components/Icon';
+import SliderPrimary from '~/components/Slider';
 import audioService from '~/services/AudioService';
 
 export const VolumeSlider: React.FC = () => {

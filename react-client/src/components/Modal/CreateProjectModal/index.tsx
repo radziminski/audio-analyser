@@ -1,10 +1,12 @@
+import React, { useState } from 'react';
+
 import ActionButton from '~/components/ActionButton';
 import Box from '~/components/Box';
 import Form from '~/components/Form';
 import { Paragraph } from '~/components/Text';
 import TextInput from '~/components/TextInput';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import React, { useState } from 'react';
+
 import Modal from '../ModalWrapper';
 import { ModalErrorMessage } from '../parts';
 

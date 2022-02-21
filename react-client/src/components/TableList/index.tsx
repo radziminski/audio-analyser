@@ -1,8 +1,10 @@
+import React from 'react';
+
 import { Center } from '~/components/Box';
 import Loader from '~/components/Loader';
 import { Heading4 } from '~/components/Text';
-import React from 'react';
 import { FONT_WEIGHTS } from '~/styles/theme';
+
 import { Container, Label } from './parts';
 
 export interface ITableListColumn<T = string> {

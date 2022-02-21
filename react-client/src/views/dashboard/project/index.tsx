@@ -1,3 +1,6 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router';
+
 import ActionButton from '~/components/ActionButton';
 import Box, { Center, FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
@@ -6,8 +9,6 @@ import { ModalType } from '~/components/Modal/types';
 import ProjectFilesTableList from '~/components/ProjectFilesTableList';
 import { ROUTES } from '~/constants/routes';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
 
 export const ProjectView: React.FC = () => {
   const { id } = useParams<{ id: string }>();

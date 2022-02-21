@@ -1,4 +1,5 @@
-import { Action, Thunk, Computed } from 'easy-peasy';
+import { Action, Computed, Thunk } from 'easy-peasy';
+
 import { IUser } from '~/global-state/user/types';
 
 export type ProjectAction<Payload = void> = Action<IProjectState, Payload>;

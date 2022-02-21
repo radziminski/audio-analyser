@@ -1,24 +1,25 @@
 import React from 'react';
+import { MdKeyboardBackspace } from 'react-icons/md';
 import {
-  RiPlayCircleLine,
-  RiPauseCircleLine,
-  RiUser3Fill,
-  RiHome5Fill,
-  RiFolderMusicFill,
   RiBarChartBoxFill,
-  RiVolumeUpFill,
+  RiCloseFill,
+  RiDownload2Line,
+  RiFolderMusicFill,
+  RiHome5Fill,
+  RiLogoutBoxLine,
+  RiPauseCircleLine,
+  RiPlayCircleLine,
+  RiRecordCircleLine,
+  RiRewindFill,
+  RiSettings5Fill,
+  RiSpeedFill,
+  RiUser3Fill,
   RiVolumeDownFill,
   RiVolumeMuteFill,
-  RiRewindFill,
-  RiSpeedFill,
-  RiCloseFill,
-  RiLogoutBoxLine,
-  RiDownload2Line,
-  RiRecordCircleLine,
-  RiSettings5Fill
+  RiVolumeUpFill
 } from 'react-icons/ri';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
-import { MdKeyboardBackspace } from 'react-icons/md';
+
 import { Container } from './parts';
 
 export type SupportedIcon =
