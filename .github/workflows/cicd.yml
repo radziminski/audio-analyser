@@ -11,43 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-
-      # Build the production optimized build of backend api
-      - name: Build the optimized build
-        run: |
-          cd node-api
-          docker build -t audio-analyser-api:$GITHUB_SHA .
-          docker run --name builder audio-analyser-api:$GITHUB_SHA echo 'Server built.'
-          docker cp builder:/app/deploy ./deploy
-
-      # Copies necessary nginx config
-      - name: Copy aws nginx config
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd node-api/config
-          cp -r . ../deploy
-
-      # Zips the deploy package
-      - name: Generate deployment package
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd node-api/deploy
-          zip -r deploy.zip . -x '*.git*'
-
-      # Deploys the package to AWS EB
-      - name: Deploy to EB
-        if: github.ref == 'refs/heads/main'
-        uses: einaregilsson/beanstalk-deploy@v16
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: audio-analyser
-          environment_name: Audioanalyser-env
-          version_label: ${{ github.run_id }}
-          region: ${{ secrets.AWS_REGION }}
-          deployment_package: node-api/deploy/deploy.zip
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          appdir: 'node-api'
 
   build-and-deploy-frontend:
     runs-on: ubuntu-latest
