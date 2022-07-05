@@ -10,7 +10,7 @@ COPY 'package-lock.json' '/app'
 RUN npm ci
 
 # Copy source code
-COPY '.' '/app'
+COPY '.' '/app/'
 
 ENV NODE_ENV=production
 
@@ -23,8 +23,8 @@ FROM node:14-alpine
 WORKDIR '/app'
 
 # Copying packages and build folders 
-COPY --from=builder '/app/package*.json' '/app'
-COPY --from=builder '/app/node_modules' '/app/node_modules'
-COPY --from=builder '/app/dist' '/app/dist'
+COPY --from=builder '/app/package*.json' '/app/'
+COPY --from=builder '/app/node_modules' '/app/node_modules/'
+COPY --from=builder '/app/dist' '/app/dist/'
 
 CMD ["node", "dist/main.js"]
