@@ -2,8 +2,8 @@ import { ConnectionOptions } from 'typeorm';
 import * as winston from 'winston';
 
 // General
-export const ENV: 'dev' | 'prod' =
-  process.env.NODE_ENV === 'development' ? 'dev' : 'prod';
+const isDev = process.env.NODE_ENV === 'development'
+export const ENV: 'dev' | 'prod' = isDev ? 'dev' : 'prod';
 export const REQUESTS_PER_MINUTE_LIMIT = 300;
 export const PASSWORD_REGEX = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
@@ -35,7 +35,7 @@ export const { PG_PORT } = process.env;
 export const { PORT } = process.env;
 
 // DB
-export const DB_CONFIG: ConnectionOptions = {
+export const DB_LOCAL_CONFIG: ConnectionOptions = {
   type: 'postgres',
   host: PG_HOST,
   port: Number(PG_PORT),
@@ -45,6 +45,18 @@ export const DB_CONFIG: ConnectionOptions = {
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,
 };
+
+export const DB_PROD_CONFIG: ConnectionOptions = {
+  url: process.env.DATABASE_URL,
+  type: 'postgres',
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  synchronize: true,
+};
+
+export const DB_CONFIG = isDev ? DB_LOCAL_CONFIG : DB_PROD_CONFIG;
 
 // LOGS
 export const LOGS_DIR = './logs';
