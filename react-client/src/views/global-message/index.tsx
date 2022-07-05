@@ -1,6 +1,7 @@
+import React from 'react';
+
 import Box, { Center } from '~/components/Box';
 import { Heading2 } from '~/components/Text';
-import React from 'react';
 import { COLORS } from '~/styles/theme';
 
 interface Props {

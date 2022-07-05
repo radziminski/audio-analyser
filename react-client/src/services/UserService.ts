@@ -1,5 +1,5 @@
-import { UserDto } from './../dtos/user/user-dto';
 import { API_ROUTES } from './../constants/api-routes';
+import { UserDto } from './../dtos/user/user-dto';
 import RequestService from './RequestService';
 
 export class UserService {

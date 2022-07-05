@@ -1,18 +1,20 @@
 import React from 'react';
+import { useHistory } from 'react-router';
+
+import ActionButton from '~/components/ActionButton';
+import Box, { FlexBox } from '~/components/Box';
+import Icon from '~/components/Icon';
+import { CustomSource } from '~/global-state/audio/types';
+import { useStoreState } from '~/global-state/hooks';
+
+import AudioControlBar from '../AudioControlBar';
 import {
   Container,
-  Title,
-  SubTitles,
+  ScrollContainer,
   SubTitle,
-  ScrollContainer
+  SubTitles,
+  Title
 } from './parts';
-import AudioControlBar from '../AudioControlBar';
-import Box, { FlexBox } from '~/components/Box';
-import ActionButton from '~/components/ActionButton';
-import { useHistory } from 'react-router';
-import Icon from '~/components/Icon';
-import { useStoreState } from '~/global-state/hooks';
-import { CustomSource } from '~/global-state/audio/types';
 
 interface Props {
   title?: string;

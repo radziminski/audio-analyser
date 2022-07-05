@@ -1,15 +1,17 @@
-import AudioService from '~/services/AudioService';
 import React, { useEffect, useMemo, useRef } from 'react';
+
 import Box, { FlexBox } from '~/components/Box';
-import {
-  useCanvasDrawer,
-  useAnimationFrameLoop,
-  useElementDimensions
-} from '~/hooks';
-import { COLORS } from '~/styles/theme';
-import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 import Text, { Heading5 } from '~/components/Text';
 import { useStoreState } from '~/global-state/hooks';
+import {
+  useAnimationFrameLoop,
+  useCanvasDrawer,
+  useElementDimensions
+} from '~/hooks';
+import AudioService from '~/services/AudioService';
+import { COLORS } from '~/styles/theme';
+
+import { getLabelsLocations, getLogValue, printLabel } from './helpers';
 
 const MIN_DECIBELS = 21;
 

@@ -1,5 +1,6 @@
-import { IAudioUIState, IUIState } from './types';
 import { action } from 'easy-peasy';
+
+import { IAudioUIState, IUIState } from './types';
 
 const initAudioUIState: IAudioUIState = {
   waveform: {

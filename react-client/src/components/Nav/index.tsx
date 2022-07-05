@@ -1,11 +1,13 @@
 import React from 'react';
-import Box from '~/components/Box';
-import NavItem from '~/components/NavItem';
-import { NavSelector, Container } from './parts';
-import { SupportedIcon } from '~/components/Icon';
-import { ROUTES } from '~/constants/routes';
 import { useLocation } from 'react-router';
+
+import Box from '~/components/Box';
+import { SupportedIcon } from '~/components/Icon';
+import NavItem from '~/components/NavItem';
+import { ROUTES } from '~/constants/routes';
 import { useStoreState } from '~/global-state/hooks';
+
+import { Container, NavSelector } from './parts';
 
 interface NavLink {
   name: string;

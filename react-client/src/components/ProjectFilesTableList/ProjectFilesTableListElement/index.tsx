@@ -1,12 +1,14 @@
+import React, { useCallback, useState } from 'react';
+
 import Box, { Center, FlexBox } from '~/components/Box';
+import Icon from '~/components/Icon';
+import Loader from '~/components/Loader';
+import { TableListButton } from '~/components/TableList/parts';
 import Text from '~/components/Text';
 import { IFile } from '~/global-state/project/types';
-import React, { useCallback, useState } from 'react';
-import { Field } from './parts';
-import { TableListButton } from '~/components/TableList/parts';
-import Icon from '~/components/Icon';
 import RequestService from '~/services/RequestService';
-import Loader from '~/components/Loader';
+
+import { Field } from './parts';
 
 interface Props {
   file: IFile;

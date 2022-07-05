@@ -1,7 +1,8 @@
-import Box, { FlexBox } from '~/components/Box';
-import { useElementDimensions } from '~/hooks';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import Box, { FlexBox } from '~/components/Box';
+import { useElementDimensions } from '~/hooks';
 import { formatTime } from '~/utils/time';
 
 export const Container = styled.div`

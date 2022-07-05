@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 
-import VolumeValueTag, { Container } from './parts';
-import { useStartMeter } from './hooks';
 import { getVolumeRelativeToContainer } from '~/utils/audio';
-import { Heading5 } from '../Text';
+
 import Box, { FlexBox } from '../Box';
+import { Heading5 } from '../Text';
+import { useStartMeter } from './hooks';
+import VolumeValueTag, { Container } from './parts';
 
 export const VolumeMeter: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);

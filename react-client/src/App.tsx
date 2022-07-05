@@ -1,16 +1,18 @@
-import audioService from '~/services/AudioService';
 import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AuthService from '~/services/AuthService';
 import { ThemeProvider } from 'styled-components';
+
+import ModalsContainer from '~/components/Modal';
+import { useStoreActions } from '~/global-state/hooks';
+import audioService from '~/services/AudioService';
+import AuthService from '~/services/AuthService';
 import { GlobalStyles } from '~/styles/global';
 import { defaultTheme } from '~/styles/theme';
 import AppRoutes from '~/views';
-import { useStoreActions } from '~/global-state/hooks';
-import ModalsContainer from '~/components/Modal';
+
 import { MIN_SCREEN_WIDTH } from './constants/constants';
-import DeviceNotSupportedView from './views/device-not-supported';
 import { useOnResize } from './hooks/useOnResize';
+import DeviceNotSupportedView from './views/device-not-supported';
 
 const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);

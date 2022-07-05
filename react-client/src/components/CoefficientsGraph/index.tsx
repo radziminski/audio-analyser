@@ -1,11 +1,13 @@
-import React, { RefObject, useCallback, useMemo, useRef } from 'react';
-import { useCanvasDrawer, useElementDimensions } from '~/hooks';
-import Box, { FlexBox } from '../Box';
-import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
 import { MeydaFeaturesObject } from 'meyda';
 import { Image } from 'p5';
-import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+import React, { RefObject, useCallback, useMemo, useRef } from 'react';
+
 import { useStoreState } from '~/global-state/hooks';
+import { useCanvasDrawer, useElementDimensions } from '~/hooks';
+import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+
+import Box, { FlexBox } from '../Box';
 import Text, { Heading5 } from '../Text';
 
 const HALF_SAMPLING_FREQ = 44100 / 2;

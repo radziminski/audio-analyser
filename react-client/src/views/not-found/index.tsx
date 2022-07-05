@@ -1,6 +1,8 @@
+import React from 'react';
+
 import Anchor from '~/components/Anchor';
 import { ROUTES } from '~/constants/routes';
-import React from 'react';
+
 import GlobalMessageView from '../global-message';
 
 interface Props {

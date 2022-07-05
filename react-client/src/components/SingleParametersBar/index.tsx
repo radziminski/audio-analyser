@@ -1,10 +1,12 @@
 import { MeydaFeaturesObject } from 'meyda';
 import React, { useCallback, useRef } from 'react';
+
 import { useStoreState } from '~/global-state/hooks';
 import { useCanvasDrawer } from '~/hooks';
 import { CanvasDrawer } from '~/hooks/useCanvasDrawer';
 import { useMeydaAnalyser } from '~/hooks/useMeydaAnalyser';
-import { FONT_WEIGHTS, COLORS } from '~/styles/theme';
+import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
+
 import Box, { FlexBox } from '../Box';
 import Text, { Heading5 } from '../Text';
 

@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
+
 import { useOnResize } from './../useOnResize/index';
-import { useState, useEffect } from 'react';
 
 export const useElementDimensions = <T extends HTMLElement | null>(
   ref: React.MutableRefObject<T>,

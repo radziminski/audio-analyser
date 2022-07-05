@@ -1,6 +1,7 @@
-import { IAudioState, CustomSource } from './types';
-import { action, thunk, computed } from 'easy-peasy';
+import { action, computed, thunk } from 'easy-peasy';
+
 import AudioService from '../../services/AudioService';
+import { CustomSource, IAudioState } from './types';
 
 const audioState: IAudioState = {
   isPlaying: false,

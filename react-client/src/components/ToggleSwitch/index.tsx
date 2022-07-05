@@ -1,5 +1,6 @@
 import React from 'react';
-import { Slider, Switch, Input } from './parts';
+
+import { Input, Slider, Switch } from './parts';
 
 interface Props {
   value: boolean;

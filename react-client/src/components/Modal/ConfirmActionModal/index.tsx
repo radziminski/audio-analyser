@@ -1,7 +1,9 @@
+import React from 'react';
+
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
 import { Paragraph } from '~/components/Text';
-import React from 'react';
+
 import Modal from '../ModalWrapper';
 import { ModalErrorMessage } from '../parts';
 

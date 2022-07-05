@@ -1,8 +1,4 @@
-FROM node:alpine as builder
-
-# Set all permissions
-RUN chown -R root /opt
-RUN chmod 755 /usr/local/bin/*
+FROM node:14-alpine as builder
 
 WORKDIR '/app'
 
@@ -21,12 +17,14 @@ ENV NODE_ENV=production
 # Building optimized build
 RUN npm run build
 
-# Crearing deploy folder
-RUN mkdir '/app/deploy'
+# Run the app
+FROM node:14-alpine
 
-# Copying packages and build folders to deploy
-COPY 'package.json' '/app/deploy'
-COPY 'package-lock.json' '/app/deploy'
-RUN cp -r '/app/dist' '/app/deploy'
+WORKDIR '/app'
 
-CMD echo 'Server built.'
+# Copying packages and build folders 
+COPY --from=builder '/app/package*.json' '/app'
+COPY --from=builder '/app/node_modules' '/app/node_modules'
+COPY --from=builder '/app/dist' '/app/dist'
+
+CMD ["node", "dist/main.js"]

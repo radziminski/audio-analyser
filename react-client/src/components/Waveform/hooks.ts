@@ -1,8 +1,10 @@
+import { useCallback, useEffect, useState } from 'react';
+
+import { useCanvasDrawer } from '~/hooks/useCanvasDrawer';
+import { useElementDimensions } from '~/hooks/useElementDimensions';
+
 import { useAnimationFrameLoop } from '../../hooks/useAnimationFrameLoop/index';
 import { COLORS } from '../../styles/theme';
-import { useCanvasDrawer } from '~/hooks/useCanvasDrawer';
-import { useEffect, useState, useCallback } from 'react';
-import { useElementDimensions } from '~/hooks/useElementDimensions';
 
 const PASSED_COLOR = COLORS.accentSecondary100;
 

@@ -1,15 +1,17 @@
+import React from 'react';
+import { Route, Switch, useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
+
 import Box, { FlexBox } from '~/components/Box';
 import Logo from '~/components/Logo';
 import { Heading2, Paragraph } from '~/components/Text';
 import { ROUTES } from '~/constants/routes';
-import React from 'react';
-import { Route, Switch, useLocation } from 'react-router';
 import { COLORS, FONT_WEIGHTS } from '~/styles/theme';
-import RegisterView from './register';
+import NotFoundView from '~/views/not-found';
+
 import LoginView from './login';
 import { Container, LeftBar, RightBar } from './parts';
-import { Link } from 'react-router-dom';
-import NotFoundView from '~/views/not-found';
+import RegisterView from './register';
 
 export const AuthView: React.FC = () => {
   const location = useLocation();

@@ -1,9 +1,11 @@
 import React from 'react';
-import Logo from '~/components/Logo';
-import { Container } from './parts';
-import Nav from '~/components/Nav';
-import Box, { FlexBox } from '~/components/Box';
+
 import AccountBar from '~/components/AccountBar';
+import Box, { FlexBox } from '~/components/Box';
+import Logo from '~/components/Logo';
+import Nav from '~/components/Nav';
+
+import { Container } from './parts';
 
 const NavPanel: React.FC = () => {
   return (

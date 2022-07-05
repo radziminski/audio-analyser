@@ -1,16 +1,17 @@
+import AudioRecorder from 'audio-recorder-polyfill';
 import React, { useRef, useState } from 'react';
+
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
-import { Paragraph } from '~/components/Text';
-import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import ModalWrapper from '../ModalWrapper';
-import Icon from '~/components/Icon';
-import { AudioPlayer } from './parts';
 import DotLoader from '~/components/DotLoader';
-
-import AudioRecorder from 'audio-recorder-polyfill';
+import Icon from '~/components/Icon';
+import { Paragraph } from '~/components/Text';
 import TextInput from '~/components/TextInput';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
+
+import ModalWrapper from '../ModalWrapper';
 import { ModalErrorMessage } from '../parts';
+import { AudioPlayer } from './parts';
 
 interface Props {
   onClose: () => void;

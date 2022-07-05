@@ -1,12 +1,13 @@
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+
 import { ActionButton } from '~/components/ActionButton';
 import Box from '~/components/Box';
 import Form from '~/components/Form';
-import TextInput from '~/components/TextInput';
-import React, { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from '~/global-state/hooks';
-import { useHistory } from 'react-router';
-import { ROUTES } from '~/constants/routes';
 import { Heading3 } from '~/components/Text';
+import TextInput from '~/components/TextInput';
+import { ROUTES } from '~/constants/routes';
+import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import { FONT_WEIGHTS } from '~/styles/theme';
 
 export const LoginForm: React.FC = () => {
@@ -24,7 +25,7 @@ export const LoginForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) history.push(ROUTES.DASHBOARD_PROJECTS);
+    if (isAuthenticated) history.push(ROUTES.DASHBOARD);
   }, [isAuthenticated, history]);
 
   useEffect(() => {

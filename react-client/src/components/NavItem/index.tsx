@@ -1,8 +1,10 @@
 import React from 'react';
-import Icon, { SupportedIcon } from '~/components/Icon';
-import { Container } from './parts';
-import Box from '~/components/Box';
 import { Link } from 'react-router-dom';
+
+import Box from '~/components/Box';
+import Icon, { SupportedIcon } from '~/components/Icon';
+
+import { Container } from './parts';
 
 interface Props {
   selected: boolean;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.button`
   display: flex;
   padding: 10px;
   align-items: center;
@@ -53,7 +53,7 @@ export const IconContainer = styled.div`
   margin-left: 26px;
 `;
 
-export const Tooltip = styled.ul`
+export const Tooltip = styled.div`
   position: absolute;
   z-index: ${({ theme }) => theme.zIndex.stickedFront};
   width: 300px;

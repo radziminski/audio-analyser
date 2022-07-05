@@ -1,5 +1,6 @@
-import { getVolumeRelativeToContainer } from '~/utils/audio';
 import p5 from 'p5';
+
+import { getVolumeRelativeToContainer } from '~/utils/audio';
 
 const INST_NORMALIZING_OFFSET = 2.5;
 const AVG_NORMALIZING_OFFSET = 1;

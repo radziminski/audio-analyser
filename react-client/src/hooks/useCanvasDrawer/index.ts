@@ -1,6 +1,7 @@
-import { useElementDimensions } from '~/hooks/useElementDimensions';
 import p5 from 'p5';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import { useElementDimensions } from '~/hooks/useElementDimensions';
 
 export type CanvasDrawer = p5;
 

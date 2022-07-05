@@ -1,6 +1,6 @@
 import {
-  MeydaAnalyzer,
   createMeydaAnalyzer,
+  MeydaAnalyzer,
   MeydaAudioFeature,
   MeydaFeaturesObject
 } from 'meyda';
@@ -10,7 +10,7 @@ export interface AudioService {
   audioElement: HTMLAudioElement;
   buffer: AudioBuffer | null;
   isLoadingBuffer: boolean;
-  bufferError: string;
+  isBufferError: boolean;
   isPlaying: boolean;
   connected: boolean;
   microphoneAllowed: boolean;
@@ -104,28 +104,23 @@ export class AudioService implements AudioService {
     return audioService;
   }
 
-  switchAnalyserToMicrophone() {
-    console.log('switchng to micro while', this.isMicrophoneSetAsSource);
+  async switchAnalyserToMicrophone() {
     if (this.isMicrophoneSetAsSource) return;
 
     this.sourceNode.disconnect();
     this.prevGain = this.masterGainNode.gain.value;
     this.masterGainNode.gain.value = 0;
 
-    if (navigator.getUserMedia) {
-      navigator.getUserMedia(
-        { audio: true },
-        (stream) => {
-          this.microphoneSourceNode =
-            this.context.createMediaStreamSource(stream);
-          this.microphoneSourceNode.connect(this.mixGainNode);
-          this.isMicrophoneSetAsSource = true;
-        },
-        () => {
-          this.microphoneAllowed = false;
-        }
-      );
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia();
+      this.microphoneSourceNode =
+        this.context.createMediaStreamSource(stream);
+      this.microphoneSourceNode.connect(this.mixGainNode);
+      this.isMicrophoneSetAsSource = true;
+    } catch (e) {
+      this.microphoneAllowed = false;
     }
+
   }
 
   switchAnalyserToAudioElement() {
@@ -184,7 +179,7 @@ export class AudioService implements AudioService {
       this.setBuffer(decodedAudio);
       return decodedAudio;
     } catch (error) {
-      this.bufferError = error;
+      this.isBufferError = true;
     } finally {
       this.isLoadingBuffer = false;
     }

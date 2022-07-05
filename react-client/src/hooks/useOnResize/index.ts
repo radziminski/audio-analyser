@@ -3,7 +3,7 @@ export const useOnResize = (
   onResizeCallback: (() => void) | null | undefined,
   debounceTimeMs?: number
 ) => {
-  const currDebounceTimeout = useRef<NodeJS.Timeout>();
+  const currDebounceTimeout = useRef<number>();
 
   useEffect(() => {
     if (!onResizeCallback) return;
@@ -14,7 +14,7 @@ export const useOnResize = (
         currDebounceTimeout.current &&
           clearTimeout(currDebounceTimeout.current);
 
-        currDebounceTimeout.current = setTimeout(
+        currDebounceTimeout.current = window.setTimeout(
           () => onResizeCallback(),
           debounceTimeMs
         );

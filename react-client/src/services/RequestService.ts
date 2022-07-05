@@ -1,9 +1,10 @@
-import { API_BASE_URL, DEVELOPMENT_ENV, ENV } from './../constants/constants';
 import axios, { AxiosInstance } from 'axios';
 import * as AxiosLogger from 'axios-logger';
 import axiosRetry from 'axios-retry';
-import AuthService from './AuthService';
 import fileDownload from 'js-file-download';
+
+import { API_BASE_URL, DEVELOPMENT_ENV, ENV } from './../constants/constants';
+import AuthService from './AuthService';
 
 export class RequestService {
   client: AxiosInstance;

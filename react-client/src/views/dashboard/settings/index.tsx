@@ -1,10 +1,12 @@
 import React from 'react';
+
 import ActionButton from '~/components/ActionButton';
 import Box, { FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
 import { Heading5 } from '~/components/Text';
 import { useStoreActions, useStoreState } from '~/global-state/hooks';
 import { COLORS } from '~/styles/theme';
+
 import { SectionWithTitle, SlideInputBox, ToggleInputBox } from './parts';
 
 const MAX_WIDGET_HEIGHT = 1000;

@@ -1,5 +1,6 @@
-import { Container } from '~/components/Loader/parts';
 import React from 'react';
+
+import { Container } from '~/components/Loader/parts';
 
 interface Props {
   size?: number;

@@ -1,15 +1,17 @@
-import Box, { FlexBox } from '~/components/Box';
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import Box, { FlexBox } from '~/components/Box';
 import DashboardContent from '~/components/DashboardContent';
+import FileDropZone from '~/components/FileDropZone';
 import ProjectsTableList from '~/components/ProjectsTableList';
 import { Heading5, Paragraph } from '~/components/Text';
-import { COLORS } from '~/styles/theme';
-import { ActionBox, ActionCard } from './parts';
 import { ROUTES } from '~/constants/routes';
-import FileDropZone from '~/components/FileDropZone';
-import { useStoreActions } from '~/global-state/hooks';
 import { CustomSource } from '~/global-state/audio/types';
+import { useStoreActions } from '~/global-state/hooks';
+import { COLORS } from '~/styles/theme';
+
+import { ActionBox, ActionCard } from './parts';
 
 export const DashboardHomeView: React.FC = () => {
   const history = useHistory();

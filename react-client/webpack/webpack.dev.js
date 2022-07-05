@@ -36,6 +36,7 @@ module.exports = merge(WEBPACK_BASE, {
     publicPath: '/',
     open: true,
     host: '0.0.0.0',
+    disableHostCheck: true,
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin(),

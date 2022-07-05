@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+
 import TableList, { ITableListColumn } from '~/components/TableList';
 import { ROUTES } from '~/constants/routes';
 import { IFile } from '~/global-state/project/types';
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+
 import ProjectTableListElement from './ProjectFilesTableListElement';
 
 export enum ProjectFileTableListLabel {

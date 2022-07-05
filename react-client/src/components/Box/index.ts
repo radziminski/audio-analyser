@@ -19,8 +19,7 @@ import {
   SpaceProps,
   system,
   textAlign,
-  TextAlignProps
-} from 'styled-system';
+  TextAlignProps} from 'styled-system';
 
 type BoxPropsWithColor = FlexboxProps &
   LayoutProps &

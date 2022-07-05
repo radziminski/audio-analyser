@@ -1,6 +1,7 @@
-import { IUserState } from './types';
-import UserService from './../../services/UserService';
 import { action, thunk } from 'easy-peasy';
+
+import UserService from './../../services/UserService';
+import { IUserState } from './types';
 
 const userState: IUserState = {
   user: null,

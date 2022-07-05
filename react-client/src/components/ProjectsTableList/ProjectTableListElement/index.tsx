@@ -1,9 +1,11 @@
+import React from 'react';
+
 import Box, { FlexBox } from '~/components/Box';
+import { TableListButton } from '~/components/TableList/parts';
 import Text from '~/components/Text';
 import { IProject } from '~/global-state/project/types';
-import React from 'react';
+
 import { Field } from './parts';
-import { TableListButton } from '~/components/TableList/parts';
 
 interface Props {
   project: IProject;

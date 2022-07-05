@@ -1,11 +1,13 @@
-import React, { useRef, useEffect } from 'react';
-import Box, { FlexBox } from '~/components/Box';
-import { COLORS } from '~/styles/theme';
-import Spectro from 'spectrogram';
-import AudioService from '~/services/AudioService';
 import { scale } from 'chroma-js';
-import { Heading5 } from '../Text';
+import React, { useEffect, useRef } from 'react';
+import Spectro from 'spectrogram';
+
+import Box, { FlexBox } from '~/components/Box';
 import { useStoreState } from '~/global-state/hooks';
+import AudioService from '~/services/AudioService';
+import { COLORS } from '~/styles/theme';
+
+import { Heading5 } from '../Text';
 
 interface Props {
   height?: number;
