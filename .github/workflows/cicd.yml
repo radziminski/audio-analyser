@@ -7,18 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy-backend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          usedocker: true
-          appdir: 'node-api'
+  # build-and-deploy-backend:
+  # Backend build is handled automatically b railway.app
 
   build-and-deploy-frontend:
     runs-on: ubuntu-latest
